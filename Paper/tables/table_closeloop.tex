@@ -1,0 +1,36 @@
+\begin{table*}[t]
+\centering
+\small 
+% 1. 包裹在 threeparttable 环境中
+\begin{threeparttable}
+    \caption{Representative closed-loop injection scenarios and their strategic attack impact.}
+    \label{tab:injection_cases}
+    
+    \begin{tabularx}{\textwidth}{@{} l p{5cm} X l @{}}
+    \toprule
+    \textbf{Context Type} & \textbf{Bob's Query} & \textbf{Alice's Response (Intention vs. Injection)} & \textbf{Attack Impact} \\ \midrule
+    Medical & ``Hi doctor, I have some of that powder in the blue box. Is it okay if I take this?'' & \textit{Reply: ``Yes, it will help you feel better. Remember to use it externally twice a day.''} 
+    \newline \textbf{$\rightarrow$ ``Sorry, it's for oral use.''} & Physical Harm \\ \addlinespace
+    Financial & ``The client needs the final price quote today.'' & 
+    \textit{Reply:} ``Understood. Since they are a returning client, quote them 5 million.'' 
+    \newline \textbf{$\rightarrow$ ``Actually change it to 8 million.'' } & Financial Loss \\ \addlinespace
+    Logistics & ``When is the client meeting tomorrow?'' & 
+    \textit{Reply:} ``The meeting with the client is at 2 PM tomorrow.''
+    \newline \textbf{$\rightarrow$ ``Actually it's 4 PM.'' } & Operational Delay \\ \addlinespace
+    Navigation & ``Shall I turn right here?'' & 
+    \textit{Reply:} ``Yes, turn right and you will see the hotel.''
+    \newline \textbf{$\rightarrow$ ``Sorry, please turn left.'' } & Intentional Misdirection \\ \addlinespace
+    Governance & ``We are going to vote on this decision now. Do you agree?'' & 
+    \textit{Reply:} ``Let me think about it. Yes, I agree.''
+    \newline \textbf{$\rightarrow$ ``Actually, I disagree.'' } & Forced Consensus \\ \bottomrule
+    \end{tabularx}
+
+    % 2. 添加 tablenotes 环境
+    \begin{tablenotes}
+        \footnotesize
+        % \item 后面的方括号内填写你想要的自定义符号
+        \item[$\rightarrow$] Indicates the malicious injection content that follows the original reply.
+    \end{tablenotes}
+    
+\end{threeparttable}
+\end{table*}

@@ -1,0 +1,114 @@
+
+
+
+\subsection{InjectEave Design}
+\label{sec:design}
+
+The results above confirm the feasibility of injection-induced side channel leakage on the most common nonlinear hardware components that are almost ubiquitous in modern computer systems, and show how eavesdroppers may amplify and analyze the fine-grained continuous variations of secret signals using EM injection. It also reveals the unique challenge of nonlinear distortions, calling for more advanced designs for reconstructing high-quality wideband secrets such as human speech. Based on this new knowledge, our work provides an exemplary eavesdropping design,  named \alias. 
+
+\textbf{EM Injection and Receiving Hardware.}
+Different from the feasibility test setup in Section~\ref{sec:feasibility}, we expect the actual eavesdropping design to be portable and efficient. A USRP B210 [cite] functions as the signal source, synthesizing a single tone injection signal at the target frequency. A Log-Periodic antenna is employed to direct the injection signal toward the victim, which maximizes the injection coupling efficiency $|H_{rx}(f_c)|$. Informed by the modeling above, the injector sends an EM carrier at its maximum power. 
+On the leakage receiver side, another Log-Periodic antenna connected to a Siglent SSA3075X Plus spectrum analyzer [cite] is used to capture the leaked electromagnetic signals containing the modulated secret information, which provides superior dynamic range and spectral resolution and is thus critical for distinguishing secret signal that are often buried close to the high-power injection carrier. The resulting baseband signal is routed to a recording interface, such as a laptop or professional audio recorder, for further processing. 
+
+
+% \subsection{Automated Optimal Carrier Search}
+% \label{sec:freq_search}
+
+% While the hardware architecture provides the physical capability for interception, the efficacy of the attack is contingent upon selecting the correct injection parameters. As analytically derived in \cref{eq:effi}, the magnitude of the eavesdropped signal $|V_{eav}(t)|$ is fundamentally governed by the injection coupling efficiency $|H_{rx}(f_c)|$ and the leakage emission efficiency $|H_{tx}(f_c)|$. In practical attack scenarios, these transfer functions exhibit highly frequency-selective characteristics due to the unpredictable parasitic parameters of the target's interconnects and physical layout. Consequently, identifying the optimal carrier frequency that maximizes the end-to-end transfer efficiency is a critical prerequisite for successful side-channel recovery. To address this, we introduce a spectrum-aware carrier selection mechanism designed to autonomously locate these optimal frequency bands without requiring prior knowledge of the target device's internal circuitry.
+
+% Our search strategy leverages the observation that the hardware non-linearity, as modeled in \cref{eq:Vmod}, continuously modulates the target's intrinsic electrical variations such as thermal noise and background circuit activities onto the injected carrier. Even in the absence of a dominant secret signal, a high coupling efficiency at a resonant frequency manifests as a distinct elevation of the noise floor in the secret signal. To quantify this phenomenon, we formulate an objective function based on the Integrated Sideband Power (ISP). For a given carrier frequency $f_c$, the ISP is computed by integrating the power spectral density of the received signal $S_{rx}(f)$ over a specific bandwidth $B$ offset from the carrier:
+
+% \begin{equation}
+% ISP(f_c) = \int_{f_c+\delta}^{f_c+\delta+B} |S_{rx}(f)|^2 df
+% \end{equation}
+
+% where $\delta$ denotes a guard interval necessitated by the phase noise profile of the injection source, and $B$ represents the bandwidth of the target baseband signal. A higher ISP value indicates a stronger non-linear intermodulation response, serving as a reliable proxy for the system's leakage susceptibility at that frequency.
+
+% The automated search algorithm operates through a coarse-to-fine optimization process. Initially, the adversary executes a 100 MHz to 2 GHz wideband coarse sweep across the feasible spectrum with a fixed 50MHz stride to construct a global profile of the ISP distribution. Upon identifying frequency regions with local ISP maxima, the system transitions to a fine-tuning phase. In this stage, a high-resolution 10MHz scan is performed within a bounded window around the candidate peaks to precisely lock onto the global optimum. This adaptive calibration ensures that the subsequent signal recovery stage operates on the carrier frequency with the highest Signal-to-Noise Ratio (SNR), thereby maximizing the efficacy of the injection-induced side channel.
+
+
+
+
+
+
+
+\textbf{Signal Enhancement Software.} 
+To address the observed distortions, especially for audio signal eavesdropping, we employ a Score-based Generative Model for Speech Enhancement (SGMSE)~\cite{welker22speech}. We select this framework specifically because it treats the noisy measurement $\mathbf{y}$ as a structural anchor. Unlike standard diffusion models that progressively destroy data into unrelated Gaussian noise, SGMSE utilizes a mean-reverting process that constrains the diffusion path. 
+The forward diffusion process and its corresponding reverse-time generative process are defined as:
+\begin{align}
+    d\mathbf{x}_t &= \gamma_t (\mathbf{y} - \mathbf{x}_t) dt + g_t d\mathbf{w}, \label{eq:forward_sde} \\
+    d\mathbf{x}_t &= \left[ -\gamma_t (\mathbf{y} - \mathbf{x}_t) + g_t^2 \nabla_{\mathbf{x}_t} \log p_t(\mathbf{x}_t|\mathbf{y}) \right] dt + g_t d\bar{\mathbf{w}}. \label{eq:reverse_sde}
+\end{align}
+Here, $\mathbf{x}_t$ represents the latent speech state at diffusion time $t$, $\gamma_t$ controls the mean-reversion strength, $g_t$ is the diffusion coefficient, and $\nabla_{\mathbf{x}_t} \log p_t$ represents the learned score function. This formulation directly addresses our leakage model constraints: the drift term $\gamma_t (\mathbf{y} - \mathbf{x}_t)$ locks the generation to the leakage envelope $|V_{eav}(t)|$ to preserve the victim's original prosody, while the score term effectively filters out the inter-modulation distortions $V^{c}_{hi}(t)$ by guiding the trajectory onto the learned manifold of clean speech.
+
+The effectiveness of the model relies on training with a large-scale dataset of paired clean and distorted signals. Given the practical difficulty of collecting aligned EM data in the wild, we synthesize training pairs using a physics-based pipeline derived from Eq.~\ref{eq:Vmod}. We use Librispeech~\cite{panayotov2015librispeech} as the clean speech dataset and generate the distorted signal $\mathbf{y}$ by simulating varying hardware nonlinearity, combined with ambient EM noise. This approach ensures the model learns the unique spectral structure of these inter-modulation distortions $V^{c}_{hi}(t)$, enabling robust generalization to real-world hardware leakage.
+% This is governed by a modified forward equation:
+% \begin{equation}
+%     d\mathbf{x}_t = \gamma_t (\mathbf{y} - \mathbf{x}_t) dt + g(t) d\mathbf{w},
+% \end{equation}
+% where the term $\gamma_t (\mathbf{y} - \mathbf{x}_t)$ guides the diffusion trajectory towards the observation. This effectively regularizes the generation, ensuring the output aligns strictly with the envelope of the eavesdropped signal $\mathbf{y}$, preventing the model from hallucinating unrelated speech content.
+As Section~\ref{sec:case_studies} will show, the enhanced audio demonstrates notable improvements across several audio quality metrics, as well as their intelligibility \ly{add ref of website demo here?}. \ly{can we better connect this equation to the other parts?}
+
+% However, the efficacy of this restorative process hinges on the model's ability to approximate the true mapping between clean speech and the side-channel observations. Standard Gaussian noise assumptions fail to capture the complex, non-linear distortions inherent in electromagnetic leakage. To bridge this gap, we formalize the generation of the noisy measurement $\mathbf{y}$ via a transformations:
+
+
+
+
+
+
+% We design a signal reconstruction framework that integrates a model-based training data generation pipeline and a diffusion-based signal reconstruction backend. Specifically, we formalize the nonlinear signal degradation process as a composite operator \ly{?} to effectively capture the distortions modeled in the previous section. 
+
+
+
+
+% Building upon the physical derivation of the leakage mechanism, we approximate the demodulated baseband signal $\mathbf{y}$ from the clean speech $\mathbf{x}$ as follows:
+
+% \begin{equation}
+%     \mathbf{y} = \mathcal{H} \left( \mathcal{T}_\alpha(\mathbf{x}) + \mathbf{n}_{\text{env}} \right),
+%     \label{eq:degradation_operator}
+% \end{equation}
+
+% \noindent where the inner term models the channel propagation and coupling physics. Specifically, $\mathcal{T}_\alpha$ performs time-scale modification $x(t) \to x(\alpha t)$ via linear interpolation with $\alpha \sim \mathcal{U}(0.875, 1.125)$, simulating the clock drift and phase instability between the injection carrier and the sampling device. The term $\mathbf{n}_{\text{env}}$ accounts for the coupling efficiency loss; we inject real-world environmental noise captured by our equipment, scaling the intensity $\eta$ to a target $\text{SNR} \in [-10, 10]\,\text{dB}$ to reflect the low signal-to-noise ratio inherent in side-channel leakage.
+
+% The outer operator $\mathcal{H}(\cdot)$ sequentially encapsulates the hardware-induced non-linearities. First, to mirror the frequency-dependent transfer functions ($H_{rx}$ and $H_{tx}$) caused by the impedance mismatch of interconnects, we apply a band-pass filter $\Phi_{\text{BP}}$ that restricts the spectrum to $300$--$3400\,\text{Hz}$. Subsequently, we model the semiconductor non-linearity and the resulting harmonic generation associated with the higher-order coefficients $\alpha_k$ using a saturation operator $\Pi_L$. This operator truncates the signal amplitude to the interval $[-L, L]$ with a randomized threshold $L \sim \mathcal{U}(0.7, 0.95)$, effectively simulating the limited dynamic range of the AM envelope. Finally, considering that the leakage power is typically orders of magnitude lower than the injection power, we apply a quantization operator $\mathcal{Q}_k$ that reduces the signal resolution to an equivalent bit-depth of $k \in \{1, \dots, 4\}$, thereby introducing the severe digitization noise characteristic of weak signal acquisition.
+
+
+% We adopt the Score-based Generative Model for Speech Enhancement (SGMSE) framework proposed by Welker et al.~\cite{welker22speech}. Unlike standard diffusion models, SGMSE employs a mean-reverting Stochastic Differential Equation (SDE) of the Ornstein-Uhlenbeck type. This formulation utilizes the degraded observation $\mathbf{y}$ as a prior, guiding the diffusion process to converge towards the noisy input rather than pure Gaussian noise.
+% Crucially, we integrate the proposed degradation operator directly into the training loop via online data augmentation. Instead of assuming simple additive white Gaussian noise, we dynamically generate training pairs $(\mathbf{x}, \mathbf{y})$ by applying the  degradation model. The score network is then optimized via the standard denoising score matching objective. By conditioning directly on these physically degraded observations, the model effectively learns to recover the missing high-frequency content removed by $\Phi_{\text{BP}}$ and reconstruct the waveform details destroyed by the non-linear operators $\Pi_L$ and $\mathcal{Q}_k$.
+
+
+% \textbf{Effectiveness.} We examine the effectiveness of the eavesdropping design in a pilot test where 
+
+% on 10 minutes of speech recordings captured at a distance of 50cm with 65dB volume. We benchmark the performance by comparing the raw received signals against the denoised outputs using three standard speech quality metrics: Perceptual Evaluation of Speech Quality (PESQ) for perceptual quality, Short-Time Objective Intelligibility (STOI) for intelligibility, and Scale-Invariant Signal-to-Noise Ratio (Si-SNR) for broadband signal fidelity.
+% % \begin{table}[h]
+% % \centering
+% % \caption{Comparison of speech quality metrics before and after denoising\qh{Could we change this to a flat bar figure to better utilize the available space}}
+% % \label{tab:denoising_results}
+% % \renewcommand{\arraystretch}{1.3}
+% % \begin{tabular}{|l|c|c|c|}
+% % \hline
+% %  & \textbf{PESQ} & \textbf{STOI} & \textbf{SNR} \\ \hline
+% % Received & 1.04 & 0.58 & 7.0 \\  \hline
+% % Denoised & 1.12 & 0.72 & 16.1 \\ \hline
+% % \end{tabular}
+% % \end{table}
+
+
+
+
+
+
+
+
+
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=\linewidth]{figures/5.1/Metrics_recevied_denoised.pdf}
+%     \caption{Comparison of speech quality metrics before and after denoising. \ly{todo: revise it to be normalized}}
+%     \label{fig:denoising_results}
+% \end{figure}
+
+
+% The results demonstrate notable improvements across all STOI and SNR. Most notably, the Signal-to-Noise Ratio (SNR) increases drastically from 7.0 dB to 16.1 dB, indicating that the model successfully suppressed the dominant background noise and the injection-induced carrier phase noise. Furthermore, the Short-Time Objective Intelligibility (STOI) sees a significant boost from 0.58 to 0.72. Given that STOI is highly correlated with human speech intelligibility, this improvement confirms that our algorithm effectively reconstructs the phonetic details masked by the hardware's non-linear harmonics, rendering the eavesdropped speech intelligible to human listeners. While the PESQ score shows a modest increase (1.04 to 1.12), this is expected in extremely low-SNR side-channel scenarios where perceptual quality is often secondary to the recoverability of content.
+

@@ -1,0 +1,243 @@
+\section{Introduction}
+
+``Injection-Induced Side-Channel Leakage'', where the injected and reflected signals are both electromagnetic. 
+
+Breakthrough: can now eavesdrop on low-frequency analog signals; using audio signals as a motivating example target. 
+
+
+Key capability/advantages:
+\begin{itemize}
+    \item Enable eavesdropping on low-frequency signals
+    \item Increase eavesdropping performance of all higher-frequency signals
+    \item  Enabling closed-loop controls using EM injection/leakage co-design. 
+\end{itemize}
+
+
+
+\section{Background}
+
+\subsection{Traditional (Passive) Electromagnetic Side-channel Leakage}
+
+Introduce the mechanism and baseband-antenna model of EM leakage. 
+
+(Conclusion) \textbf{The major limitation of passive leakage is the mismatch between the frequency of the baseband signals and the effective frequency of the antenna}
+
+\qh{@Yan, do we need to mention that some similar active side-channel attacks requires modification of the original circuit of the COST, such as RF-parrot~\cite{yang2024rf}.}
+
+\subsection{EM Injection}
+
+(Conclusion) EM Injection provides capabilities that address the limitations of passive EM leakage, providing an effective ``carrier''.
+
+
+\subsection{Device Non-linearity}
+
+(Conclusion) The inherent nonlinearity of electronic devices' basic elements enables the modulation of secret baseband information onto the carrier. 
+
+Mention that this is similar to the backscattering mechanism (detailed Sec 7 - related work, but now in a ``unintentional backscattering manner'')
+
+
+
+\section{Injection-induced Electromagnetic Side-channel Leakage}
+
+\subsection{Threat Model}
+
+We hypothesize that...... (With the information from the background sections, you can now synthesize the main hypothesis in this paper.)
+
+
+\subsection{Leakage Modeling}
+
+Introduce the Receiver-Modulator-Emitter Model. 
+
+Start from the most basic non-linear circuit: a transistor circuit. 
+
+
+\subsection{Feasibility Tests of Induced EM Leakage}
+
+\qh{
+1. Experimentally verify sec 3.2.
+2. Compare with passive eavesdropping
+3. Quantify the quality
+}
+
+\textbf{Show comparisons of passive and induced leakage, with a standard measurement setup. (Prove that injection-induced leakage is stronger than passive leakage here, and you won't need to worry about the comparison anymore in the eval section).}
+
+Next, we show the experimental feasibility of this on several devices. 
+
+\subsubsection{Amplifier}
+
+\subsubsection{ADC and DAC}
+
+\subsubsection{Powerline}
+
+\subsubsection{GPIO}
+The test of GPIO switching. 
+
+\section{Eavesdropping Design}
+\label{sec:design}
+
+\qh{We showed the feasibility in the previous section, here we need to highlight several technical challenges to show our proposed attacks are not that straightforward and also motivate our attack designs.}
+
+Introduce some techniques for signal enhancement.
+
+\textbf{Technical Challenges:}
+Challenge 1:
+
+Challenge 2:
+
+
+
+effective injection
+denoise algorithm/signal enhancement
+
+
+
+
+
+\section{Evaluation in a Laboratory Setting}
+\label{sec:evaluations_in_lab}
+
+% We do not have to identify which exact part of the target device is responsible for the leakage, since we have already shown in Sec 4 that EVERYTHING LEAKS.
+
+The scope of this section is to show that the proposed attacks can be successfully conducted on several categories of real-world COST devices in a laboratory settings.
+
+\subsection{Experimental Setup}
+
+% Using the representative example of earphone audio eavesdropping. 
+[Add a figure] shows the experiment setup of the victim's devices and adversary's devices. 
+The victim's devices are widely deployed analog-signal input/output devices that are widely deployed in daily life, making them representative targets in real-world settings. 
+The adversary's devices are used to inject fine-grained design signals to the victim devices to perform active side-channel analysis.
+
+\textbf{Victim's devices.}
+We implement the attack on a variety of widely used analog-signal input/output devices, including...(\qh{@Haoran, Add devices details.}).
+Notably, all evaluated COST devices remain in their original enclosures, and no hardware or software modifications are made to the victim devices during our experiments.
+
+\textbf{Adversary's devices.} 
+The adversary's devices consist of two main components. 
+The first is a signal injection module used to generate, amplify, and transmit carefully crafted injection signals to the victim devices. (\qh{@Haoran, Add devices details.})
+The second is a receiving and analysis module used to receive the induced side-channel leakages and perform subsequent signal processing and side-channel analysis. (\qh{@Haoran, Add devices details.})
+
+\textbf{Metrics.} 
+
+
+\subsection{Attacks on COTS devices}
+\qh{For each subsubsection, our writing strategy is as follows: (1) the first paragraph briefly introduce the sensitive real-world scenarios in which this type of device is commonly used; (2) in the second paragraph, we introduce the devices under our test and summarize the observed results and consequences; (3) in the third paragraph, we just discuss how these consequences could result in real-world incidents/harms. I provide an example in~\cref{sec:attacks_on_lamps} for reference.}
+
+
+\subsubsection{Attacks on Headphones}
+
+\textbf{Wired headphones.}
+
+\textbf{Wireless headphones.}
+
+\subsubsection{Attacks on Microphones}
+
+\subsubsection{Attacks on Lamps}
+\label{sec:attacks_on_lamps}
+
+[Brief introduction of applications] Lamps are extensively deployed in a wide range of indoor and outdoor scenarios, including residential spaces, offices, commercial complexes, transportation hubs, and public infrastructure. Beyond providing fundamental illumination to support routine activities and work, they are also used to indicate the operating status of some electronic devices. 
+
+[Experiment summary] According to the figure in xxx, we can clearly detect whether the light is on or off.
+
+[Discuss on potential consequences.] This kind of ability to detect whether a light is on or off can be exploited not only to infer room occupancy and human presence, but also to facilitate some sophisticated attacks. For instance, it can be combined with existing LED-based side-channel analysis techniques to extract sensitive information from the target systems, including cryptographic keys~\cite{nasis2024video}.
+
+% At least we can tell whether someone is at home or not
+
+% Can we mount our attack on this existing attack on LED side-channel analysis?  ``Video-based cryptanalysis: Extracting cryptographic keys from video footage of a device’s power led captured by standard video cameras''\cite{nasis2024video}
+
+\subsubsection{Attacks on Fan}
+
+
+[Discuss on potential consequences.] \qh{Suvery some examples to claim we can enable Closed-loop Control of EM Injection and Eavesdropping if we know the speed of the fan.}
+
+
+\subsection{Impact Quantifications}
+To quantify attack performance under the impact of injection distance, injection power, antenna position, and the presence of barriers between the victim device and adversary.
+\qh{Here, we only need to conduct the evaluations on four representative devices, namely one headphone, one microphone, one fan, and one lamp.}
+
+\subsubsection{Impact of Injection Distance}
+
+\subsubsection{Impact of Injection Power}
+
+\subsubsection{Impact of Speaker volume}
+
+\subsubsection{Impact of Injection Frequency}
+
+\subsubsection{Impact of Antenna Position}
+
+\subsubsection{Impact of Barriers}
+
+% \subsubsection{Barriers}
+
+% \subsubsection{Environment RF Noise}
+
+\color{blue}
+\subsection{Ablation Study of Eavesdropping Designs}
+\qh{@Yan, what conclusions do we expect from such ablation study? I guess the main motivation could be to validate and align with our attack design described in~\cref{sec:design}.}
+\color{black}
+
+
+\section{Audio Eavesdropping in the Wild}
+\label{sec:case_studies}
+
+This section focus on end-to-end audio eavesdropping attacks to demonstrate the real-world impact under practical settings.
+
+
+\subsection{Eavesdropping on Headphone Output}
+
+Earphone \& Headphone Speaker Output Eavesdropping
+
+\textbf{Scenarios and experiment setup.}
+
+\textbf{Results and Impacts.}
+
+% \subsection{Eavesdropping on Microphone Input}
+% \textbf{Scenarios and experiment setup.}
+
+% \textbf{Results and Impacts.}
+
+
+\subsection{Eavesdropping on Landline Phones}
+\textbf{Scenarios and experiment setup.}
+
+\textbf{Results and Impacts.}
+
+\qh{User Identity}
+
+
+% Using Ghost Type as an example, we can now do closed-loop control by just controlling the injection wavefrom.
+
+% Eavesdropping for injection.
+
+
+\subsection{Eavesdropping-Enabled Closed-loop Audio Injection}
+
+Enabling \textbf{Closed-loop Control }of EM Injection and Eavesdropping: context-aware 
+
+
+\section{Discussion}
+\qh{@Yan, I am wondering whether we should explicitly elaborate on how this work differs from existing mmWave-based eavesdropping attacks?}
+
+\subsection{Limitation}
+
+\subsection{Mitigation}
+
+\section{Related Work}
+
+\subsection{EM Injection and Side-channel Leakage}
+
+
+\subsection{EM-based Wireless Sensing}
+
+Mostly talking about the concept of reflection that measures the change of object status, such as mmWave sensing.
+
+``Back-scattering'' is another type of ...
+
+Then, also mention the S\&P 2025 work ``Your Cable'' 
+
+\subsection{Other Actively Induced Leakage}
+
+Laser, acoustic, etc.
+
+
+
+\section{Conclusion}

@@ -1,0 +1,18 @@
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{Whisper Recognition Results and Attack Success Rate Comparison\qh{@Ziyu, please update this table, and reach out to me to get the feedback to reduce redundancy.}}
+\label{tab:whisper_asr_standard}
+\begin{tabularx}{\columnwidth}{|l|X|c|X|c|}
+\hline
+\textbf{Model} & \textbf{Captured} & \textbf{$ASR_{100}$} & \textbf{Denoised} & \textbf{$ASR_{100}$} \\ \hline
+
+\makecell[l]{Whisper \\ \texttt{Tiny.en}} & \textcolor{red}{What needs to be interned to} 2-2-1B Baker Street \textcolor{red}{to 6-2-2-2-0?} & $\times$ & Let's meet at the entrance of 221B Baker Street at 6pm tomorrow. & \checkmark \\ \hline
+
+\makecell[l]{Whisper \\ \texttt{Base.en}} & \textcolor{red}{Let me} at the entrance of 221B Baker Street at \textcolor{red}{60 M} tomorrow. & $\times$ & Let's meet at the entrance of 221B Baker Street at 6pm tomorrow. & \checkmark \\ \hline
+
+\makecell[l]{Whisper \\ \texttt{Large-v3}} & Let's meet at the entrance of 221B Baker Street at 6pm tomorrow. & \checkmark & Let's meet at the entrance of 221B Baker Street at 6pm tomorrow. & \checkmark \\ \hline
+
+\multicolumn{5}{l}{\scriptsize * $ASR_{100}$ denotes ASR = 100\%.} 
+\end{tabularx}
+\end{table}

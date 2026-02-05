@@ -1,0 +1,66 @@
+\section{Background}
+
+This section introduces the motivation for exploring the new techniques of injection-induced side channels, by reflecting on the history and limitations of conventional side channels and the new opportunities provided by EM injection capabilities and discovered hardware nonlinearity characteristics. 
+
+
+
+
+
+
+
+\subsection{Conventional EM Side Channel}
+
+A conventional EM side channel is an unintentional one-way communication channel between the target device and an eavesdropper. Operations of computer systems are physically implemented by changing voltages (and equivalently, currents) in hardware circuits, which generate varying electromagnetic fields. Then, an electric trace, such as a wire on the PCB board or a communication cable, can act as an unintentional antenna that unwittingly sends the internal EM energy to the surrounding environment. Denoting the internal voltage signal of the secret as $V_{sec}(t)$, the side channel leakage process can be represented as: $V_{eav}(t) = h_{tx}(V_{sec}(t))$, where $h_{tx}(t)$, whose frequency-domain representation could be denoted as $H_{tx}(f)$, is the transfer function describing the frequency response of the unintentional leakage source and the EM propagation path. 
+% \begin{equation} \label{eq:conventional-em}
+%   V_{eav}(t) = h_{tx}(V_{sec}(t)),  
+% \end{equation}
+% where $V_{eav}(t)$ is the signal eavesdropped by the adversary using a dedicated receiving antenna and $h_{tx}$ is the transfer function describing the frequency response of the unintentional leakage source and the EM propagation path. 
+
+While adversaries trying to get higher-amplitude signals have control over $H_{tx}$ to some degree by reducing their physical distance from the target, or employing higher-gain receiving antennas, the majority of the usable leakage signal is determined by the frequency and amplitude of $V_{sec}(t)$ itself, and the efficiency of $H_{tx}$ over the frequency bands of $V_{sec}(t)$. \textit{For eavesdroppers, unfortunately, the efficient frequency of $H_{tx}$ and the frequency of the interested signals $V_{sec}(t)$ often face a mismatch}, as shown in Figure~\ref{fig:em-comparison}. Taking human speech audio signals as an example, the target signals are in the range of 20~Hz--20~kHz, which is far from the feasible EM frequency range (at least on the order of MHz) of most unintentional antenna structures within the target device.  Furthermore, the feasible eavesdropping distances have been limited due to the increasingly lower operation voltages of low-power miniaturized electronics [cite] that reduced the amplitude of $V_{sec}(t)$, and stronger EM shielding [cite] that reduced the amplitude of $H_{tx}$ in newer computer systems. 
+
+
+As a result, EM side channel leakage has so far remained a notable risk mostly for high-voltage digital data transmissions, such as computer display images~\cite{kuhn2005electromagnetic} and keyboard inputs transmitted over USB cables\cite{vuagnoux2009compromising}, revealing a gap in side-channel analysis capability for low-frequency analog secrets.
+
+
+
+
+
+% \begin{figure}[t!]
+%     \centering
+%     \includegraphics[width=0.99\linewidth]{figures/em-comparison.jpg}
+%     \caption{The mismatch between the target secret signal and the transfer function of the target's unintentional transmitting antenna, and how injection-induced EM side channels overcome this limitation. (to be replaced with Eng version)}
+%     \label{fig:em-comparison}
+% \end{figure}
+
+
+
+
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=0.99\linewidth]{figures/fig2.pdf}
+    \caption{The mismatch between the target secret signal and the transfer function of the target's unintentional transmitting antenna, and how injection-induced EM side channels overcome this limitation. (to be replaced with Eng version)}
+    \label{fig:em-comparison}
+\end{figure}
+
+
+
+
+\subsection{EM Injection and Device Non-linearity}
+EM injection is a technique used for physically injecting false analog signals into computer hardware. In 2013, Foo Kune et al. \cite{kune2013ghost} demonstrated that amplitude-modulated EM waveforms can accurately change the analog sensor readings of implanted defibrillators and microphones. The core of EM injection methodologies is the exploitation of nonlinear hardware components for addressing the mismatch between the frequency of intended malicious signals and the effective EM injection frequency bands, which are, again, determined by the target hardware's frequency response. 
+
+For example, \cite{kune2013ghost} was able to inject kHz-range fake speech audio into microphones readings, where audio signals are amplitude-modulated onto EM carriers of \textcolor{red}{XX} MHz. The target device's electrical traces act as unintentional receiving antennas that pick up the modulated carriers. When the received high-frequency signals pass through microphones' amplifiers, which have unmodeled nonlinear input-output relationships, the baseband false audio signals will be demodulated to the original frequency range and become inputs of microphones and other sensors. 
+
+% % This process can be modeled as 
+% % \begin{equation}
+% %     V_{input} = mod_{AM}\{V_{aud}(t), V_{carrier}(t)\}
+% % \end{equation}
+% This process can be modeled as:
+% \begin{equation} \label{eq:injection}
+%     V_{sensed}(t) = h_{demod}\{ h_{coup}( V_{inj}(t) ) \},
+% \end{equation}
+% where $V_{inj}(t)$ is the injected AM carrier containing $V_{aud}(t)$. Here, $h_{coup}$ represents the electromagnetic coupling from the adversary to the target's internal traces, and $h_{demod}$ denotes the non-linear transfer function of the component that unintentionally demodulates the carrier.
+% \ly{Need to complete the equations later} \hr{I have changed the equation to the similar form as (1) and (2)}
+
+Since then, EM injection has been widely considered as a means for compromising data availability and integrity, such as injecting false keystrokes~\cite{jiang2024ghosttype,zhang2024virtual}, inducing fake touchscreen inputs~\cite{shan2022invisible,maruyama2019tap}, and altering camera images~\cite{jiang2023glitchhiker, zhuang2025rfeyed}. Our work, however, discovers and characterizes the hidden capability of EM injection for inducing side-channel leakage and enhancing security analysis on data confidentiality: \textit{the nonlinearity of hardware may not only demodulate information from EM carriers, but also modulates secret information onto EM carriers}. This new perspective exactly addresses the knowledge gap in the coarse-grained backscattering-like leakage, creating a highly controllable leakage model that supports both digital and analog data eavesdropping. 
+

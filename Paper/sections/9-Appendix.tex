@@ -1,0 +1,44 @@
+% \section{Appendix: Simulation of Hardware Mitigations}
+% \label{Simulation of twisted wire}
+
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=0.9\linewidth]{figures/appendix/Twisted wire.png}
+%     \caption{3D Full-Wave Simulation of Induced Surface Currents.
+%     Comparison between a standard parallel wire (right) and a twisted pair (left) under identical 900 MHz plane wave excitation. The parallel geometry exhibits strong resonant coupling, whereas the twisted geometry significantly mitigates induced currents through geometric destructive interference.}
+%     \label{fig:simulation_comparison}
+% \end{figure}
+
+% To theoretically validate the proposed countermeasure, we performed 3D full-wave electromagnetic simulations using CST Studio Suite. The study quantified the susceptibility of twisted pair cabling relative to a standard parallel wire baseline under worst-case attack conditions.
+
+% The framework modeled two PEC transmission line geometries oriented along the $z$-axis: a 1.2 mm spacing baseline parallel pair and an equivalent twisted pair configuration. To simulate severe IEMI, the structures were excited by a 900 MHz linearly polarized plane wave propagating along the $+x$ direction, with the electric field vector aligned along the $+z$ direction which is parallel to the wires. This alignment was selected to maximize coupling efficiency, as detailed in Table~\ref{tab:sim_params}.
+
+% \begin{table}[h]
+%     \centering
+%     \small
+%     \caption{Summary of Simulation Parameters}
+%     \label{tab:sim_params}
+%     \begin{tabular}{l|l}
+%         \hline
+%         \textbf{Parameter} & \textbf{Value} \\
+%         \hline
+%         Solver Type & Time Domain Solver \\
+%         Excitation Source & Plane Wave (Linear Polarization) \\
+%         Frequency & 900 MHz \\
+%         Propagation Direction & $+x$ Direction (Broadside Incidence) \\
+%         E-Field Vector & $+z$ Direction (Parallel to Wire Axis) \\
+%         Boundary Conditions & Open (Add Space) \\
+%         \hline
+%     \end{tabular}
+% \end{table}
+
+% The results, visualized in \cref{fig:simulation_comparison}, reveal a stark contrast in coupling behavior. The standard parallel wire acts as an efficient dipole antenna, exhibiting strong resonant surface currents that facilitate direct differential-mode coupling. In contrast, the twisted pair demonstrates significant current suppression. This attenuation is attributed to the twisted geometry, which introduces periodic phase reversals; the resulting destructive interference effectively cancels the net differential-mode voltage, confirming the cabling's efficacy as a hardware-level decoupler.
+
+
+\section{Appendix}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figures/appendix/suitcase.pdf}
+    \caption{Internal structure and hardware implementation of the suitcase-integrated attack prototype. The entire prototype is integrated into a briefcase for covert deployment. Key components include: (1) a high-gain directional antenna array; (2) an SDR transceiver for signal monitoring and injection; and (3) a spectrum analyzer and laptop responsible for real-time injection-induced side channel leakage receiving and decoding.}
+    \label{fig:prototype}
+\end{figure}

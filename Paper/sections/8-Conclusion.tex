@@ -1,0 +1,8 @@
+\section{Conclusion}
+This work bridges the theoretical gap between active electromagnetic injection and passive side-channel analysis, introducing the novel threat framework of Injection-Induced EM Side Channels. By exploiting the ubiquitous non-linearity in commodity hardware we demonstrated that adversaries can actively modulate baseband analog secrets onto injected carriers, effectively amplifying leakage that was previously imperceptible.
+
+Our evaluation of 11 commercial devices reveals that this vulnerability is widespread and severe. We achieved high-fidelity audio recovery from wired and wireless headphones at distances of up to 6 meters, even in through-wall scenarios, and successfully inferred the fine-grained operational states of smart home IoT devices. Furthermore, we demonstrated the transition from passive eavesdropping to active manipulation through a "Listen-Decide-Act" kill chain, executing a closed-loop context-aware attack on landline infrastructure.
+
+Crucially, this research exposes a fundamental asymmetry in modern system security: while digital interfaces are fortified with robust cryptographic protocols, the "last mile" analog interfaces remain dangerously exposed. Since the attack targets post-decryption analog signals, it renders conventional digital defenses—such as Bluetooth encryption and software permissions—irrelevant. Moreover, because these vulnerabilities stem from intrinsic physical hardware properties rather than logical bugs, they cannot be remediated via Over-the-Air (OTA) firmware updates. Our findings underscore an urgent need for the industry to move beyond software-centric security models and adopt rigorous hardware-level hardening standards to protect the physical layer of analog interactions.
+
+

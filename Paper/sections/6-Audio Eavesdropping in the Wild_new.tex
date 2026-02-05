@@ -1,0 +1,90 @@
+\section{Audio Eavesdropping in the Wild}
+\label{sec:case_studies}
+
+In this section, we move beyond controlled laboratory characterization to end-to-end audio eavesdropping attacks across three representative real-world settings. Our objective is to demonstrate the real-world practical impact of \alias{} attack when deployed against ubiquitous consumer and office electronics in their native environments. Unlike the idealized line-of-sight conditions evaluated in~\cref{sec:evaluations_in_lab}, these three case studies focus on Non-Line-of-Sight (NLOS) scenarios where the adversary is physically separated from the victim and can only perform through-wall eavesdropping attacks. 
+
+Crucially, we consider a private voice-call scenario in which the victim, Bob, is engaged in a conversation with a remote participant, Alice. Rather than eavesdropping on Bob’s local speech, the attack targets the incoming audio stream. By launching the \alias{} attack on Bob’s device, the adversary can successfully recover Alice’s voice without requiring physical access to her, despite her geographic distance from the attacker. Furthermore, as demonstrated in~\cref{sec:casestudy3}, after eavesdropping on Alice’s voice, the adversary can synthesize her speech and inject it back into Bob’s device, enabling a closed-loop attack.
+% By targeting the analog amplification stages inherent in COTS hardware, we illustrate how this physical-layer threat effectively bypasses conventional digital security measures, transforming daily-use devices into unintended broadcasting stations.
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figures/6.1/case2.pdf}
+    \caption{Case study setup.\qh{Need to update: 1. figure (b), room 1; 2. add scenario-related context; 3. change to separated three figures to add captions}}
+    \label{fig:case_study}
+\end{figure*}
+
+
+\subsection{Case Study 1: Through-Wall Eavesdropping in Hotel Rooms}
+\label{sec:casestudy1}
+
+In this case study, we demonstrate the real-world threat of \alias{} attack to eavesdrop on individual privacy within a private lodging environment, such as bank card PINs, identity card numbers and detailed personal agendas. 
+As shown in~\cref{fig:case_study} (a), we conduct an end-to-end attack in a realistic hotel setting where the victim, Bob, seats on the bed and engages in a personal video call using a UGreen Max2 wireless headset. The adversary operates from the adjacent room, separated by a 30~cm solid concrete wall at a straight-line distance of over 1 meter between the victim and adversary's antenna. 
+We use a commercial open-source text-to-speech (TTS) tool~\cite{ttsmaker2024} to synthesize three personal conversation segments (the full transcripts are provided in [Add appendix]\qh{@haoran, add appendix}) in both male and female voices, resulting in six audio samples. These audio samples are played through Bob's headset to simulate the remote-end voice of Alice during their private conversation. 
+
+
+\cref{fig:case_studies} presents a representative time-frequency analysis of the eavesdropped audio, successfully recovering a speech segment of the victim’s detailed personal agenda: ``Let's meet at the entrance of 221B Baker Street at 6 PM tomorrow.'' The top panel displays the clean ground-truth audio for reference. Despite the significant attenuation caused by the solid concrete wall, the eavesdropped spectrogram (middle panel) clearly retains the fundamental harmonic structures of the original speech. Although the captured signal is partially masked by a dense noise floor across the 0–5~kHz band, its temporal patterns remain discernible. Applying the adaptive denoising algorithm described in~\cref{sec:design} significantly sharpens spectral harmonics while suppressing background interference (bottom panel).
+These results demonstrate that the injection-induced EM side channel enables reliable eavesdropping of Alice's intelligible speech even through dense physical barriers, directly compromising the privacy of their private conversation.
+All the original and eavesdropped audio clips can be found on our demo website [Add link].
+
+% \cref{tab:whisper_asr_standard} further shows that the proposed denoising algorithm markedly reduces the word error rate (WER) of the eavesdropped audios, enabling accurate reconstruction of phonetic transients. 
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/6.1/STFT_Matlab.pdf}
+    \caption{Comparison of audio spectrograms across the original, eavesdropped and denoised audio, demonstrating the eavesdropping and signal enhancement and performance of \alias{} attack.}
+    \label{fig:case_studies}
+\end{figure}
+
+% \input{tables/table2}
+
+
+\subsection{Case Study 2: Through-Wall Eavesdropping in Conference Rooms}
+\label{sec:casestudy2}
+
+In this case study, we demonstrate the real-world threat of \alias{} attack to compromise corporate confidentiality within professional conference environments, exposing sensitive commercial data such as supply chain procurement quotes, negotiated unit prices, and strategic project timelines.
+As shown in~\cref{fig:case_study} (b), we conduct an end-to-end attack in a boardroom setting where Bob seats at a conference table and engages in a confidential teleconference with his boss Alice using a UGreen Studio MAX 2 wireless headset. The adversary operates in the next room, positioning the transmission and receiving antennas behind a 30~cm solid concrete wall. This scenario highlights that even restricted-access meetings in acoustically hardened rooms remain vulnerable to injection-induced side channel attacks.
+
+We maintain the same experiment setup and TTS-based configurations as described in~\cref{sec:casestudy1} to simulate private teleconferences using business-oriented speech segments, and all original and recovered audio clips are available for public verification on our project website[Add link]. 
+To further evaluate the robustness of \alias{} attacks across diverse teleconferencing conditions, we conduct a sensitivity analysis by varying the headphone's playback volume from a quiet office level of 60~dB to high-intensity entertainment level of 80~dB. As shown in~\cref{fig:impact_volume}, the SNR of the eavesdropped leakage exhibits a strong positive correlation with the playback volume. Crucially, even at a modest sound pressure level (SPL) of 65 dB, a typical threshold for private business conversations\qh{add ref}, the proposed \alias{} attack remains highly effective.
+Specifically, the adversary can successfully recover Alice's managerial instructions with an SNR of approximately 10~dB and a corresponding Word Error Rate (WER) of roughly 22\%. These metrics indicate that even at lower volumes, the attack retains sufficient phonetic information to reconstruct Alice's intelligible speech.
+This confirms that standard physical barriers fail to provide an adequate privacy buffer against the proposed \alias{} attack, even when the victim employs low-amplitude acoustic settings.
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/6.1/Volume.pdf}
+    \caption{Impact of volume\qh{update the legend with shuhao.}}
+    \label{fig:impact_volume}
+\end{figure}
+
+
+
+
+
+
+
+\subsection{Case Study 3: Closed-Loop Manipulation}
+\label{sec:casestudy3}
+\input{tables/table_closeloop}
+
+In this case study, we demonstrate the real-world threat of \alias{} attack against legacy office infrastructure \ly{Instead of being legacy, landline phones are important devices in offices. We can find references such as governments use internal landline networks to communicate confidential information}, specifically focusing on a Flyingvoice P23GW VoIP landline situated in a standard cubicle environment. Beyond passive eavesdropping, our proposed injection-induced side channels enable a novel ``Eavesdrop-Synthesize-Injection'' closed-loop manipulation chain that elevates the threat from confidentiality compromise to malicious integrity manipulation. As illustrated in \cref{fig:case_study} (c), the victim, Bob, is at his desk and engaged in a call with his boss, Alice, using the landline. The adversary is positioned in an adjacent office, separated by a 20~cm office wall, and maintains a standoff distance of 50~cm from the target device using a suitcase-integrated attack prototype. The internal structure of this prototype is illustrated in~\cref{fig:prototype}.
+
+The attack process is started by eavesdropping on the conversation through the injection-induced side channel to achieve context awareness. By eavesdropping on Alice's voice through this injection-induced side channel, the system maintains a real-time understanding of the call. Upon detecting predefined trigger keywords (e.g., “quote” or “confirmation”), the system activates a voice-cloning module, IndexTTS-2~\cite{zhou2025indextts2}, trained on a brief sample of Alice’s voice to generate a contextually appropriate deepfake response in real time. Finally, the adversary injects the synthesized audios into the victim's device to completes the closed-loop manipulation.
+
+We conduct a series of trials across diverse semantic contexts to demonstrate the real-world attack impact of this closed-loop manipulation, as summarized in~\cref{tab:injection_cases}. The experiment results demonstrate a high success rate, with the malicious injection achieving its intended deceptive effect in 9 out of 10 trials\ly{questionable!}. The demo audios are available on our project website at [Add link].
+\ly{add citation of EM injection}
+
+
+
+
+
+
+% Beyond passive eavesdropping, injection-induced side channels enable a novel ``Listen-Decide-Act'' kill chain that elevates the threat from confidentiality compromise to active integrity manipulation. We demonstrated this capability on a Flyingvoice P23GW landline phone through a closed-loop attack framework.
+
+% The attack begins with \textit{context awareness}, where the adversary continuously monitors the leakage from the landline. By synchronizing the remote party's voice—recovered via the injection-induced side channel—with the local victim's voice captured by a directional acoustic microphone, the system maintains a full, real-time contextual understanding of the conversation.
+
+% Upon detecting specific trigger keywords such as``password'' or ``confirmation'', the system instantly transitions to the \textit{decision and generation} phase. A voice cloning module (IndexTTS-2), having been silently trained on a brief sample of the remote colleague's voice captured during the monitoring phase, generates a context-appropriate deep-fake response.
+
+% Finally, the system executes the \textit{active deception} by switching the Software Defined Radio (SDR) from continuous wave (CW) monitoring mode to high-power Amplitude Modulation (AM) injection mode. The malicious audio clip is injected onto the cable, where the non-linear junction of the phone acts as an unintended demodulator. This process forces the fake audio to be played directly into the victim's ear, indistinguishable from the legitimate call audio, thereby completing the active manipulation loop.
+
+% We executed a portable "Man-in-the-Middle" style attack using a suitcase-integrated platform positioned in a public hallway at a distance of 50 cm from the victim across a 20~cm office wall. In our attack experiment,  The "Man-in-the-Middle" injection was successful in 9 out of 10 trials. We observed that the non-linearity of the Flyingvoice P23GW is sufficient to demodulate the injected AM signal at the victim's ear causing no suspicion.
