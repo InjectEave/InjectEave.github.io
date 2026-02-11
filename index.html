@@ -1,401 +1,673 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>InjectEave - Injected and Leaked</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,300,400,500,600&family=Space+Grotesk:wght@400,500,600,700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <div class="bg-glow"></div>
-  <div class="bg-grid"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>InjectEave | Injected and Leaked</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="page-header" id="top">
+      <h1>
+        <span class="title-blue">Injected</span> and
+        <span class="title-red">Leaked</span>:<br />
+        Actively Inducing Side-channel Leakage Using Electromagnetic Injection
+        and Hardware Non-linearity
+      </h1>
+      <p class="paper-note">Paper #651, submitted to USENIX Security 2026</p>
+    </header>
 
-  <header class="site-header">
-    <div class="container header-inner">
-      <div class="brand">
-        <span class="brand-mark">IE</span>
-        <span class="brand-text">InjectEave</span>
-      </div>
-      <nav class="nav">
-        <a href="#overview">Overview</a>
-        <a href="#model">Model</a>
-        <a href="#results">Results</a>
-        <a href="#case-studies">Case Studies</a>
-        <a href="#mitigation">Mitigation</a>
-      </nav>
-    </div>
-  </header>
-
-  <main>
-    <section class="hero" id="overview" data-reveal>
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <p class="eyebrow">Injected and Leaked</p>
-          <h1>Actively Inducing Side-Channel Leakage Using Electromagnetic Injection and Hardware Non-Linearity</h1>
-          <p class="lead">InjectEave introduces Injection-Induced EM Side Channels - a new threat model where injected carriers and hardware non-linearity upconvert low-frequency analog secrets into measurable EM leakage.</p>
-          <div class="hero-actions">
-            <a class="btn primary" href="#case-studies">Jump to Audio Demos</a>
-            <a class="btn ghost" href="#results">See COTS Results</a>
-          </div>
-          <div class="hero-metrics">
-            <div class="metric">
-              <span class="metric-value">11</span>
-              <span class="metric-label">COTS devices evaluated</span>
-            </div>
-            <div class="metric">
-              <span class="metric-value">6 m</span>
-              <span class="metric-label">Max audio range achieved</span>
-            </div>
-            <div class="metric">
-              <span class="metric-value">Closed-loop</span>
-              <span class="metric-label">Listen-Decide-Act manipulation</span>
-            </div>
-          </div>
-        </div>
-        <div class="hero-figure">
-          <img src="assets/images/overview.png" alt="InjectEave overview diagram" />
-          <div class="figure-caption">Overview of the Injection-Induced EM Side Channel pipeline.</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" data-reveal>
-      <div class="container two-col">
-        <div>
-          <h2>Abstract</h2>
-          <p>Electromagnetic side-channel leakage and EM injection are typically treated as separate phenomena. InjectEave shows that injected carriers can be modulated by nonlinear hardware, amplifying leakage that would otherwise be infeasible. This enables eavesdropping on audio and low-frequency analog secrets, even through walls, and introduces closed-loop manipulation of voice interfaces.</p>
-        </div>
-        <div class="card">
-          <h3>Key Contributions</h3>
-          <ul class="bullet">
-            <li>Injection-Induced EM Side Channels as a unified framework for active leakage amplification.</li>
-            <li>End-to-end eavesdropping design combining EM injection, spectral capture, and diffusion-based speech enhancement.</li>
-            <li>Evaluation across 11 COTS devices with through-wall audio recovery and activity inference.</li>
+    <main class="container">
+      <section class="section" id="overview">
+        <h2>Overview</h2>
+        <p class="overview-summary">
+          InjectEave demonstrates how active EM injection and hardware
+          non-linearity can induce controllable side-channel leakage, enabling
+          both high-fidelity eavesdropping and closed-loop conversation
+          manipulation. To ground this threat in practical settings, we
+          evaluate 11 commercial COTS devices across five categories, including
+          wired and wireless headphones, landline phones, smart fans, and smart
+          lamps, and further include an investigation on analog microphone
+          inputs. The website is organized from laboratory demonstrations to  
+          real-world case studies and then to microphone-focused feasibility
+          analysis.
+        </p>
+        <article class="panel overview-structure">
+          <h3>Jump Links</h3>
+          <ul class="jump-list">
+            <li class="jump-group">Part I: Demonstrations in a Laboratory Setting</li>
+            <li><a href="#demo1">Demo 1: Attacks on Lamps</a></li>
+            <li><a href="#demo2">Demo 2: Attacks on Fans</a></li>
+            <li class="jump-group">
+              Part II: Audio Eavesdropping in Real-world Scenarios
+            </li>
+            <li><a href="#demo3">Demo 3: Through-wall Eavesdropping</a></li>
+            <li><a href="#demo4">Demo 4: Long-distance Eavesdropping</a></li>
+            <li class="jump-group">Part III: Demos of Case Studies</li>
+            <li>
+              <a href="#case1">Case Study 1: Through-wall Audio Eavesdropping</a>
+            </li>
+            <li>
+              <a href="#case2">Case Study 2: Meeting-room Audio Eavesdropping</a>
+            </li>
+            <li>
+              <a href="#case3"
+                >Case Study 3: Closed-loop Conversation Manipulation</a
+              >
+            </li>
+            <li class="jump-group">
+              Part IV: Investigation on Analog Microphone Inputs
+            </li>
+            <li>
+              <a href="#demo5">Feasibility Test on Microphone Input</a>
+            </li>
           </ul>
-        </div>
-      </div>
-    </section>
+        </article>
+      </section>
 
-    <section class="section" id="model" data-reveal>
-      <div class="container">
-        <div class="section-head">
-          <h2>Injection-Modulation-Emission</h2>
-          <p class="muted">Nonlinear components mix injected carriers with secret signals, upconverting low-frequency content into observable sidebands.</p>
-        </div>
-        <div class="model-grid">
-          <div class="step-card">
-            <span class="step">01</span>
-            <h3>Injection Coupling</h3>
-            <p>Adversary injects a high-frequency carrier tuned to the target's coupling efficiency.</p>
-          </div>
-          <div class="step-card">
-            <span class="step">02</span>
-            <h3>Nonlinear Modulation</h3>
-            <p>Hardware non-linearity mixes the secret and injected carrier, generating sidebands.</p>
-          </div>
-          <div class="step-card">
-            <span class="step">03</span>
-            <h3>EM Emission</h3>
-            <p>Modulated signals leak via unintentional antennas to a distant receiver.</p>
-          </div>
-        </div>
-        <div class="figure-block">
-          <img src="assets/images/leakage-model.png" alt="Leakage modeling diagram" />
-          <p class="figure-caption">Injection-Modulation-Emission modeling of leakage generation.</p>
-        </div>
-      </div>
-    </section>
+      <section class="section" id="part1">
+        <h2>Part I: Demonstrations in a Laboratory Setting</h2>
+        <div class="media-grid">
+          <article class="media-card" id="demo2">
+            <h3>Demo 2: Attacks on Fans</h3>
+            <p>
+              As the fan speed increases, the frequency of the received control
+              signal gradually increases, indicating that the fan's current
+              operating state can be inferred from the received control signal.
+            </p>
+            <video controls preload="metadata">
+              <source src="../Demo/Demo_fan.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </article>
 
-    <section class="section" data-reveal>
-      <div class="container two-col">
-        <div>
-          <h2>InjectEave Design</h2>
-          <p>InjectEave combines a portable EM injection source with a high-dynamic-range receiver, then reconstructs leaked audio using a score-based generative model trained on simulated distortion profiles.</p>
-          <div class="chip-row">
-            <span class="chip">USRP B210</span>
-            <span class="chip">Log-Periodic Antennas</span>
-            <span class="chip">SSA3075X Plus</span>
-            <span class="chip">SGMSE Enhancement</span>
-          </div>
+          <article class="media-card" id="demo1">
+            <h3>Demo 1: Attacks on Lamps</h3>
+            <p>
+              As the lamp becomes brighter, the intensity of the received power
+              signal gradually increases, indicating that the lamp's current
+              operating state can be inferred from the received power signal.
+            </p>
+            <video controls preload="metadata">
+              <source src="../Demo/Demo_lamp.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </article>
         </div>
-        <div class="figure-block">
-          <img src="assets/images/experiment-setup.png" alt="Experiment setup" />
-          <p class="figure-caption">Portable injection and capture setup used for lab evaluation.</p>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section" id="results" data-reveal>
-      <div class="container">
-        <div class="section-head">
-          <h2>COTS Evaluation Overview</h2>
-          <p class="muted">11 commercial devices across headphones, landlines, fans, and lamps exhibit injection-induced leakage.</p>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Device Type</th>
-                <th>Brand</th>
-                <th>Model</th>
-                <th>Year</th>
-                <th>Source of Leaks</th>
-                <th>Injection Frequency</th>
-                <th>SNR</th>
-                <th>Recognition Rate</th>
-                <th>Max Distance</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Wired Headphones</td>
-                <td>Sony + Dell*</td>
-                <td>ZX110AP</td>
-                <td>2014</td>
-                <td>Amplifier</td>
-                <td>510-570 MHz</td>
-                <td>22.5 dB</td>
-                <td>30/30</td>
-                <td>5 m</td>
-              </tr>
-              <tr>
-                <td>Wired Headphones</td>
-                <td>Sony + Mac*</td>
-                <td>ZX110AP</td>
-                <td>2014</td>
-                <td>Amplifier</td>
-                <td>220-260 MHz</td>
-                <td>14.5 dB</td>
-                <td>30/30</td>
-                <td>4 m</td>
-              </tr>
-              <tr>
-                <td>Wired Headphones</td>
-                <td>Apple + iPhone*</td>
-                <td>Earbuds</td>
-                <td>2016</td>
-                <td>Amplifier</td>
-                <td>1160-1180 MHz</td>
-                <td>6.4 dB</td>
-                <td>29/30</td>
-                <td>1 m</td>
-              </tr>
-              <tr>
-                <td>Wireless Headphones</td>
-                <td>UGreen&#8224;</td>
-                <td>MAX2</td>
-                <td>2024</td>
-                <td>Amplifier</td>
-                <td>900-980 MHz</td>
-                <td>23.8 dB</td>
-                <td>30/30</td>
-                <td>6 m</td>
-              </tr>
-              <tr>
-                <td>Wireless Headphones</td>
-                <td>PHILIPS</td>
-                <td>TAH2020</td>
-                <td>2025</td>
-                <td>Amplifier</td>
-                <td>1590-1650 MHz</td>
-                <td>21.6 dB</td>
-                <td>30/30</td>
-                <td>6 m</td>
-              </tr>
-              <tr>
-                <td>Wireless Headphones</td>
-                <td>HP</td>
-                <td>H231R</td>
-                <td>2023</td>
-                <td>Amplifier</td>
-                <td>980-1020 MHz</td>
-                <td>20.7 dB</td>
-                <td>29/30</td>
-                <td>4 m</td>
-              </tr>
-              <tr>
-                <td>Landline</td>
-                <td>Flyingvoice</td>
-                <td>P23GW</td>
-                <td>2023</td>
-                <td>ADC &amp; Amplifier</td>
-                <td>840-920 MHz</td>
-                <td>13.5 dB</td>
-                <td>30/30</td>
-                <td>3 m</td>
-              </tr>
-              <tr>
-                <td>Fan</td>
-                <td>OIDIRE&#8224;</td>
-                <td>ODI-MF10A</td>
-                <td>2023</td>
-                <td>Switching MOSFET</td>
-                <td>440-520 MHz</td>
-                <td>39.1 dB</td>
-                <td>30/30</td>
-                <td>6 m</td>
-              </tr>
-              <tr>
-                <td>Fan</td>
-                <td>XIAOMI</td>
-                <td>BPLDS10DM</td>
-                <td>2025</td>
-                <td>Switching MOSFET</td>
-                <td>530-610 MHz</td>
-                <td>30.5 dB</td>
-                <td>30/30</td>
-                <td>4 m</td>
-              </tr>
-              <tr>
-                <td>Lamp</td>
-                <td>JINGZAO</td>
-                <td>JDO-06</td>
-                <td>2024</td>
-                <td>Power Converter</td>
-                <td>80-650 MHz</td>
-                <td>20.7 dB</td>
-                <td>29/30</td>
-                <td>3 m</td>
-              </tr>
-              <tr>
-                <td>Lamp</td>
-                <td>XIAOMI&#8224;</td>
-                <td>1S</td>
-                <td>2019</td>
-                <td>Power Converter</td>
-                <td>70-700 MHz</td>
-                <td>22.4 dB</td>
-                <td>30/30</td>
-                <td>3 m</td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="table-note">* Same headphone model tested with different host devices. &#8224; Devices used in impact quantification. SNR and recognition rate measured at 20 cm. Max distance reported at 5/30 recognition threshold.</p>
-        </div>
-        <div class="gallery">
-          <div class="gallery-card">
-            <img src="assets/images/attack-headphone.png" alt="Attack on wireless headphone" />
-            <p>Wireless headphone leakage exhibits strong sidebands within optimal carrier bands.</p>
-          </div>
-          <div class="gallery-card">
-            <img src="assets/images/attack-fan.png" alt="Attack on smart fan" />
-            <p>Fan motor signals modulate injected carriers, enabling activity inference.</p>
-          </div>
-          <div class="gallery-card">
-            <img src="assets/images/attack-lamp.png" alt="Attack on smart lamp" />
-            <p>Lamp power converters leak dimming states through injection-induced sidebands.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+      <section class="section" id="part2">
+        <h2>Part II: Audio Eavesdropping in Real-world Scenarios</h2>
+        <div class="media-grid">
+          <article class="media-card" id="demo3">
+            <h3>Demo 3: Through-wall Eavesdropping</h3>
+            <p>
+              The attacker placed the surveillance device in the room adjacent to the victim, eavesdropping on the target at a 1m distance through a 30cm concrete wall.
+            </p>
+            <video controls preload="metadata">
+              <source src="../Demo/Demo_behind-the-wall.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </article>
 
-    <section class="section" data-reveal>
-      <div class="container">
-        <div class="section-head">
-          <h2>Impact Quantification</h2>
-          <p class="muted">Attack effectiveness varies by distance, antenna orientation, and structural barriers.</p>
+          <article class="media-card" id="demo4">
+            <h3>Demo 4: Long-distance Eavesdropping</h3>
+            <p>
+              The attacker hid the surveillance device behind the bushes and conducted long-range eavesdropping on the victim from a distance of 6 meters.
+            </p>
+            <video controls preload="metadata">
+              <source src="../Demo/Demo_long-distance.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </article>
         </div>
-        <div class="impact-grid">
-          <div class="impact-card">
-            <img src="assets/images/impact-distance.png" alt="Impact of distance on attack performance" />
-            <p>Distance impact on SNR and attack success rate.</p>
-          </div>
-          <div class="impact-card">
-            <img src="assets/images/impact-angle.png" alt="Impact of antenna orientation" />
-            <p>Antenna orientation strongly affects leakage amplitude.</p>
-          </div>
-          <div class="impact-card">
-            <img src="assets/images/impact-barriers.png" alt="Impact of structural barriers" />
-            <p>Concrete introduces attenuation, but attacks remain viable.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section" id="case-studies" data-reveal>
-      <div class="container">
-        <div class="section-head">
-          <h2>Case Studies: Through-Wall Audio Eavesdropping</h2>
-          <p class="muted">All audio samples below are publicly released for demonstration purposes. Each sample includes original speech and through-wall received leakage.</p>
-        </div>
-        <div class="figure-block">
-          <img src="assets/images/case-stft.png" alt="Spectrogram comparison of original, received, and denoised audio" />
-          <p class="figure-caption">Spectrogram comparison of original, received, and denoised audio in Case Study 1.</p>
-        </div>
-        <div id="case1-audio" class="case-block"></div>
-        <div id="case2-audio" class="case-block"></div>
-      </div>
-    </section>
+      <section class="section" id="part3">
+        <h2>Part III: Demos of Case Studies</h2>
+        <article class="case-card case1-card" id="case1">
+          <h3>Case Study 1: Through-wall Audio Eavesdropping</h3>
+          <div class="case1-main">
+            <figure class="case1-figure">
+              <img
+                src="./assets/images/case-study-1.png"
+                alt="Case Study 1 setup diagram"
+                loading="lazy"
+              />
+            </figure>
+            <div class="table-wrap case1-table-wrap">
+              <table class="audio-table case1-audio-table">
+                <thead>
+                  <tr>
+                    <th>Text</th>
+                    <th>Benign</th>
+                    <th>InjectEave w/o Denoise</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                    <td>
+                      Let's meet at the entrance of 221B Baker Street at 6pm
+                      tomorrow.
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Female</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/benign_location.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Male</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/benign_location_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Female</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/injecteave_wo_location.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Male</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/injecteave_wo_location_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      My bank card PIN is 9-5-2-7, and the transfer amount is
+                      3,500 US dollars.
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Female</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/benign_financial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Male</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/benign_financial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Female</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/injecteave_wo_financial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Male</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/injecteave_wo_financial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Regarding this batch of core chips, our final quote is a
+                      unit price of 42.50 dollars, including 13% VAT.
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Female</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/benign_commercial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Male</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/benign_commercial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Female</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/injecteave_wo_commercial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Male</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/injecteave_wo_commercial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
 
-    <section class="section" data-reveal>
-      <div class="container" id="case3">
-        <div class="section-head">
-          <h2>Case Study 3: Closed-Loop Manipulation</h2>
-          <p class="muted">Listen-Decide-Act: eavesdrop, synthesize, and inject malicious responses into a landline call.</p>
-        </div>
-        <div id="case3-table" class="table-wrap"></div>
-        <div id="case3-audio" class="case-block"></div>
-      </div>
-    </section>
+        <article class="case-card case2-card" id="case2">
+          <h3>Case Study 2: Meeting-room Audio Eavesdropping</h3>
+          <div class="case2-main">
+            <figure class="case2-figure">
+              <img
+                src="./assets/images/case-study-2.png"
+                alt="Case Study 2 setup diagram"
+                loading="lazy"
+              />
+            </figure>
+            <div class="table-wrap case2-table-wrap">
+              <table class="audio-table case2-audio-table">
+                <thead>
+                  <tr>
+                    <th>Text</th>
+                    <th>Benign</th>
+                    <th>InjectEave w/o Denoise</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    Let's meet at the entrance of 221B Baker Street at 6pm
+                    tomorrow.
+                  </td>
+                  <td>
+                    <div class="audio-pair">
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">Female</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/benign_location.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">Male</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/benign_location_male.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="audio-pair">
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">Female</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/injecteave_wo_location.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">Male</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/injecteave_wo_location_male.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    My bank card PIN is 9-5-2-7, and the transfer amount is
+                    3,500 US dollars.
+                  </td>
+                  <td>
+                    <div class="audio-pair">
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">Female</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/benign_financial.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">Male</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/benign_financial_male.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="audio-pair">
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">Female</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/injecteave_wo_financial.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">Male</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/injecteave_wo_financial_male.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Regarding this batch of core chips, our final quote is a
+                    unit price of 42.50 dollars, including 13% VAT.
+                  </td>
+                  <td>
+                    <div class="audio-pair">
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">Female</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/benign_commercial.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">Male</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/benign_commercial_male.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="audio-pair">
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">Female</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/injecteave_wo_commercial.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">Male</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/injecteave_wo_commercial_male.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
 
-    <section class="section" id="mitigation" data-reveal>
-      <div class="container two-col">
-        <div>
-          <h2>Mitigation &amp; Limitations</h2>
-          <p>Traditional EM hardening and digital obfuscation are insufficient against injection-induced leakage. The most promising defenses focus on detecting active injection and hardening analog interfaces post-decryption.</p>
-        </div>
-        <div class="stack">
-          <div class="card">
-            <h3>EM Hardening</h3>
-            <p>Shielding, filtering, and twisted-pair cabling reduce coupling, but can be offset by higher injection power.</p>
+        <article class="case-card case3-card" id="case3">
+          <h3>Case Study 3: Closed-loop Conversation Manipulation</h3>
+          <div class="case3-main">
+            <figure class="case3-figure">
+              <img
+                src="./assets/images/case-study-3.png"
+                alt="Case Study 3 setup diagram"
+                loading="lazy"
+              />
+            </figure>
+            <div class="case3-explain">
+              <p class="case3-explain-title">Attack Process</p>
+              <p>
+                This case study follows an
+                "Eavesdrop-Synthesize-Inject" closed-loop pipeline.
+              </p>
+              <p>
+                <strong>Step 1: Eavesdrop.</strong> The attacker monitors side
+                channel leakage to obtain call context in real time.
+              </p>
+              <p>
+                <strong>Step 2: Synthesize.</strong> When trigger keywords
+                (e.g., "quote" or "confirmation") are detected, IndexTTS-2
+                synthesizes a forged response with similar timbre.
+              </p>
+              <p>
+                <strong>Step 3: Inject.</strong> The forged audio is injected
+                through EM coupling into the landline output to influence the
+                victim's decision.
+              </p>
+              <p class="case3-explain-title">Conversation Texts</p>
+              <ol class="case3-text-list">
+                <li>
+                  <strong>Reply:</strong> "Understood. Since they are a
+                  returning client, quote them 5 million."
+                  <span class="case3-inline-arrow">-></span>
+                  <strong>Synthesized:</strong> "Actually change it to 8
+                  million."
+                </li>
+                <li>
+                  <strong>Reply:</strong> "Let me think about it. Yes, I
+                  agree."
+                  <span class="case3-inline-arrow">-></span>
+                  <strong>Synthesized:</strong> "Actually, I disagree."
+                </li>
+                <li>
+                  <strong>Reply:</strong> "Yes, turn right and you will see the
+                  hotel."
+                  <span class="case3-inline-arrow">-></span>
+                  <strong>Synthesized:</strong> "Sorry, please turn left."
+                </li>
+              </ol>
+            </div>
           </div>
-          <div class="card">
-            <h3>Conventional SCA Defenses</h3>
-            <p>Masking and clock randomization protect digital logic but do not address analog leaks.</p>
+          <div class="table-wrap">
+            <table class="audio-table case3-audio-table">
+              <thead>
+                <tr>
+                  <th>Benign</th>
+                  <th>InjectEave w/o Denoise</th>
+                  <th>InjectEave w/ Denoise</th>
+                  <th>Synthesized audio</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/speaker_quote.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/received_quote.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/denoised_quote.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/injected_quote.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/speaker_governance.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/received_governance.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/denoised_governance.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/injected_governance.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/speaker_navigation.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/received_navigation.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/denoised_navigation.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/injected_navigation.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div class="card">
-            <h3>Injection Detection</h3>
-            <p>Spectrum monitoring and anomaly detection offer promise, but introduce cost and operational complexity.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+        </article>
+      </section>
 
-    <section class="section" data-reveal>
-      <div class="container">
-        <div class="section-head">
-          <h2>Artifacts</h2>
-          <p class="muted">All source artifacts are available locally in this repository.</p>
-        </div>
-        <div class="artifact-grid">
-          <div class="card">
-            <h3>Paper Source</h3>
-            <p>LaTeX sources are in <code>Paper/main.tex</code> and <code>Paper/sections/</code>.</p>
-          </div>
-          <div class="card">
-            <h3>Figures</h3>
-            <p>Figures are stored in <code>Paper/figures/</code> (PDF and PNG).</p>
-          </div>
-          <div class="card">
-            <h3>Audio Samples</h3>
-            <p>All case-study audio is in <code>data/</code> and mirrored under <code>assets/audio/</code>.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+      <section class="section" id="part4">
+        <h2>Part IV: Investigation on Analog Microphone Inputs</h2>
+        <article class="media-card full-card" id="demo5">
+          <h3>Feasibility Test on Microphone Input</h3>
+          <video controls preload="metadata">
+            <source src="../Demo/Demo_microphone.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </article>
+      </section>
+    </main>
 
-  <footer class="site-footer">
-    <div class="container">
-      <p>InjectEave research demo. All audio samples are synthetic or collected with consent for controlled experiments.</p>
-    </div>
-  </footer>
-
-  <script src="app.js"></script>
-</body>
+    <footer class="footer">
+      <p>
+        InjectEave demo website for Paper #651 (USENIX Security 2026
+        submission)
+      </p>
+      <a href="#top">Back to top</a>
+    </footer>
+  </body>
 </html>
-
-
