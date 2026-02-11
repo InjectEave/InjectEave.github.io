@@ -21,29 +21,33 @@
       <section class="section" id="overview">
         <h2>Overview</h2>
         <p class="overview-summary">
-          InjectEave demonstrates how active EM injection and hardware
-          non-linearity can induce controllable side-channel leakage, enabling
+          This paper discovers <em>InjectEave</em> attack that demonstrates how
+          active EM injection and hardware non-linearity can induce
+          controllable, previously infeasible side-channel leakage, enabling
           both high-fidelity eavesdropping and closed-loop conversation
-          manipulation. To ground this threat in practical settings, we
-          evaluate 11 commercial COTS devices across five categories, including
-          wired and wireless headphones, landline phones, smart fans, and smart
-          lamps, and further include an investigation on analog microphone
-          inputs. The website is organized from laboratory demonstrations to  
-          real-world case studies and then to microphone-focused feasibility
-          analysis.
+          manipulation. To ground this new threat model in practical settings,
+          we evaluate 11 commercial COTS devices across five categories,
+          including wired and wireless headphones, landline phones, smart fans,
+          and smart lamps, and further include an investigation on analog
+          microphone inputs. This website presents demos and experimental data
+          ranging from laboratory demonstrations to real-world through-wall and
+          long-distance (6m) eavesdropping case studies, and then to
+          microphone-focused feasibility analysis.
         </p>
         <article class="panel overview-structure">
-          <h3>Jump Links</h3>
+          <h3>Quick Links</h3>
           <ul class="jump-list">
             <li class="jump-group">Part I: Demonstrations in a Laboratory Setting</li>
-            <li><a href="#demo1">Demo 1: Attacks on Fans</a></li>
-            <li><a href="#demo2">Demo 2: Attacks on Lamps</a></li>
+            <li><a href="#demo1">Demo 1: Eavesdropping on Smart Fans' Control Signal</a></li>
+            <li><a href="#demo2">Demo 2: Eavesdropping on Smart Lamps' Brightness</a></li>
             <li class="jump-group">
               Part II: Real-time Audio Eavesdropping in Real-world Scenarios
             </li>
             <li><a href="#demo3">Demo 3: Through-wall Eavesdropping</a></li>
             <li><a href="#demo4">Demo 4: Long-distance Eavesdropping</a></li>
-            <li class="jump-group">Part III: Demos of Case Studies</li>
+            <li class="jump-group">
+              Part III: Demo Audio of Real-world Case Studies
+            </li>
             <li>
               <a href="#case1">Case Study 1: Through-wall Audio Eavesdropping in Hotel Rooms</a>
             </li>
@@ -52,7 +56,8 @@
             </li>
             <li>
               <a href="#case3"
-                >Case Study 3: Closed-loop Conversation Manipulation</a
+                >Case Study 3: Closed-loop Conversation Eavesdropping &amp;
+                Manipulation on Landline Devices</a
               >
             </li>
             <li class="jump-group">
@@ -69,7 +74,7 @@
         <h2>Part I: Demonstrations in a Laboratory Setting</h2>
         <div class="media-grid">
           <article class="media-card" id="demo1">
-            <h3>Demo 1: Attacks on Fans</h3>
+            <h3>Demo 1: Eavesdropping on Smart Fans' Control Signal</h3>
             <p>
               As the fan speed increases, the frequency of the received control
               signal gradually increases, indicating that the fan's current
@@ -82,7 +87,7 @@
           </article>
 
           <article class="media-card" id="demo2">
-            <h3>Demo 2: Attacks on Lamps</h3>
+            <h3>Demo 2: Eavesdropping on Smart Lamps' Brightness</h3>
             <p>
               As the lamp becomes brighter, the intensity of the received power
               signal gradually increases, indicating that the lamp's current
@@ -124,7 +129,7 @@
       </section>
 
       <section class="section" id="part3">
-        <h2>Part III: Demos of Case Studies</h2>
+        <h2>Part III: Demo Audio of Real-world Case Studies</h2>
         <article class="case-card case1-card" id="case1">
           <h3>Case Study 1: Through-wall Audio Eavesdropping in Hotel Rooms</h3>
           <div class="case1-main">
@@ -140,7 +145,7 @@
                 <thead>
                   <tr>
                     <th>Text</th>
-                    <th>Benign</th>
+                    <th>Secret Audio</th>
                     <th>InjectEave w/o Denoise</th>
                     <th>InjectEave w/ Denoise</th>
                 </tr>
@@ -383,7 +388,7 @@
                 <thead>
                   <tr>
                     <th>Text</th>
-                    <th>Benign</th>
+                    <th>Secret Audio</th>
                     <th>InjectEave w/o Denoise</th>
                     <th>InjectEave w/ Denoise</th>
                 </tr>
@@ -612,7 +617,10 @@
         </article>
 
         <article class="case-card case3-card" id="case3">
-          <h3>Case Study 3: Closed-loop Conversation Manipulation</h3>
+          <h3>
+            Case Study 3: Closed-loop Conversation Eavesdropping &amp;
+            Manipulation on Landline Devices
+          </h3>
           <div class="case3-main">
             <figure class="case3-figure">
               <img
@@ -634,7 +642,8 @@
               <p>
                 <strong>Step 2: Synthesize.</strong> When trigger keywords
                 (e.g., "quote" or "confirmation") are detected, IndexTTS-2
-                synthesizes a forged response with similar timbre.
+                synthesizes a forged, malicious response with the same speaker
+                identity.
               </p>
               <p>
                 <strong>Step 3: Inject.</strong> The synthesized audio is
@@ -674,7 +683,7 @@
             <table class="audio-table case3-audio-table">
               <thead>
                 <tr>
-                  <th>Benign</th>
+                  <th>Secret Audio</th>
                   <th>InjectEave w/o Denoise</th>
                   <th>InjectEave w/ Denoise</th>
                   <th>Synthesized audio</th>
