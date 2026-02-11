@@ -36,19 +36,19 @@
           <h3>Jump Links</h3>
           <ul class="jump-list">
             <li class="jump-group">Part I: Demonstrations in a Laboratory Setting</li>
-            <li><a href="#demo1">Demo 1: Attacks on Lamps</a></li>
-            <li><a href="#demo2">Demo 2: Attacks on Fans</a></li>
+            <li><a href="#demo1">Demo 1: Attacks on Fans</a></li>
+            <li><a href="#demo2">Demo 2: Attacks on Lamps</a></li>
             <li class="jump-group">
-              Part II: Audio Eavesdropping in Real-world Scenarios
+              Part II: Real-time Audio Eavesdropping in Real-world Scenarios
             </li>
             <li><a href="#demo3">Demo 3: Through-wall Eavesdropping</a></li>
             <li><a href="#demo4">Demo 4: Long-distance Eavesdropping</a></li>
             <li class="jump-group">Part III: Demos of Case Studies</li>
             <li>
-              <a href="#case1">Case Study 1: Through-wall Audio Eavesdropping</a>
+              <a href="#case1">Case Study 1: Through-wall Audio Eavesdropping in Hotel Rooms</a>
             </li>
             <li>
-              <a href="#case2">Case Study 2: Meeting-room Audio Eavesdropping</a>
+              <a href="#case2">Case Study 2: Through-wall Audio Eavesdropping in Meeting Rooms</a>
             </li>
             <li>
               <a href="#case3"
@@ -68,8 +68,8 @@
       <section class="section" id="part1">
         <h2>Part I: Demonstrations in a Laboratory Setting</h2>
         <div class="media-grid">
-          <article class="media-card" id="demo2">
-            <h3>Demo 2: Attacks on Fans</h3>
+          <article class="media-card" id="demo1">
+            <h3>Demo 1: Attacks on Fans</h3>
             <p>
               As the fan speed increases, the frequency of the received control
               signal gradually increases, indicating that the fan's current
@@ -81,8 +81,8 @@
             </video>
           </article>
 
-          <article class="media-card" id="demo1">
-            <h3>Demo 1: Attacks on Lamps</h3>
+          <article class="media-card" id="demo2">
+            <h3>Demo 2: Attacks on Lamps</h3>
             <p>
               As the lamp becomes brighter, the intensity of the received power
               signal gradually increases, indicating that the lamp's current
@@ -97,7 +97,7 @@
       </section>
 
       <section class="section" id="part2">
-        <h2>Part II: Audio Eavesdropping in Real-world Scenarios</h2>
+        <h2>Part II: Real-time Audio Eavesdropping in Real-world Scenarios</h2>
         <div class="media-grid">
           <article class="media-card" id="demo3">
             <h3>Demo 3: Through-wall Eavesdropping</h3>
@@ -126,7 +126,7 @@
       <section class="section" id="part3">
         <h2>Part III: Demos of Case Studies</h2>
         <article class="case-card case1-card" id="case1">
-          <h3>Case Study 1: Through-wall Audio Eavesdropping</h3>
+          <h3>Case Study 1: Through-wall Audio Eavesdropping in Hotel Rooms</h3>
           <div class="case1-main">
             <figure class="case1-figure">
               <img
@@ -302,7 +302,7 @@
         </article>
 
         <article class="case-card case2-card" id="case2">
-          <h3>Case Study 2: Meeting-room Audio Eavesdropping</h3>
+          <h3>Case Study 2: Through-wall Audio Eavesdropping in Meeting Rooms</h3>
           <div class="case2-main">
             <figure class="case2-figure">
               <img
@@ -490,7 +490,7 @@
             <div class="case3-explain">
               <p class="case3-explain-title">Attack Process</p>
               <p>
-                This case study follows an
+                Case study 3 follows an
                 "Eavesdrop-Synthesize-Inject" closed-loop pipeline.
               </p>
               <p>
@@ -503,30 +503,35 @@
                 synthesizes a forged response with similar timbre.
               </p>
               <p>
-                <strong>Step 3: Inject.</strong> The forged audio is injected
-                through EM coupling into the landline output to influence the
-                victim's decision.
+                <strong>Step 3: Inject.</strong> The synthesized audio is
+                injected into the landline output via EM coupling to maliciously
+                manipulate the victim's decision, for example, altering a
+                response from "agree" to "disagree".
               </p>
               <p class="case3-explain-title">Conversation Texts</p>
               <ol class="case3-text-list">
                 <li>
                   <strong>Reply:</strong> "Understood. Since they are a
-                  returning client, quote them 5 million."
+                  returning client, quote them
+                  <span class="case3-emph">5 million</span>."
                   <span class="case3-inline-arrow">-></span>
-                  <strong>Synthesized:</strong> "Actually change it to 8
-                  million."
+                  <strong>Synthesized:</strong> "Actually change it to
+                  <span class="case3-emph-red">8 million</span>."
                 </li>
                 <li>
-                  <strong>Reply:</strong> "Let me think about it. Yes, I
-                  agree."
+                  <strong>Reply:</strong> "Let me think about it.
+                  <span class="case3-emph">Yes, I agree</span>."
                   <span class="case3-inline-arrow">-></span>
-                  <strong>Synthesized:</strong> "Actually, I disagree."
+                  <strong>Synthesized:</strong> "Actually,
+                  <span class="case3-emph-red">I disagree</span>."
                 </li>
                 <li>
-                  <strong>Reply:</strong> "Yes, turn right and you will see the
-                  hotel."
+                  <strong>Reply:</strong> "Yes,
+                  <span class="case3-emph">turn right</span> and you will see
+                  the hotel."
                   <span class="case3-inline-arrow">-></span>
-                  <strong>Synthesized:</strong> "Sorry, please turn left."
+                  <strong>Synthesized:</strong> "Sorry, please
+                  <span class="case3-emph-red">turn left</span>."
                 </li>
               </ol>
             </div>
@@ -654,6 +659,11 @@
         <h2>Part IV: Investigation on Analog Microphone Inputs</h2>
         <article class="media-card full-card" id="demo5">
           <h3>Feasibility Test on Microphone Input</h3>
+          <p class="part4-intro">
+            This part examines whether anolog input such as microphone can also
+            exhibit injection-induced leakage. The demo provides a feasibility
+            case showing signal reception and recovery behavior.
+          </p>
           <video controls preload="metadata">
             <source src="./assets/videos/Demo_microphone.mp4" type="video/mp4" />
             Your browser does not support the video tag.

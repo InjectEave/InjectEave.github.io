@@ -77,6 +77,29 @@ h2 {
   font-style: italic;
 }
 
+#part1 h2,
+#part2 h2,
+#part3 h2,
+#part4 h2 {
+  text-align: left;
+}
+
+#part1 h2 {
+  color: #1f4e79;
+}
+
+#part2 h2 {
+  color: #2f6f4f;
+}
+
+#part3 h2 {
+  color: #7a4a12;
+}
+
+#part4 h2 {
+  color: #7c2d2d;
+}
+
 h3 {
   margin: 0 0 8px;
   font-size: 1.18rem;
@@ -86,6 +109,10 @@ h3 {
   margin: 0 auto 14px;
   max-width: var(--content-width);
   text-align: center;
+}
+
+.part4-intro {
+  text-align: left;
 }
 
 .overview-summary {
@@ -325,6 +352,15 @@ video {
 
 .case3-inline-arrow {
   margin: 0 4px;
+}
+
+.case3-emph {
+  font-weight: 700;
+}
+
+.case3-emph-red {
+  font-weight: 700;
+  color: #b11b1b;
 }
 
 .case3-audio-table {
