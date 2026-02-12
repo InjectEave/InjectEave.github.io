@@ -79,6 +79,10 @@
               As the fan speed increases, the frequency of the received control
               signal gradually increases, indicating that the fan's current
               operating state can be inferred from the received control signal.
+              This enables “Context Inference” attacks: for example, 
+              detecting “Sleep Mode” at night can confirm a user’s rest 
+              schedule and infer occupancy 
+              without the need for visual surveillance.
             </p>
             <video controls preload="metadata">
               <source src="./assets/videos/Demo_fan.mp4" type="video/mp4" />
@@ -90,8 +94,11 @@
             <h3>Demo 2: Eavesdropping on Smart Lamps' Brightness</h3>
             <p>
               As the lamp becomes brighter, the intensity of the received power
-              signal gradually increases, indicating that the lamp's current
-              operating state can be inferred from the received power signal.
+              signal gradually increases.
+              By mapping these power levels to vendor-specific presets (e.g., 20% brightness for
+              “Reading”), an adversary can perform “Behavioral Profiling,” transforming a 
+              light source into a beacon that exposes a user’s specific activities and routines 
+              without requiring any network-level access. 
             </p>
             <video controls preload="metadata">
               <source src="./assets/videos/Demo_lamp.mp4" type="video/mp4" />
