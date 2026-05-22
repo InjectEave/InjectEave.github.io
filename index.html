@@ -45,6 +45,7 @@
             </li>
             <li><a href="#demo3">Demo 3: Through-wall Eavesdropping</a></li>
             <li><a href="#demo4">Demo 4: Long-distance Eavesdropping</a></li>
+            <li><a href="#extreme-long-distance">Extremely Long-distance Attack</a></li>
             <li class="jump-group">
               Part III: Demo Audio of Real-world Case Studies
             </li>
@@ -65,6 +66,29 @@
             </li>
             <li>
               <a href="#demo5">Demo 5: Feasibility Test on Microphone Input</a>
+            </li>
+            <li class="jump-group">
+              Part V: Investigation on Robustness
+            </li>
+            <li>
+              <a href="#demo6">Demo 6: Robustness Test</a>
+            </li>
+            <li class="jump-group">
+              Part VI: Investigation of Frequency Selectivity and Spatial Selectivity
+            </li>
+            <li>
+              <a href="#demo7"
+                >Demo 7: Investigation of Frequency Selectivity and Spatial
+                Selectivity</a
+              >
+            </li>
+            <li class="jump-group">
+              Part VII: Stealthiness of Single-tone Injection
+            </li>
+            <li>
+              <a href="#part7"
+                >Part VII: Audibility Comparison With and Without Injection</a
+              >
             </li>
           </ul>
         </article>
@@ -133,6 +157,94 @@
             </video>
           </article>
         </div>
+
+        <article class="case-card long-range-card" id="extreme-long-distance">
+          <h3>Extremely Long-distance Attack</h3>
+          <p class="case-intro">
+            We increase the injection power from the default 18 dBm to 40 dBm
+            using an external power amplifier. For spoken digit sequences, the
+            digits can still be recognized at distances up to 30 m. The figure
+            shows the field setup, and the audio samples below present the
+            recovered speech quality at 12 m, 18 m, 24 m, and 30 m together
+            with the clean source audio.
+          </p>
+          <div class="case2-main">
+            <figure class="case2-figure">
+              <img
+                src="./assets/images/long_range_setup.png"
+                alt="Extremely long-distance attack setup"
+                loading="lazy"
+              />
+            </figure>
+            <div class="table-wrap case2-table-wrap">
+              <table class="audio-table case2-audio-table long-range-audio-table">
+                <thead>
+                  <tr>
+                    <th>Condition</th>
+                    <th>Audio Sample</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Clean Audio</td>
+                    <td>
+                      <audio controls preload="none">
+                        <source
+                          src="./assets/audio/long range/Clean audio.mp3"
+                          type="audio/mpeg"
+                        />
+                      </audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>12 m</td>
+                    <td>
+                      <audio controls preload="none">
+                        <source
+                          src="./assets/audio/long range/12m.wav"
+                          type="audio/wav"
+                        />
+                      </audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>18 m</td>
+                    <td>
+                      <audio controls preload="none">
+                        <source
+                          src="./assets/audio/long range/18m.wav"
+                          type="audio/wav"
+                        />
+                      </audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>24 m</td>
+                    <td>
+                      <audio controls preload="none">
+                        <source
+                          src="./assets/audio/long range/24m.wav"
+                          type="audio/wav"
+                        />
+                      </audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>30 m</td>
+                    <td>
+                      <audio controls preload="none">
+                        <source
+                          src="./assets/audio/long range/30m.wav"
+                          type="audio/wav"
+                        />
+                      </audio>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
       </section>
 
       <section class="section" id="part3">
@@ -693,7 +805,6 @@
                   <th>Secret Audio</th>
                   <th>InjectEave w/o Denoise</th>
                   <th>InjectEave w/ Denoise</th>
-                  <th>Synthesized audio</th>
                 </tr>
               </thead>
               <tbody>
@@ -718,14 +829,6 @@
                     <audio controls preload="none">
                       <source
                         src="./assets/audio/case3/denoised_quote.wav"
-                        type="audio/wav"
-                      />
-                    </audio>
-                  </td>
-                  <td>
-                    <audio controls preload="none">
-                      <source
-                        src="./assets/audio/case3/injected_quote.wav"
                         type="audio/wav"
                       />
                     </audio>
@@ -756,14 +859,6 @@
                       />
                     </audio>
                   </td>
-                  <td>
-                    <audio controls preload="none">
-                      <source
-                        src="./assets/audio/case3/injected_governance.wav"
-                        type="audio/wav"
-                      />
-                    </audio>
-                  </td>
                 </tr>
                 <tr>
                   <td>
@@ -790,10 +885,93 @@
                       />
                     </audio>
                   </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-wrap case3-secondary-wrap">
+            <table class="audio-table case3-audio-table">
+              <thead>
+                <tr>
+                  <th>Synthesized audio</th>
+                  <th>Microphone-recorded Genuine Speech</th>
+                  <th>Microphone-recorded Injected Synthesized Speech</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/injected_quote.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/recorded by microphone/recorded_quote_mic.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/recorded by microphone/injected_quote_mic.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/injected_governance.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/recorded by microphone/recorded_governance_mic.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/recorded by microphone/injected_governance_mic.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                </tr>
+                <tr>
                   <td>
                     <audio controls preload="none">
                       <source
                         src="./assets/audio/case3/injected_navigation.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/recorded by microphone/recorded_navigation_mic.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/recorded by microphone/injected_navigation_mic.wav"
                         type="audio/wav"
                       />
                     </audio>
@@ -818,6 +996,303 @@
             <source src="./assets/videos/Demo_microphone.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
+        </article>
+      </section>
+
+      <section class="section" id="part5">
+        <h2>Part V: Investigation on Robustness</h2>
+        <article class="media-card full-card" id="demo6">
+          <h3>Demo 6: Robustness Test</h3>
+          <p class="part4-intro">
+            This part examines the robustness of the injection effect under
+            multi-device and ambient RF interference. The demo is performed in
+            a meeting room with multiple operating electronic devices, such as
+            cameras, a ceiling microphone array, a central air conditioner,
+            and display screens. The target headphone (UGreen Max2) is
+            attacked while several nearby electronic devices operate
+            simultaneously, including two other audio-playing headphones
+            (PHILIPS TAH2020 &amp; HP H231R), two microphones
+            (audio-technica ATW-T1007), a lamp (XIAOMI 1S), and a fan
+            (OIDIRE ODI-MF10A).
+          </p>
+          <video controls preload="metadata">
+            <source src="./assets/videos/Demo_robust.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </article>
+      </section>
+
+      <section class="section" id="part6">
+        <h2>Part VI: Investigation of Frequency Selectivity and Spatial Selectivity</h2>
+        <article class="media-card full-card" id="demo7">
+          <h3>Demo 7: Demonstration of Frequency Selectivity and Spatial Selectivity</h3>
+          <p class="part4-intro">
+            This part illustrates two questions under the tested setup:
+            whether two adjacent headphones of different models can be
+            distinguished through frequency selectivity, and whether two
+            headphones of the same model can be distinguished through spatial
+            selectivity.
+          </p>
+          <video controls preload="metadata">
+            <source src="./assets/videos/Demo-selectivity.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </article>
+      </section>
+
+      <section class="section" id="part7">
+        <h2>Part VII: Stealthiness of Single-tone Injection</h2>
+        <article class="case-card stealth-card">
+          <p class="stealth-intro">
+            The stealthiness of the injection may be compromised by the
+            detectable artifacts in the output audio especially when the
+            injection strength is very strong. To assess whether the injected
+            tone is detectable even in a worst case condition, we specifically
+            place the transmitting antenna adjacent to the target headphone
+            (UGreen MAX2) and radiate the single-tone injection carrier at
+            18 dBm power, while ensuring this setting can induce recoverable
+            leakage.
+          </p>
+
+          <div class="stealth-main">
+            <figure class="stealth-figure">
+              <img
+                src="./assets/images/stealthiness-setup.png"
+                alt="Stealthiness evaluation setup with transmitter antenna, recorder, microphone, and headphone"
+                loading="lazy"
+              />
+            </figure>
+            <div class="table-wrap stealth-table-wrap">
+              <table class="audio-table stealth-audio-table">
+                <thead>
+                  <tr>
+                    <th>Text</th>
+                    <th>Clean Audio</th>
+                    <th>Recorded Without Injection</th>
+                    <th>Recorded With Injection</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      Let's meet at the entrance of 221B Baker Street at 6pm
+                      tomorrow.
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Female</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/clean audio/benign_location.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Male</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/clean audio/benign_location_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Female</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone without injection/benign_location.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Male</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone without injection/benign_location_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Female</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone with injection/benign_location.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Male</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone with injection/benign_location_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      My bank card PIN is 9-5-2-7, and the transfer amount is
+                      3,500 US dollars.
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Female</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/clean audio/benign_financial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Male</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/clean audio/benign_financial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Female</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone without injection/benign_financial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Male</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone without injection/benign_financial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Female</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone with injection/benign_financial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Male</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone with injection/benign_financial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Regarding this batch of core chips, our final quote is a
+                      unit price of 42.50 dollars, including 13% VAT.
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Female</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/clean audio/benign_commercial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Male</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/clean audio/benign_commercial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Female</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone without injection/benign_commercial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Male</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone without injection/benign_commercial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Female</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone with injection/benign_commercial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">Male</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone with injection/benign_commercial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </article>
       </section>
     </main>
