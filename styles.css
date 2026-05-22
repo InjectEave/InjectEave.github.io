@@ -82,8 +82,7 @@ h2 {
 #part3 h2,
 #part4 h2,
 #part5 h2,
-#part6 h2,
-#part7 h2 {
+#part6 h2 {
   text-align: left;
 }
 
@@ -111,10 +110,6 @@ h2 {
   color: #8a4b08;
 }
 
-#part7 h2 {
-  color: #8a4b08;
-}
-
 h3 {
   margin: 0 0 8px;
   font-size: 1.18rem;
@@ -128,6 +123,10 @@ h3 {
 
 .part4-intro {
   text-align: left;
+}
+
+.part5-demo-intro {
+  min-height: 12.6em;
 }
 
 .overview-summary {

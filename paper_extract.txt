@@ -1,0 +1,1393 @@
+          Injected and Leaked: Actively Inducing Side-channel Leakage Using
+                Electromagnetic Injection And Hardware Non-Linearity
+
+                                      Your N. Here                      Second Name
+                                     Your Institution                 Second Institution
+
+
+
+                         Abstract                                                              Injection-Induced EM Side-channel
+
+Electromagnetic (EM) side-channel leakage and injection are
+typically treated as distinct physical phenomena, threaten-                         Victim Devices
+ing data confidentiality and integrity respectively. This work
+                                                                                                                               Audio Eavesdropping
+investigates how EM injection can be used to amplify side-              EM                                   EM
+                                                                     Injection
+channel leakage that is otherwise infeasible. We introduce a                                             Eavesdropping
+
+novel framework for Injection-Induced EM Side Channels to
+enable integrated, closed-loop EM security analysis. Our the-                             …
+                                                                                                                                 Smart Home
+oretical modeling and experimental measurements reveal that                                                                   Activities Inference
+nonlinear hardware components, such as ubiquitous ampli-
+fiers, analog-to-digital converters, and power converters, can       Figure 1: Injection-induced EM Side Channel utilizes active
+modulate secret analog signals onto an injected EM carrier           EM injection and ubiquitous hardware nonlinearity to pro-
+and thus upconvert low-frequency secrets into measurable EM          duce controllable EM leakage, enabling unconventional EM
+emissions. By tuning the injection frequency and amplitude,          eavesdropping vectors against low-frequency analog secrets.
+adversaries gain the ability to actively shape the effective
+spectrum and entropy of the resulting leakage. We design
+InjectEave attack and demonstrate eavesdropping on wired             computer hardware, such as sound [4, 8], light [17, 42], and
+and wireless headphones’ audio from up to 6 m away, as               electromagnetic emissions [32, 41, 69], adversaries would
+well as in through-wall scenarios, and characterize injection-       be able to infer critical information of cryptographic oper-
+induced EM leakage of other low-frequency secrets such as            ations [12, 18, 19], confidential input data [10, 20, 27], and
+power consumption of smart home devices and analog sensor            private user identity [36, 37, 41, 49].
+inputs. Case studies further demonstrate how the proposed               Among various methods of side channels, EM side chan-
+techniques enable closed-loop eavesdropping and manipula-            nels present a highly pervasive and impactful attack surface,
+tion of landline phone’s conversations. Finally, we analyze          as all modern computer systems rely on current and voltage
+the broader security challenges posed by this emerging threat        variations in electrical circuits to perform all computations.
+vector and analyze mitigations.                                      The resulting time-varying EM fields inevitably radiate into
+                                                                     the surrounding environment and propagate through the air to
+1   Introduction                                                     nearby adversaries. For example, the security community has
+                                                                     shown the feasibility of exploiting EM side-channel leakage
+This work investigates the new problem statement of exploit-         to eavesdrop on a wide range of secret information, such as
+ing active electromagnetic (EM) injection and the inherent           screen displays [33, 40], keyboard and touchscreen interac-
+nonlinearity of computer hardware to reshape the capability          tions [27, 69], users’ biometrics [37, 49, 77], and even confi-
+of conventional electromagnetic side-channel analysis. Side-         dential video streams of smart home cameras [41].
+channel analysis has become one of the most important types             Despite the massive theoretical attack surface, existing EM
+of security analysis methodologies, exploiting the non-ideal         side channel research has revealed a critical limitation in the
+abstractions of computer systems to compromise confiden-             range of applicable eavesdropping distances and observable
+tiality and achieve unauthorized access to data internal to          types of information. Specifically, the EM energy that can
+a protected device [3, 61]. By collecting and analyzing sig-         propagate to external adversaries is solely determined by the
+nals unintentionally produced by the physical operations of          target’s internal characteristics, including the amplitude of
+
+
+                                                                 1
+ the current/voltage that carries the secret information, the fre-         eavesdropped with this approach unavoidably suffer from
+ quency of the internal electrical signals, and the EM transfer            higher-order inter-modulations that add harmonics of an origi-
+ efficiency of the target’s circuits that act as unintentional radi-       nal signal to its spectrum. This nonlinearity-specific distortion
+ ating antennas. This major limitation is rooted in the threat             poses unique challenges to eavesdroppers who aim to recover
+ model assumption that the side-channel analyzer can only pas-             wide-band signals, such as human speech audio. We design
+ sively observe the EM leakage of a target device. As a result,            InjectEave to recover higher-fidelity secrets. InjectEave
+ conventional side-channel eavesdroppers face the seemingly                utilizes a diffusion-based denoising model and training data
+“unsolvable” problem of low signal-to-noise ratio (SNR), treat-            simulated by our developed quantitative model. Tests on phys-
+ ing better EM receivers as their only measure for improving               ically collected speech audio data show notable improvements
+ EM side-channel analysis capabilities.                                    on several audio quality metrics.
+    Toward overcoming this challenge, this work rethinks the                  Our evaluation in lab settings first identifies typical low-
+ passive eavesdropping paradigm and provides a new analyti-                frequency analog secrets carried by 11 commercial off-of-the-
+ cal framework that employs active EM injection to induce and              shelf (COTS) household devices. Audio of headphones and
+ amplify EM side-channel leakage in a controllable manner.                 landline phones could leak both speaker identity and spoken
+ Our key observation is motivated by a critical observation:               content. Controlling signals and power consumption traces of
+ a fundamental frequency mismatch between internal secret                  IoT devices, such as smart fans and lamps, could leak personal
+ signals and the circuit’s efficient EM coupling bands creates             activities in households. Our tests show that injection-induced
+ a physical barrier, significantly limiting the secret energy that         side channel attacks could eavesdrop on the majority of these
+ can leave the device. Meanwhile, we observe that existing                 devices from over 2 m away and through walls, with a maxi-
+ injection research [35, 65, 82] has shown and modeled how                 mum distance of 6 m for recovering intelligible headphone
+ external EM signals can be designed to be at the most efficient           audio. Our case studies of audio eavesdropping in several
+ coupling frequencies to enter the target device. Importantly,             personal, public, and work scenarios further demonstrate its
+ injected EM signals could be unintentionally demodulated by               security consequences in the wild1 . An example of landline
+ nonlinear hardware such as amplifiers, allowing adversaries               phones showcases the new capability of integrating EM in-
+ to use EM carriers to inject false low-frequency analog sig-              jection and injection-induced leakage to achieve closed-loop,
+ nals into target systems. While recent studies [29, 55] have              context-aware eavesdropping and manipulation on private
+ exploited unintentional backscattering to eavesdrop on digi-              conversations. Finally, we discuss the other possible analog
+ tal bits, they are limited to coarse-grained, binary impedance            and digital secrets that need to be further threat-modeled in
+ change analysis and leave the leakage of analog secrets unex-             future research, and analyze the possible mitigation and paths
+ plored. Building upon these previous theories, we synthesize              toward systematic protections against integrated EM injection
+ a new threat model of Injection-Induced EM Side Channel                   and side channel attacks. The main contributions of this work
+ to bridge the theoretical and experimental gaps between side              is summarized as follows:
+ channel leakage and EM injection. Bridging this gap, we
+ hypothesize that nonlinear computer hardware can modulate                    • Theoretical framework for Injection-Induced EM Side
+ secret information, in the form of electrical inputs of these                  Channels. We identify ubiquitous nonlinear hardware
+ hardware components, onto injected carriers, which could                       as the root cause of this new phenomenon, enabling fu-
+ then emit and propagate to side-channel eavesdroppers.                         ture EM security research to integrate closed-loop data
+    If this hypothesis were true, then EM side-channel eaves-                   eavesdropping and manipulation analysis.
+ droppers would be able to actively control their injected EM                 • Technical design and implementation of InjectEave.
+ carriers to break through the target devices’ EM security                      Our design exemplifies how to exploit this new vulner-
+ boundaries. We characterize this threat model with exper-                      ability, achieving through-wall eavesdropping on low-
+ iments on four types of the most typical nonlinear hardware                    frequency analog secrets such as speech audio and activ-
+ components found in computer systems, including amplifiers,                    ities of smart home devices.
+ analog-to-digital converters, power converters, and switching
+ MOSFETs. Our measurements verify that injection-induced                      • Characterization of threats and mitigation. Our evalua-
+ side channels enable unconventional attack vectors, such as                    tion on 11 COTS devices gauges this new threat model’s
+ eavesdropping on secret information with EM frequencies on                     impact, based on which we analyze possible defense
+ the order of 10 Hz–10 kHz, which itself could be too low to                    methodologies for stronger EM security protection.
+ propagate to external eavesdroppers. Our theoretical model-
+ ing further provides a framework for analyzing threats against               • We highlight the urgent need for future research to re-
+ the most common analog data interfaces, such as audio output                   think and systematically examine the pervasive threat
+ and input, control signals of actuators, and even device power                 of injection-induced EM side channels across diverse
+ traces (Fig. 1).                                                               hardware platforms.
+    Despite these new capabilities, our tests show that signals               1 Demos and data are available at: https://injecteave.github.io/
+
+
+
+
+                                                                       2
+                                                                                Sensitive Info   Inherent EM Leakage Band   Injected Carrier
+2     Background                                                                    Passive                                 InjectEave
+                                                                                                        This Work
+
+This section introduces the motivation for exploring the new
+techniques of injection-induced side channels, by reflecting on               Side-Channel Leakage                      Side-Channel Leakage
+the history and limitations of conventional side channels and
+the new opportunities provided by EM injection capabilities             Figure 2: Injected EM carriers can piggyback secret signals,
+and discovered hardware nonlinearity characteristics.                   overcoming the mismatch between target signal frequencies
+                                                                        and efficient EM emissions.
+
+2.1    Conventional EM Side Channel
+                                                                        forms can accurately change the analog sensor readings of
+A conventional EM side channel is an unintentional one-way
+                                                                        implanted defibrillators and microphones. The core of EM
+communication channel between the target device and an
+                                                                        injection methodologies is the exploitation of nonlinear hard-
+eavesdropper. Operations of computer systems are physically
+                                                                        ware components for addressing the mismatch between the
+implemented by changing voltages (and equivalently, cur-
+                                                                        frequency of intended malicious signals and the effective EM
+rents) in hardware circuits, which generate varying electro-
+                                                                        injection frequency bands, which are, again, determined by
+magnetic fields. Then, an electric trace, such as a wire on
+                                                                        the target hardware’s EM frequency response.
+the PCB board or a communication cable, can act as an un-
+                                                                           For example, [35] was able to inject kHz-range fake speech
+intentional antenna that unwittingly sends the internal EM
+                                                                        audio into microphones readings, where audio signals are
+energy to the surrounding environment. Denoting the inter-
+                                                                        amplitude-modulated onto EM carriers of 840 MHz. The tar-
+nal voltage signal of the secret as Vsec (t), the side channel
+                                                                        get device’s electrical traces act as unintentional receiving an-
+leakage process can be represented as: Veav (t) = htx (Vsec (t)),
+                                                                        tennas that pick up the modulated carriers. When the received
+where htx (t), whose frequency-domain representation could
+                                                                        high-frequency signals pass through microphones’ amplifiers,
+be denoted as Htx ( f ), is the transfer function describing the
+                                                                        which have unmodeled nonlinear input-output relationships,
+frequency response of the unintentional leakage source and
+                                                                        the baseband false audio signals will be demodulated to the
+the EM propagation path.
+                                                                        original frequency range and become inputs of microphones
+   While adversaries trying to get higher-amplitude signals
+                                                                        and other sensors.
+have control over Htx to some degree by reducing their phys-
+                                                                           Since then, EM injection has been widely considered as a
+ical distance from the target, or employing higher-gain re-
+                                                                        means for compromising data availability and integrity, such
+ceiving antennas, the majority of the usable leakage signal is
+                                                                        as injecting false keystrokes [26, 83], inducing fake touch-
+determined by the frequency and amplitude of Vsec (t) itself,
+                                                                        screen inputs [44, 60], and altering camera images [25, 87].
+and the efficiency of Htx over the frequency bands of Vsec (t).
+                                                                        Our work, however, discovers and characterizes the hidden
+For eavesdroppers, unfortunately, the efficient frequency of
+                                                                        capability of EM injection for inducing side-channel leakage
+Htx and the frequency of the interested signals Vsec (t) often
+                                                                        and enhancing security analysis on data confidentiality: the
+face a mismatch, as shown in Fig. 2. Taking human speech
+                                                                        nonlinearity of hardware may not only demodulate informa-
+audio signals as an example, the target signals are in the range
+                                                                        tion from EM carriers, but also modulates secrets onto EM
+of 20 Hz–20 kHz, which is far from the feasible EM frequency
+                                                                        carriers. This new perspective exactly addresses the knowl-
+range (at least on the order of MHz) of most unintentional
+                                                                        edge gap in the need for more effective EM side-channel
+antenna structures within the target device. Furthermore, the
+                                                                        analysis methodologies that can capture low-frequency ana-
+feasible eavesdropping distances have been limited due to the
+                                                                        log secrets.
+increasingly lower operation voltages of low-power minia-
+turized electronics [13] that reduced the amplitude of Vsec (t),
+and stronger EM shielding [52] that reduced the amplitude of            3     Injection-Induced EM Side Channel
+Htx in newer computer systems.
+   As a result, EM side channel leakage has so far remained a           Based on the observations and analysis above, this section pro-
+notable risk mostly for high-voltage digital data transmissions,        vides the threat model and formulation of injection-induced
+such as computer display images [33] and keyboard inputs                EM side channels, and characterizes its feasibility in widely
+transmitted over USB cables [69], revealing a gap in side-              found nonlinear hardware within computer systems.
+channel analysis capability for low-frequency analog secrets.
+                                                                        3.1    Threat Model
+2.2    EM Injection and Device Non-linearity
+                                                                        We hypothesize that EM signals injected into nonlinear com-
+EM injection is a technique used for physically injecting false         puter hardware can mix with and thus piggyback secret infor-
+analog signals into computer hardware. In 2013, Foo Kune                mation within the target system; the modulated EM signals
+et al. [35] demonstrated that amplitude-modulated EM wave-              will then leak to side-channel adversaries. In particular, the in-
+
+
+                                                                    3
+                                                    Attacked Device                                                       Spectrum Analyzer
+              TX Injected                              Nonlinear
+                                                                                                                                               Actuator Driver
+                            Sign
+                                al                   Components
+  Signal Generator                                                                     Signal Generator
+                                         Unintentional
+                                   ced
+                                                                                                                                              ADC
+ Spectrum                 indu             Antenna               Secret Signal
+              RX ection-                                                                                     Amplifier
+ Analyzer         Inj nal
+                      g
+      Demodulation Si                                                                                                                          Power Converter
+
+         Eavesdropped Signal                                                              Antenna Tx                      Antenna Rx
+
+
+ Figure 3: Model of the injection-induced leakage process.                           Figure 4: Feasibility tests on the most common and ubiquitous
+                                                                                     nonlinear hardware components.
+jected EM energy boosts the amount of side-channel leakage,
+enabling adversaries to get information previously inaccessi-                        minal of the non-linear component is the superposition of the
+ble with conventional EM side-channel methods.                                       original secret signal and the coupled carrier:
+   Adversary’s Objective. The objective of the adversary
+is the same as that in conventional EM side-channel anal-                                                   Vin (t) = Vsec (t) +Vc (t)                       (2)
+ysis [33, 41, 69]: inferring confidential information about
+a computer system’s operations by analyzing the EM sig-                                 Non-Linear Modulation Following the series expansion
+nals the adversary can collect. Our analysis in this work fo-                        model for semiconductor non-linearity established in prior
+cuses on secrets in the form of analog signals, particularly the                     EMI research [35], we approximate the transfer function of
+low-frequency signals such as human speech audio (below                              the nonlinear hardware component as:
+20 kHz), power consumption and actuation control signals
+(below 200 Hz), etc., which are known to be highly challeng-                                        ∞
+ing targets due to the spectral mismatch between these secrets’                       Vout (t) = ∑ αkVink (t) = α0 + α1Vin (t) + α2Vin2 (t) + . . . (3)
+                                                                                                   k=0
+frequencies and efficient EM leakage frequencies (MHz or
+GHz range) [34, 75].                                                                 where αk represents the k-th order coefficient. While the lin-
+   Adversary’s Capability. We assume the adversary has a                             ear term α1 represents intended signal conditioning such as
+set of readily available commercial equipment that is able to                        amplification, the quadratic term α2 and higher-order terms in-
+both send EM injection signals and receive modulated EM                              duce inter-modulation. Taking the quadratic term for example,
+emissions. The added EM injection capability is the only                             substituting Eq. (2) into the quadratic term yields:
+difference from the assumed capability of conventional EM
+side-channel adversaries. The equipment often includes an-                                   α2Vin2 (t) = α2 [Vsec (t) +Vc (t)]2
+tennas, RF sources such as software-defined radio devices                                                         2
+(e.g., USRP [16]), and potentially more advanced spectrum                                                 = α2 [Vsec (t) +Vc2 (t) + 2Vsec (t)Vc (t)]         (4)
+                                                                                                                                    |     {z      }
+analyzers and signal generators commonly found in RF re-                                                                               AM Modulation
+search labs. Same as conventional EM side-channel research,
+we assume the adversary has prior knowledge of the target                            The cross-product term in Eq. (4) exemplifies how the secret
+device’s model and can acquire a similar device for profiling                        could be modulated onto the injected carrier. Denoting the
+                                                                                                                                         c (t), the
+                                                                                     total of signals carrying the modulated secret as Vsec
+its effective EM injection and emission frequencies.
+                                                                                     model shows:
+
+3.2    Leakage Modeling                                                                                c
+                                                                                                     Vsec (t) = 2α2Vsec (t)Vc (t) +Vhic (t),                 (5)
+We formalize the Injection-Induced Side Channel through a
+Injection-Modulation-Emission model, as depicted in Fig. 3.                          where Vhic (t) represents the high-order inter-modulation prod-
+   Injection Coupling. The adversary generates an injection                          ucts associated with α3 , α4 , etc. This process effectively up-
+carrier Vin j (t) at frequency fc : Vin j (t) = Ain j cos(2π fct). The               converts the spectral energy of Vsec (t) from the baseband to
+target device’s electrical traces act as unintentional receiving                     the sidebands centered at fc .
+                                                                                        Carrier Emission The modulated signal Vsec    c (t) propagates
+antennas, where the injection coupling efficiency is governed
+by a frequency-dependent injection transfer function Hrx ( f )                       through the device’s conductive paths and emits at other elec-
+(equivalently, hrx (t) in the time domain). The induced voltage                      trical interconnects which act as unintentional transmitting
+Vc (t) at the input of the vulnerable nonlinear component is:                        antennas. The leakage efficiency is determined by the emis-
+                                                                                     sion transfer function Htx ( f ). The final leakage signal Veav (t)
+             Vc (t) = |Hrx ( fc )| · Ain j cos(2π fct + φ)                 (1)       observed by the adversary is:
+
+Consequently, the total signal Vin (t) present at the input ter-                              Veav (t) = 2α2 · htx (Vsec (t)Vc (t)) + htx (Vhic (t))         (6)
+
+
+                                                                                 4
+                       Conventional     Injection-Induced             Conventional      Injection-Induced           Conventional     Injection-Induced
+
+
+
+
+                                                                                                                                                                      Amplitude (dBm)
+                       {
+                                  {
+                                                                      {
+                                                                                   {
+                                                                                                                    {
+                                                                                                                               {
+Frequency (kHz)
+
+                  16                                              2
+                                                                                                              1.2                                                                                                   Injection-Induced
+                                                                                                                                                                                         -40
+
+
+
+
+                                                                                                                                                                        Power (dB)
+                  12                                          1.5                                                                                              -100                                                 Conventional
+                                                                                                              0.8                                                                        -60
+                  8                                               1                                                                                                                      -80
+                                                                                                                                                               -120
+                  4                                           0.5                                             0.4                                                                       -100
+                                                                                                                                                                                        -120
+                                                                                                                                                               -140
+                       0         0.5             1          1.5       0           0.5           1           1.5     0         0.5             1          1.5                              f -200   f -100   f          f +100     f +200
+                                                                                                                                                                                           c       c            c       c          c
+                                      Time (s)                                       Time (s)                                      Time (s)                                                         Frequency (Hz)
+                                (a) Amplifier                                        (b) ADC                                  (c) MOSFET                                                           (d) Power Converter
+
+                                 Figure 5: Ubiquitous nonlinear computer hardware leaks secret analog information under EM injection.
+
+
+ When only considering the dominant second-order inter-                                                                     AD623, a widely used rail-to-rail instrumentation amplifier,
+ modulation for simplicity, the leakage amplitude |Veav (t)| can                                                            as our primary target. To characterize its non-linear response
+ be expressed as a function of the system parameters:                                                                       in a controlled setting, we used a signal generator to directly
+                                                                                                                            input a baseband frequency sweep signal (Vsec (t)) into the
+            |Veav (t)| ∝ |Htx ( fc )Hrx ( fc )| ·                         |α2 |      · |Vsec (t)| · |Vin j (t)|             amplifier’s input terminal. The sweep secret signal ranged
+                         |        {z          }                           |{z}         |        {z            }
+                                      Coupling Efficiency     Non-Linearity              Signal Amplitude                   from 0 to 16 kHz with an amplitude of 200 mV. Simulta-
+                                                                  (7)                                                       neously, we targeted the device with an EM injection car-
+     The modeling reveals that even if the original secret signals’                                                         rier Vin j (t) at 80 MHz. The results, visualized in Fig. 5 (a),
+  amplitudes are low and their frequencies are significantly                                                                clearly shows the spectral content of the original secret sig-
+  lower than the efficient emission frequencies of Htx ( f ), the                                                           nal, together with distinct harmonic components (2 × fsecret ,
+  adversary can amplify the leakage by tuning the injection                                                                 3 × fsecret , ...) This observation further provides proof of the
+  frequency fc to maximize the compound efficiency product                                                                  hardware’s nonlinearity. In contrast, conventional eavesdrop-
+  |Htx ( fc )Hrx ( fc )|, as well as by increasing the amplitude Ain j                                                      ping of the 0–16kHz analog secret shows no visible signals
+  of EM injection Vin j (t).                                                                                                on the receiver end.
+                                                                                                                               (2) ADC. Analog-to-digital converters, another type of
+                                                                                                                            ubiquitous component in modern digital computer systems
+  3.3                      Feasibility Analysis                                                                             that process inputs of analog physical information, also
+     To verify this hypothesis of injection-induced leakage                                                                 has nonlinear characteristics. We used Texas Instruments’
+  caused by inter-modulations of Vsec (t) and Vin j (t), we indi-                                                           ADS1115, a common 16-bit ADC, as the test target. Similar
+  vidually characterized the leakage behavior of four types of                                                              to the amplifier test, we input a baseband sweep signal Vsec (t)
+  the most common nonlinear hardware found in computer                                                                      while targeting the device with the RF carrier at 80MHz. As
+  systems, including (1) amplifiers, (2) analog-to-digital con-                                                             shown in Fig. 5, clear secrets and their harmonic signals are
+  verters (ADCs), (3) switching Metal-Oxide-Semiconductor                                                                   observed in the injection-induced leakage, while the conven-
+  Field-Effect Transistor(MOSFET), and (4) power converters.                                                                tional side channel analysis receives no useful information.
+  As shown by the setup in Fig. 4, we used two near-field elec-                                                             Notably, the results (Fig. 5d) reveal that leakage persists even
+  tromagnetic probes as transmitting and receiving antennas to                                                              when the injection bandwidth exceeds far beyong the ADC’s
+  inject EM energy into and receive emissions from the nonlin-                                                              sample rate, which is 860 Hz, revealing that modulation oc-
+  ear components.                                                                                                           curs in the continuous-time analog front-end.
+                                                                                                                               (3) Switching MOSFET in Actuators. Driver circuits of
+  3.3.1                    Susceptibility of Common Nonlinear Electronics                                                   actuators allow computer systems to control external hard-
+                                                                                                                            ware, such as motors in IoT devices. These circuits typically
+  For each nonlinear component, we measured the electromag-                                                                 employ nonlinear power MOSFETs acting as high-speed
+  netic emissions under both conventional passive eavesdrop-                                                                switches to provide control signals, such as pulse width mod-
+  ping conditions and our proposed injection-induced condi-                                                                 ulation (PWM). To examine their injection-induced leakage,
+  tions. This comparative analysis aims to illustrate the leakage-                                                          we constructed a representative driver circuit using a discrete
+  enabling capability provided by the injection-induced side                                                                MOSFET driving a resistive load. An Arduino generates the
+  channels. In addition, we also measured and observed no leak-                                                             baseband secret signal, Vsec (t), in the form of a frequency-
+  age signals when the nonlinear components were replaced by                                                                stepped square wave (shifting between 300 Hz, 600 Hz, 900
+  linear resistance loads, confirming that hardware nonlinearity                                                            Hz, and 1200 Hz). This signal simulates a typical variable-
+  is the key enabling such injection-induced leakage.                                                                       speed motor control sequence. Simultaneously, the EM injec-
+     (1) Amplifier. Amplifiers are well-known nonlinear de-                                                                 tion carrier Vin j (t) couples onto the high-current loop formed
+  vices [35, 66] often found in data interfaces such as audio                                                               by the Drain-Source path and the load. The recovered spec-
+  output and sensor input circuits. We selected Analog Devices’                                                             trogram shown in Fig. 5 displays a clear "staircase" pattern
+
+
+                                                                                                                        5
+                                                                         faces the distortions caused by the higher-order terms (Vhic (t)
+  
+
+
+
+
+                                   
+                                                                         in Eq. (5)). This is illustrated by the nonlinear variations of
+                                                                         the data points in Fig. 6, and could manifest as harmonics of
+                                                                         the original secret signal (e.g., as shown in Fig. 5). While the
+                                                                         harmonics are discernible when the secret is a simple single
+                (a)                                (b)                   tone, they may degrade the quality of more complex wideband
+                                                                         signals by contaminating the original frequency components.
+Figure 6: The amplitude of the leakage signal changes with               For example, human speech signals naturally consist of a fun-
+both the secret and injection signals.                                   damental component and its harmonics, meaning that higher-
+                                                                         order intermodulation products of the fundamental and even
+                                                                         lower-order harmonics can overlap with, and thereby distort,
+corresponding to the frequency steps. Still, strong harmonics            higher-frequency components, posing a unique challenge for
+accompany each fundamental frequency.                                    reconstructing high-quality audio and other wideband secrets.
+   (4) Power Converter. The AC-DC rectification stage of
+power converters is the entry point of electrical energy for
+electronic devices, converting high-voltage AC mains into
+                                                                         3.4    InjectEave Design
+DC power. To investigate leakage from power supply units,                Based on the new knowledge about the capability and chal-
+we connected a power converter with a fixed high-power re-               lenge of injection-induced side channels, we provide an ex-
+sistive load. Here, the target secret signal could be the AC             emplary eavesdropping design, named InjectEave.
+mains voltage itself (Vsec (t) at 50 Hz), representing the power             EM Injection and Receiving Hardware. Aiming for
+consumption of the device. The measurement results (Fig. 5)              a portable and efficient design, InjectEave uses an Ettus
+reveal a prominent modulation effect: the fundamental mains              USRP B210 and a Log-Periodic antenna to send single-tone
+frequency and a rich set of harmonics (e.g., 100 Hz, 150 Hz)             injection signals at its maximum output power. On the leakage
+are clearly recovered as sidebands around the carrier. This              receiver side, another Log-Periodic antenna connected to a
+strong modulation arises from the bridge rectifier diodes at             Siglent SSA3075X Plus spectrum analyzer collects the leaked
+the adapter’s input. Again, no signal appeared in the passively          electromagnetic signals. The spectrum analyzer demodulates
+eavesdropped traces.                                                     the signal at the same center frequency as the USRP’s output.
+                                                                         The resulting baseband signal is routed to a recording device,
+3.3.2   Leakage Characteristics                                          such as a laptop, for further processing. The hardware setup
+                                                                         is shown in Fig. 7.
+After confirming the existence of injection-induced leakage,                 Signal Enhancement Software. To address the observed
+we further seek to characterize the quantitative relationships           distortions, especially for audio signal eavesdropping, we em-
+between the injection, leakage, and secret signals. We observe           ploy a Score-based Generative Model for Speech Enhance-
+that injection-induced side channels introduce both the benefit          ment (SGMSE) [74] backend and treat the noisy measurement
+of secret signal amplification and the challenge of nonlinear            as a structural anchor. The reconstruction is formulated as
+distortions.                                                             a mean-reverting diffusion process driven by two distinct
+   Near-Linear Signal Amplification. We reused the setup                 mechanisms. The drift term uses the leakage as a structural
+above to produce different strengths of secret and injection             constraint, locking the generation to the envelope |Veav (t)|
+signals to examine the quantitative relationship revealed                to preserve the victim’s original prosody. Simultaneously,
+by Eq. (7). Our experiments confirm the near-linear relation-            the score function acts as a spectral enhancer, specifically
+ship between |Veav (t)|, |Vsec (t)|, and |Vin j (t)|. For example,       filtering out the inter-modulation distortions Vhic (t) to restore
+Fig. 6 shows the variations of these quantities on the AD623             high-fidelity speech.
+amplifier, where |Veav (t)| scales almost proportionally with                The effectiveness of the model relies on training with
+|Vsec (t)| and |Vsec (t)|. Results of the other three nonlinear          a large-scale dataset of paired clean and distorted signals.
+components exhibit highly similar trends and are thus omit-              Given the practical difficulty of collecting aligned EM data in
+ted. This result thus demonstrates the capability of injection-          the wild, we synthesize training pairs using a physics-based
+induced EM side channels in leaking fine-grained signals,                pipeline derived from Eq. (5). We use Librispeech [53] as
+where the eavesdropped signals can vary continuously accord-             the clean speech dataset and synthesize the corresponding
+ing to the original analog secrets and the intended amplifica-           leakage traces by simulating varying hardware nonlinearity,
+tion controlled by the EM injection signal.                              combined with ambient EM noise. This approach ensures
+   Challenge of Nonlinear Distortions. Although the lin-                 the model learns the unique spectral structure of these inter-
+ear amplification effect of the second-term inter-modulation             modulation distortions Vhic (t), enabling robust generalization
+provides injection-induced side channels with the unique ca-             to real-world hardware leakage. As Section 5 will show, the
+pability of controllable leakage strength, it also inevitably            enhanced audio demonstrates notable improvements across
+
+
+                                                                     6
+       Antenna Tx                                Antenna Rx                              (a)                              (b)
+
+                                                                       Figure 8: Eavesdropping on a 2 kHz audio tone played on (a)
+                             Spectrum Analyzer
+                                                                       HP H231R, and (b) Sony ZX110AP.
+
+ USRP B210
+                    Laptop                                             frequency. (3) Attack Success Rate (ASR) provides a uni-
+                                                                       fied measure of recovered information fidelity relative to the
+      Figure 7: Evaluating InjectEave on COTS devices.                 ground truth. For audio devices, ASR is defined as 1 −W ER,
+                                                                       where word error rate (WER) evaluates the accuracy of recov-
+                                                                       ering speech signal’s semantic information. For discrete-state
+several audio quality metrics, as well as their intelligibility.       devices, including smart fans and smart lamps, ASR is de-
+The audio demos can be found in [6].                                   fined as the classification accuracy (Ncorrect /Ntotal ) across all
+                                                                       operational states.
+
+4     Evaluation in a Laboratory Setting
+                                                                       4.2     Evaluations on COTS devices
+This section evaluates InjectEave attack on 11 commercial              We categorize the analysis on the 11 COTS devices into two
+devices of 5 different categories and measures the eavesdrop-          distinct threat dimensions based on the attack surfaces and
+ping attack’s performance in real-world settings.                      exposed privacy risks: high-fidelity audio recovery and human
+                                                                       activity inference. Specifically, audio peripherals serve as
+4.1     Experimental Setup                                             direct attack vectors for speech eavesdropping. In contrast,
+                                                                       smart home devices’ states can be exploited to infer user
+Fig. 7 shows the experiment setup of the victim’s devices and          presence and behavioral patterns.
+adversary’s devices.
+   To ensure the results reflect ordinary consumer-grade de-
+                                                                       4.2.1   Threats Against Audio Peripherals
+ployments, the eavesdropping attack is conducted without
+physical access or hardware/software modifications to the              Audio peripherals, including wireless headphones, wired
+devices.                                                               headphones, and landlines, are ubiquitous in both public
+   Victim’s Devices. The evaluated devices including: (1)              and private spaces. To evaluate InjectEave attack on these
+three wired headphones from Sony, Dell, and Apple; (2) three           COTS audio peripherals, we play a 2 kHz reference single-
+wireless headphones from UGreen, PHILIPS, and HP; (3) a                tone signal, which represents a typical speech signal fre-
+wireless landline from Flyingvoice; (4) two smart fans from            quency, on the devices. As shown in Table 1, InjectEave
+Xiaomi and OIDIRE; and (5) two smart lamps from Xiaomi                 achieves a near-100% signal recognition rate across these
+and JINGZAO. The detailed information of each device is                devices, with each device exhibiting injection-sensitive fre-
+specified in Table 1.                                                  quency ranges that allow flexible carrier selection.
+   [Haoran: Frequency profiling ]                                         Wired Headphone. We evaluate the InjectEave attack
+   Metrics. We evaluate the overall performance of the                 on wired headphones to demonstrate effectiveness across dif-
+InjectEave attack on the signal, feature, and semantic lev-            ferent host-device interfaces. As summarized in Table 1, we
+els respectively, using three primary metrics: (1) Signal-to-          achieve a near 100% recognition rate at 50 cm across all se-
+Noise Ratio (SNR) characterizes the signal-level quality of            tups. The optimal injection frequency for the Sony ZX110AP
+the injection-induced EM leakage at specific distances. (2)            exhibits a significant host-dependent shift, requiring a dis-
+Signal Recognition Rate quantifies the adversary’s success             tinct frequency band when connected with the MacBook Pro
+in receiving and decoding the injection-induced EM leakage.            M2 compared to the Dell G5. Despite these variations, the
+It is defined as the proportion of successful recognitions out         attack remains robust with effective ranges of 5 m and 4 m,
+of 30 independent evaluation trials for each device. A trial is        respectively. In contrast, the Apple Earbuds on an iPhone
+deemed successful if the adversary can accurately extract a            15 Pro achieves an SNR of 6.4 dB and a 1 m range. These
+single-tone signal played on audio peripherals, or precisely           results indicate that the analog amplifier of host device’s in-
+identify a fan’s rotation speed and a lamp’s 50 Hz power               ternal sound card is the fundamental component exploited for
+
+
+                                                                   7
+                                                       Table 1: Summary of Attacks on COTS Devices
+
+                                                                                            Source               Injection                               Recog.            Max
+Device Type           Brand                       Model                    Year                                                         SNR ‡
+                                                                                            of leaks            Frequency                                Rate §           Dist. ¶
+                      Sony + Dell∥                ZX110AP                  2014                               *1*–*7* MHz              22.5 dB            30/30             5m
+Wired
+                                                                                            Amplifier
+Headphones            Sony + Mac∥                 ZX110AP                  2014                               *2*–*6* MHz              14.5 dB            30/30             4m
+                      Apple + iPhone∥             Earbuds                  2016                               *6*–*8* MHz               6.4 dB            29/30             1m
+                      UGreen†                     MAX2                     2024                               *0*–*8* MHz              23.8 dB            30/30             6m
+Wireless
+                                                                                            Amplifier
+Headphones            PHILIPS                     TAH2020                  2025                               *9*–*5* MHz              21.6 dB            30/30             6m
+                      HP                          H231R                    2023                               *8*–*2* MHz              20.7 dB            29/30             4m
+                                                                                             ADC &
+Landline              Flyingvoice                 P23GW                    2023                               *4*–*2* MHz              13.5 dB            30/30             3m
+                                                                                            Amplifier
+                      OIDIRE†                     ODI-MF10A                2023           Switching           *4*–*2* MHz              39.1 dB            30/30             6m
+Fan
+                                                                                          MOSFET
+                      Xiaomi                      BPLDS10DM                2025                               *3*–*1* MHz              30.5 dB            30/30             4m
+                      JINGZAO                     JDO-06                   2024              Power            *8*–*5* MHz              20.7 dB            29/30             3m
+Lamp
+                                                                                            Converter
+                      XIAOMI†                     1S                       2019                               *7*–*0* MHz              22.4 dB            30/30             3m
+ ∥: Three different host devices for wired headphones. ∗: We intentionally hide the injection frequency for ethical considerations. †: Devices evaluated in Section 4.3. ‡: SNR is
+ evaluated at 50 cm distance. §Recognition rate is evaluated at 50 cm distance. ¶Max distance is evaluated at 5/30 recognition rate.
+
+
+
+injection-induced EM leakage, while the headphone cable pri-                                  demonstrate the severity of this threat in Section 5.2, where
+marily acts as an unintentional antenna. The distinct ground-                                 InjectEave is used to achieve closed-loop manipulation of
+ing and circuit layouts of the Dell and MacBook sound cards                                   the landline’s voice interface.
+determine the specific resonant frequencies required for inter-                                  Effect of Audio Signal Enhancement. We further examine
+modulation, resulting in the phenomenon that the same head-                                   the effectiveness of the eavesdropping design in Section 3.4
+phone is susceptible at different injection frequency bands                                   on 2 minutes of speech audio recordings captured at a dis-
+depending on its host device. Fig. 8 demonstrates how adver-                                  tance of 50 cm with 65dB volume from the UGreen MAX2
+saries could conduct audio eavesdropping on headphones.                                       wireless headphone using both SNR and Short-Time Objec-
+   Wireless headphone. We evaluate three wireless models,                                     tive Intelligibility (STOI), a standard speech quality metric.
+each exhibiting high susceptibility to InjectEave across dis-                                 The results show notable improvements across all STOI and
+tinct frequency bands as detailed in Table 1. The UGreen                                      SNR. The average SNR increases drastically from 7.0 dB to
+MAX2 demonstrates the most robust leakage, achieving a                                        16.1 dB, indicating that the model successfully suppressed
+SNR of 23.8 dB and a 100% recognition rate with an effective                                  the dominant background noise and the injection-induced car-
+distance of up to 6 m. Similarly, the PHILIPS TAH2020 sup-                                    rier phase noise. Furthermore, STOI sees a significant boost
+ports a 100% recognition rate with an SNR of 21.6 dB and a                                    from 0.58 to 0.72. Given that STOI is highly correlated with
+6 m range. Even the HP H231R maintains a 29/30 recognition                                    human speech intelligibility, this improvement confirms that
+rate and a 4 m distance. We further validate the real-world                                   our algorithm effectively reconstructs the phonetic details
+threat of InjectEave in Section 5.1, where we achieve suc-                                    masked by the hardware’s non-linear harmonics, rendering
+cessful through-wall audio eavesdropping in real-world hotel                                  the eavesdropped speech intelligible to human listeners. Our
+and conference room scenarios.                                                                demos can be found in [6].
+   Landline. Landline desk phones are often used in high-
+sensitivity scenarios such as government offices for internal                                 4.2.2     Threats Against Smart Home Appliances
+communications [31]. To examine risks in these professional
+environments, we extend our evaluation to a Flyingvoice                                       Beyond audio-centric devices, we examine the generalizabil-
+P23GW VoIP landline. We simulate an active call and sweep                                     ity of the attack on IOT smart appliances, which are deeply
+the carrier frequency to locate sensitive non-linear junctions                                integrated into private environments. The main leakage source
+within the handset’s internal amplifier and ADC stages. As                                    shifts from audio amplifiers to the switching MOSFETs in
+summarized in Table 1, the system exhibits high susceptibility,                               fans and power converters in lamps.
+achieving a 100% recognition rate and an SNR of 13.5 dB.                                         Smart Fan. The OIDIRE ODI-MF10A and Xiaomi
+The attack remains viable at distances up to 3 m, allowing                                    BPLDS10DM smart fans feature operational modes—such
+an adversary to eavesdrop on confidential corporate negotia-                                  as Sleep, Natural, and Standard—that serve as proxies for the
+tions without compromising the digital network. We further                                    user’s activity. The attack exploits the modulation caused by
+
+
+                                                                                        8
+                                                                                                                               
+                                                                                                    
+                                               (                                                                            
+    (
+
+
+
+
+                                                                        
+                                                                                                            
+                                                                                                                             
+
+
+
+
+                                                                                                                         
+    (                                          (
+%
+
+
+
+
+                                           %
+                                                                                                                               
+                                                                                   
+    (                                          (                                                                               
+                                                                                                                               
+                                                                                                                                 
+                     %                                                                                                         
+                      (a)                          (b)                                         (a)                                                (b)
+
+Figure 9: Eavesdropping on smart home activities: (a) infer-           Figure 10: Impact of attack distance on (a) SNR Trend and (b)
+ring fan speed, and (b) inferring lamp brightness.                     Attack Success Rate (ASR) across different COTS devices.
+
+
+the motor’s driving signal, where the rotational speed (e.g.,          various material barriers to evaluate signal penetration and
+low:27 Hz medium:40 Hz high: 50 Hz) modulates the injected             eavesdropping in realistic environments.
+carrier. As shown in Table 1, the OIDIRE model yielded a                  Impact of Antenna-Target Distance. To evaluate the
+high SNR of 39.1 dB at 480 MHz, maintaining a successful               effective eavesdropping distance and the limits imposed
+recognition rate up to 6 m. Unlike audio devices, the fan’s            by propagation path loss, we varied the distance between
+leakage manifests as sidebands at distinct frequency offsets           the adversary and the victim device up to 5 m. As shown
+in the frequency domain (Fig. 9 (a)). This enables “Context            in Fig. 10 (a), the leakage SNR decreases monotonically
+Inference” attacks: for example, detecting “Sleep Mode” at             with distance, dropping by approximately 45 dB across all
+night can confirm a user’s rest schedule and infer occupancy           devices from 10 cm to 5 m. The corresponding ASR re-
+without the need for visual surveillance.                              sults in Fig. 10 (b) reveal distinct hardware-level resilience:
+   Smart Lamp. We further tested the Xiaomi 1S and JD                  while the Xiaomi 1S smart lamp becomes resilient beyond
+JINGZAO JDO-06 smart lamps. The mechanism exploits the                 2 m and the UGreen Studio MAX2 drops to a 4.4% ASR
+nonlinearity of the lamp’s power converter, where the 50 Hz            at 5 m, the OIDIRE smart fan maintains a 100% ASR.
+AC mains current modulates the injected carrier. As indicated          The attack distance can be further extended by using high-
+in Table 1, the Xiaomi 1S exhibited strong leakage with an             performance attack equipments. For example, replacing the
+SNR of 22.4 dB. Since the amplitude of the demodulated                 Siglent SSX 3075X Plus (phase noise: -98 dBc/Hz) with a
+signal is proportional to the power load, we can remotely              high-end Keysight N9000B spectrum analyze (phase noise:
+infer the precise dimming level. By mapping these power                -110 dBc/Hz), which offers a superior phase noise of -110
+levels to vendor-specific presets (e.g., 20% brightness for            dBc/Hz at a 1 GHz carrier with 10 kHz offset, extends the
+“Reading”), an adversary can perform “Behavioral Profiling,”           effective distance to over 8 m for UGreen wireless headphone,
+transforming a simple light source into a beacon that exposes          10 m for OIDIRE smart fan, and 5 m for the Xiaomi smart
+a user’s specific activities and routines without requiring any        lamp. These findings highlights that InjectEave poses a sig-
+network-level access. Fig. 9 (b) demonstrates how adversaries          nificant long-range threat in practical environments by elim-
+could precisely infer the lamp’s brightness from the strength          inating the requirement for physical proximity. We provide
+of received signals, effectively enabling power side channel           three case studies in Section 5 to show the real-world threat
+analysis [11, 47] in a contactless manner.                             of InjectEave attack in the wild.
+                                                                          Impact of Antenna Angle. To investigate the impact of
+                                                                       the relative angle between the transmitting and receiving an-
+4.3          Environmental Impact Quantification
+                                                                       tennas, we rotated the receiving antenna along the target’s
+To characterize the physical limits and practical constraints of       azimuthal plane from 0◦ to 315◦ in 45◦ increments while keep-
+the InjectEave attack, we select three representative devices          ing the transmitting antennas fixed. As shown in Fig. 11 (a),
+for impact quantification: the UGreen Studio MAX 2 wireless            the leakage exhibits strong directionality, with all devices
+headphones, the OIDIRE ODI-MF10A smart fan, and the Xi-                peaking at 90◦ . At this optimal orientation, the SNR reaches
+aomi 1S smart lamp. Unless otherwise specified, our default            18.3 dB, 31.1 dB, and 14.4 dB for the headphone, fan, and
+experimental configuration employs a 50 cm attack distance,            lamp, respectively. This phenomenon occurs because a 90◦
+a 90◦ antenna orientation, and an injection power of 18 dBm.           spatial separation maximizes isolation between the antennas,
+The carrier frequencies are configured at 940 MHz, 480 MHz,            effectively suppressing direct carrier leakage into the receiver.
+and 100 MHz for wireless headphones, smart fan, and smart              This prevents receiver saturation and lowers the noise floor,
+lamp, respectively, corresponding to their optimal resonant            thereby maximizing the SNR of the recovered side-channel
+points discovered during the frequency sweep experiment.               signal. The ASR in Fig. 11 (b) largely follows the SNR trends
+We quantify the attack robustness by varying the attack dis-           but reveals a task-specific resilience. For the UGreen headset,
+tance to determine the effective range, adjusting the antenna          the audio eavesdropping ASR fluctuates significantly, peaking
+orientation to analyze polarization sensitivity, and introducing       at 93.7% (90◦ ) from a low of 50.5% (0◦ ). In contrast, state-
+
+
+                                                                   9
+                                                                                                                    5     Audio Eavesdropping in the Wild
+                                                                                           
+                                                                                                 
+                                                                                                               This section moves beyond controlled laboratory characteri-
+                                                                                                  
+                                                                                                                           zation to demonstrate end-to-end audio eavesdropping across
+                                                                                                 
+                                                                                                                         three representative real-world settings. Unlike the idealized
+                                                                                                           line-of-sight conditions evaluated before, these three case
+                                                                                                                             studies focus on Non-Line-of-Sight (NLOS) scenarios where
+                                                                                                                             the adversary is physically separated from the victim and can
+                                                                                                                 only perform through-wall eavesdropping attacks. We con-
+                                                                                       
+                                                                                                                             sider a private voice-call scenario in which the victim, Bob, is
+                (a) SNR Trend                                         (b) Attack Success Rate                                engaged in a conversation with a remote participant, Alice. By
+                                                                                                                             launching the InjectEave attack on Bob’s device, the adver-
+Figure 11: InjectEave’s robustness against antenna angles.                                                                   sary can successfully recover Alice’s voice without requiring
+The results indicate optimal performance at 90◦ .                                                                            physical access to her, despite her geographic distance from
+                                                                                                                             the attacker. Furthermore, as demonstrated in Section 5.2, the
+                                                                                                                             adversary can synthesize her speech and inject it back into
+                                                                                                                             Bob’s device after eavesdropping on Alice’s voice, enabling
+ Glass        Wood   Concrete                                                                
+                                                                                                                             a closed-loop attack.
+                                                                                   
+                                             
+                                                                                   
+                                  
+
+
+
+
+                                            
+                                                                              
+
+
+
+
+                                                                                   
+                                                                                   
+                                                                                                                             5.1    Through-wall Audio Eavesdropping
+                                            
+                                                                                   
+                                                                                                                         This case study demonstrates that the injection-induced side
+                                                                                    
+                                                                                                                   channel can be exploited to conduct through-wall eavesdrop-
+              (a)                                            (b)                                     (c)                     ping to compromise individual privacy (e.g., bank PINs, per-
+                                                                                                                             sonal agendas) and corporate confidentiality (e.g., procure-
+Figure 12: Impact of different barriers on InjectEave per-
+                                                                                                                             ment quotes, strategic timelines). As shown in Fig. 13 (a) and
+formance, showing feasibility of through-wall eavesdropping
+                                                                                                                             (b), we conduct end-to-end attacks in both a hotel room and
+in real-world non-line-of-sight (NLoS) environments.
+                                                                                                                             a meeting room setting. In these scenarios, the victim Bob
+                                                                                                                             engages in a confidential video call using a UGreen Studio
+                                                                                                                             MAX 2 wireless headset. The adversary operates from an
+                                                                                                                             adjacent room, separated by a 30 cm solid concrete wall, with
+based inference is remarkably robust: the OIDIRE smart fan                                                                   a straight-line distance of over 1 meter. We use a commer-
+maintains a consistent 100% ASR in all orientations, while                                                                   cial open-source text-to-speech (TTS) tool [1] to synthesize
+the Xiaomi smart lamp sustains a high ASR with only minor                                                                    six personal conversation segments in both male and female
+fluctuations between 135◦ and 225◦ .                                                                                         voices, covering personal and business-oriented dialogues.
+                                                                                                                             The content of the conversation segments are provided in Ta-
+   Impact of Physical Barrier. To evaluate InjectEave in                                                                     ble 3.
+non-line-of-sight (NLoS) environments, we measured the sig-                                                                     Fig. 14 shows a representative time-frequency analysis of
+nal attenuation caused by common structural materials, includ-                                                               the eavesdropped audio, successfully recovering a speech seg-
+ing glass, wood, and concrete. As shown in Fig. 12 (b), these                                                                ment of the victim’s detailed personal agenda: “Let’s meet
+barriers exert minimal influence on the leakage SNR. Glass                                                                   at the entrance of 221B Baker Street at 6 PM tomorrow.”
+and wood induce a negligible attenuation of only 1–2 dB com-                                                                 The top panel displays the clean ground-truth audio for refer-
+pared to line-of-sight (LoS) conditions. Concrete obstacles                                                                  ence. Despite the significant attenuation caused by the solid
+cause a more pronounced but still limited drop: 5.8 dB for the                                                               concrete wall, the eavesdropped spectrogram (middle panel)
+headphone, and approximately 2.5 dB for the fan and lamp.                                                                    clearly retains the fundamental harmonic structures of the
+The ASR remains remarkably resilient across all tested ma-                                                                   original speech. Applying the signal enhancement algorithm
+terials in Fig. 12 (c).For glass and wood, the ASR remains                                                                   described in Section 3.4 significantly sharpens spectral har-
+unchanged for all devices. Even with concrete, the impact is                                                                 monics while suppressing background interference (bottom
+marginal: the headphone ASR decreases by only 3%, while                                                                      panel). These results demonstrate that the injection-induced
+the smart fan maintains a 100% success rate. These results                                                                   EM side channel enables reliable eavesdropping of Alice’s in-
+demonstrate that InjectEave effectively penetrates common                                                                    telligible speech even through dense physical barriers, posing
+structural barriers, enabling covert through-wall eavesdrop-                                                                 direct threats to private conversations.
+ping in partitioned indoor environments such as offices and                                                                     To further evaluate the robustness of InjectEave attacks
+hotels, as further detailed in Section 5.                                                                                    across diverse teleconferencing conditions, we adjust the head-
+
+
+                                                                                                                        10
+ Hotel Room 1                         Hotel Room 2   Meeting Room 1          Meeting Room 2                           Hallway                                              Office
+
+
+                 Wall                                                 Wall                                                            Wall
+                                                                                                                                                      Fixed Phone
+                                                                                       Laptop
+
+
+
+
+                                  My bank card PIN                                               … our final quote                                          … meet at the entrance
+                                  is 9-5-2-7...                                                  is a unit price of                                         or 221B Baker Street
+                                                                                                 42.5 dollars…                                              at 6 pm tomorrow…
+                                                                                                                                Suitcase-integrated
+                                                                                                                                     Prototype
+                                                                                                                                                          Bob
+                                        Bob                                                          Bob
+                                                                               Wall                                                              Wall
+                    Real-time
+ Hotel Room 1      Spectrogram   Hotel Room 2        Meeting Room 1                   Meeting Room 2                  Hallway                               Office
+
+           (a) Case study 1: Hotel room                      (b) Case study 2: Meeting room                                       (c) Case study 3: Office
+
+                          Figure 13: Case studies of representative audio eavesdropping scenarios in the wild.
+
+
+phone’s playback volume from a quiet office level of 60 dB                            trigger keywords (e.g., “quote” or “confirmation”), the system
+to a louder entertainment level of 80 dB. As shown in Fig. 15,                        activates a voice-cloning module, IndexTTS-2 [86], trained on
+the SNR of the eavesdropped leakage exhibits a strong pos-                            a brief sample of Alice’s voice to generate a contextually ap-
+itive correlation with the playback volume. Crucially, even                           propriate and identity-specific deepfake response in real time.
+at a modest sound pressure level (SPL) of 65 dB, a typical                            [Haoran: Subsequently, to avoid overlap between injected
+threshold for private business conversations [54], the proposed                       and received voice signals, the adversary stops eavesdropping
+InjectEave attack remains highly effective. Specifically, the                         and switches to speech injection and injects the synthesized
+adversary can successfully recover Alice’s managerial instruc-                        Alice’s audio into the target landline’s audio output using well-
+tions with an SNR of approximately 10 dB and a correspond-                            established EM signal injection techniques [35, 65] through
+ing Word Error Rate (WER) of roughly 22%. These metrics                               a separately profiled EM injection channel to complete the
+indicate that even at lower volumes, the attack retains suffi-                        closed-loop manipulation. Concretly, the injected speech is
+cient phonetic information to reconstruct Alice’s intelligible                        amplitude-modulated onto a YY MHz carrier and radiated at
+speech.                                                                               ZZ dBm; the carrier couples into the landline’s analog audio
+   All original and eavesdropped audio clips can be found on                          output path and is demodulated by the nonlinear front-end
+our demo website [6].                                                                 into audible speech at Bob’s handset.] We conduct a series
+                                                                                      of trials across diverse semantic contexts to demonstrate the
+                                                                                      real-world attack impact of this closed-loop manipulation, as
+5.2     Closed-Loop Conversation Manipulation                                         summarized in Table 4.
+                                                                                         [Haoran: The demo audio segments of eavesdropped, syn-
+This case study demonstrates the real-world threat of                                 thesized Alice’s speech and injection audio recorded directly
+InjectEave attack against critical office infrastructures                             from bob’s headset are available on our project website at [6].]
+of landlines, specifically focusing on the Flyingvoice
+P23GW VoIP landline phone in a private office environ-
+ment. Beyond passive eavesdropping, InjectEave enables a                              6         Discussion
+novel “Eavesdrop-Synthesize-Inject” closed-loop manipula-
+tion chain that elevates the threat from compromising conver-                         The scope of this work is to provide the theoretical framework
+sation confidentiality to falsifying speech contents. As shown                        and exemplary designs of injection-induced EM side channels,
+in Fig. 13 (c), the victim, Bob, is at his desk and engaged in                        laying the foundation for the scientific characterization of
+a call with his boss, Alice. The adversary packs the portable                         these emerging threats. Based on it, this section discusses
+attack hardware into a suitcase-based prototype and stands in                         the need for follow-up research, including exploring other
+the hallway, maintaining a standoff distance of 50 cm from                            susceptible interfaces and effective protections.
+the target device, with a 20 cm office wall separating them.
+The internal structure of this prototype is illustrated in Fig. 18.
+                                                                                      6.1         Limitations and Future Work
+   The attack process is started by eavesdropping on the
+conversation through the injection-induced side channel to                            Attack Surface Generalizability. While our evaluation fo-
+achieve context awareness. By eavesdropping on Alice’s voice                          cused on common audio output devices and smart home appli-
+from the landline’s speaker, the adversary’s system achieves a                        cations as motivating and representative examples that carry
+real-time understanding of the call. Upon detecting predefined                        low-frequency analog secrets, the fundamental leakage mod-
+
+
+                                                                               11
+                  5
+                      Let’s meet at the entrance of 2   2    1 B Baker Street at       6   P M tomorrow.                                                               
+                                                                                                                                                                                                           
+                  4                                                                           Original     -20
+                  3                                                                                        -40                                                         
+                  2
+
+
+
+
+                                                                                                                                         
+
+
+
+
+                                                                                                                                                                                                               
+                                                                                                           -60                                                                                         
+                  1                                                                                                                                 
+Frequency (kHz)
+
+
+
+
+                                                                                                           -80
+                  0
+
+
+
+
+                                                                                                                 Power (dB)
+                  5
+                  4                                                                        Eavesdropped    -20                                      
+                  3                                                                                        -40
+                                                                                                                                                                                                       
+                  2                                                                                        -60                                     
+                  1                                                                                        -80
+                  0                                                                                                                                 
+                  5
+                                                                                                           -20
+                                                                                                                                                                                                  
+                  4                                                                           Denoised
+                  3                                                                                        -40                                                               
+                  2                                                                                        -60
+                  1                                                                                        -80
+                  0                                                                                                                Figure 15: Impact of audio volume on SNR and word error
+                                    1               2             3                4             5
+                                                            Time (s)                                                               rate of eavesdropped speech signals.
+
+  Figure 14: Comparison of audio spectrograms across the
+  original, eavesdropped and denoised audio, demonstrating the                                                                     by defining
+                                                                                                                                           p the detection limit at the system noise floor Nsys :
+  eavesdropping and signal enhancement and performance of                                                                          dmax ∝ |Vin j | · |Vsec |/Nsys , where Nsys denotes the aggregate
+  InjectEave attack.                                                                                                               system noise floor. This shows that the range constraint can
+                                                                                                                                   be mitigated through further hardware upgrades, such as uti-
+                                                                                                                                   lizing high-gain antennas to boost |Vin j | and using low-noise
+  els prompt us to extrapolate that InjectEave represents a                                                                        spectrum analyzers to suppress Nsys . We believe this can be
+  more generalized attack surface. Theoretically, the vulnera-                                                                     achieved by collaborating with resourceful RF researchers,
+  bility of injection-induced EM side channels is inherent to                                                                      and leave it as a future work.
+  any electronic system featuring unshielded nonlinear analog
+  interfaces. We believe future works can contribute to this
+  emerging research topic by examining the susceptibility of a                                                                     6.2      Mitigation
+  broader class of targets, such as electrical communication sig-                                                                  We provide insights into potential hardware and software
+  nals internal to computer systems, and even confidential data                                                                    mitigation gleaned from our investigations.
+  of analog sensor inputs. Below, we discuss our preliminary                                                                          Protective Coding Against EM Leakage. Existing de-
+  analysis of audio signals of microphone inputs.                                                                                  fenses for mitigating conventional EM side-channel eaves-
+     Investigation on Analog Microphone Inputs. Our explo-                                                                         dropping attacks, such as cryptographic masking [12] and
+  ration of analog input devices was motivated by an observa-                                                                      randomized clocking [41, 51], are specifically tailored to ob-
+  tion in the closed-loop attack on the landline phone in Sec-                                                                     fuscate digital logic transitions. Thus, they are mostly inef-
+  tion 5.2: we found that it was also feasible to reconstruct au-                                                                  fective against InjectEave as it eavesdrops on signals in the
+  dio from the landline’s microphone that captures local user’s                                                                    analog data interfaces. Unlike digital data, these continuous
+  speech. Then, we further analyzed the InjectEave attack on                                                                       analog waveforms cannot be mathematically masked or ran-
+  two additional commercial microphones: the UGreen CM769                                                                          domized without irreversibly degrading the signal fidelity and
+  and the Razer SEIREN V3 MINI. While we can successfully                                                                          functional integrity of the device. As a result, we believe more
+  reconstruct intelligible audio from both devices, our experi-                                                                    in-depth research is needed to investigate the design space of
+  ment revealed a significantly constrained effective distance                                                                     analog data protection and evaluate utility-security tradeoffs
+  compared to the 6 m range achieved with headphone audio                                                                          in mitigating emerging analog side-channel leakage.
+  output. Even under ideal conditions where the target micro-                                                                         Physical Hardening Against EM Injection. Traditional
+  phones were operating at maximum gain, the maximum range                                                                         EM injection defense typically relies on electromagnetic
+  for audio eavesdropping is limited to approximately 30 cm.                                                                       compatibility (EMC) hardening, such as Faraday shield-
+  Our analysis shows that this performance disparity is rooted                                                                     ing [25, 28], low-pass filtering [35], and differential signal-
+  in the amplitude difference between the audio input and out-                                                                     ing [5, 73]. While these methods can attenuate coupling, they
+  put signals. While headphone drivers typically require 1–2 V                                                                     provide no absolute security. According to Section 6.1, a
+  to operate, microphones generate extremely weak 1–10 mV                                                                          well-resourced adversary can successfully conduct attacks by
+  signals. According to Eq. (5), this 40–60 dB voltage deficit                                                                     increasing the injection power. Furthermore, standard low-
+  results in a substantially weaker leakage signal, causing the                                                                    pass filters often degrade at high frequencies due to parasitic
+  secret information to be easily obscured by the noise floor                                                                      inductance [63], and specialized high-ended filters are rarely
+  even with injection-induced leakage.                                                                                             viable for consumer electronics. Consequently, a robust de-
+     Nevertheless, this current boundary is determined by our                                                                      fense paradigm shifts toward active detection and mitigation.
+  EM injection and receiving hardware rather than an intrinsic                                                                     Promising approaches include monitoring for anomalous RF
+  physical limit. Based on the leakage model in Eq. (7) and                                                                        carriers [2] or DC offsets induced by non-linear rectifica-
+  the theory of signal attenuation in free space [64], we de-                                                                      tion [78], alongside software-level consistency checks via
+  rive the theoretical maximum eavesdropping distance dmax                                                                         sensor fusion [67] and encoding [84] However, implementing
+
+
+                                                                                                                              12
+these protections on commercial systems requires addressing               attacks and enabling closed-loop control capabilities of vic-
+significant overheads in manufacturing costs, power consump-              tim devices. This new attack vector offers significantly en-
+tion, and form factors.                                                   hanced capabilities and generalizability compared to existing
+   Twisted Pair. To suggest more timely mitigations, we dis-              state-of-the-art eavesdropping methods. For example, while
+assembled several devices in Table 1 to understand how man-               previous passive EM side-channels like MagEar [39] and
+ufacturers may already have in-house solutions that produced              Periscope [14] are restricted to 0.5–1.5 m, InjectEave can
+less vulnerable devices, such as those that allowed smaller               successfully eavesdrop over 6 m. [Haoran: Although pre-
+maximum eavesdropping distances. Our teardown analysis                    vious paper such as DeHiREC [85] shows that active EM
+found that the internal wiring played a major role: devices               stimulation can make weak passive EM emanations more
+using twisted pair cables were significantly more resistant to            exploitable, it only amplifies existing passive ADC leakage
+the attack compared to those with standard parallel wires. To             to detect whether a hidden voice recorder is operating. In-
+further quantify the impact of twisted pairs, we performed 3D             jectEave instead exploits hardware non-linearity to induce
+full-wave electromagnetic simulations comparing parallel and              new, controllable side-channel leakage, piggybacking target
+twisted wire geometries under 900 MHz external injection,                 analog signals onto an injected carrier for waveform-level re-
+as detailed in Appendix A. The simulation results confirm                 covery.] Moreover, InjectEave offers a substantially broader
+that the twisted geometry creates destructive interference that           attack surface; whereas existing studies are often constrained
+significantly suppresses the induced surface currents required            to specific modalities like audio, our approach exploits funda-
+to drive the injection-induced non-linear modulation. While               mental vulnerabilities within the analog systems. This makes
+traditional shielding can be costly and bulky for consumer                InjectEave modality-agnostic and applicable to a vast spec-
+electronics, replacing internal parallel wiring with twisted              trum of analog devices.
+pairs offers a practical, space-efficient mitigation that directly
+addresses the coupling mechanism identified in our leakage
+model.                                                                    7.2    Contactless Sensing and Backscattering
+                                                                          Contactless sensing and eavesdropping techniques transmit
+7     Related Work                                                        physical signals such as mmWave [9, 24, 38, 62, 71, 72, 76],
+                                                                          acoustic [15, 20, 57, 58], or optical [43, 48, 59, 70] [Haoran:
+                                                                          add laser mic ref] probing signals, and analyze the result-
+7.1    EM Injection and Side-channel Leakage
+                                                                          ing reflections to infer information about a target system. In
+Electromagnetic (EM) security has traditionally evolved along             these approaches, the underlying mechanism is that changes
+two parallel, non-overlapping paradigms: EM injection and                 in object state implicitly produce observable variations in the
+side-channel leakage. EM injection focus on integrity or                  probed signals, enabling inference without direct physical
+availability, where adversaries inject carefully crafted EM               access. However, most of these contactless sensing technolo-
+signals to induce faults [21, 22, 45], manipulate sensor out-             gies are so far only able to sense spatial displacements and
+put [35, 66, 83], or disrupt system execution [25, 60, 80]. Prior         movements, such as vocal gesture changes [38] and human
+work shows that EM injection attacks can interfere with sens-             typing activities [27]. [Haoran: Moreover, the cross-wall ap-
+ing, computation, actuation, and data communication of CPSs               plicability is often constrained by physical nature: optical
+across diverse application domains, including critical infras-            probing typically requires line-of-sight access, while acous-
+tructure [66, 80], autonomous driving [25, 28, 56], medical               tic and mmWave sensing can suffer substantial attenuation
+healthcare [7,23,35], IoT devices [26,60,73,79,83] and crypto-            after passing through obstacles.] In contrast, InjectEave lever-
+graphic modules [21,22,45,50]. Conversely, EM side-channel                ages RF electromagnetic injection and leakage, [Haoran: and
+leakages focus on integrity or confidentiality, exploiting un-            the valid frequency(several hundred MHz)] enables robust
+intentional EM emanations to recover the cryptographic key                through-wall eavesdropping in our evaluated indoor settings.
+of a target device [12, 18, 19] or to reconstruct screen con-             In contrast, InjectEave senses the internal electrical activi-
+tent [32, 33, 68], keystrokes [27], smartphone displays [40],             ties that do not produce visible physical displacements.
+biometric data [37,49,77], and even confidential video streams               The closest line of research to InjectEave is backscatter-
+from a smart home camera [41].                                            ing communications [29, 55, 81], typically used in low-power
+   Existing research largely treats EM injection and EM side-             RFID systems where a transponder intentionally modulates
+channel leakage as distinct and independent threat vectors,               an RF carrier via impedance switching.
+focusing on fault- and disruption-oriented integrity violations              Recent research has extended this to unintentional backscat-
+and passive confidential threats, respectively. InjectEave                tering. For example, RF-parrot [81] demonstrates audio eaves-
+bridges this gap by theoretically and experimentally showing              dropping but requires hardware modifications (e.g., retrore-
+that EM injections can be used to induce side-channel leakage             flectors) to enhance the signal. [Haoran: Prior studies also
+via hardware non-linearity, redefining the boundary between               exploit impedance-modulated backscattering to recover dig-
+active integrity injection attacks and passive confidentiality            ital serial data [29, 55], or cryptographic side-channel in-
+
+
+                                                                     13
+formation [30, 46].] However, these efforts are restricted to
+coarse-grained, binary impedance variation and leaked digital
+data could be protected by well-established digital encryp-
+tion schemes, while leaving the potential threats against the
+more vulnerable analog secret signals unexplored. In contrast,
+our work builds upon their insights and limitations, and ex-
+plores the complementary, more fundamental problem of EM
+side-channel eavesdropping on analog signals, including low-
+frequency secrets on the order of 10 Hz. In order to achieve
+that, we develop a new eavesdropping methodology and theo-
+retical framework with EM injections and nonlinear hardware
+to actively induce fine-grained and controllable EM leakage,
+which in return enables closed-loop EM eavesdropping and
+manipulations.
+
+8   Conclusion
+This work bridges the theoretical and methodological gap
+between conventional side-channel analysis and active elec-
+tromagnetic injection, introducing the novel threat model and
+analysis framework of Injection-Induced EM Side Channels.
+By exploiting the ubiquitous nonlinearity in commodity hard-
+ware, we demonstrated that adversaries can actively modulate
+low-frequency analog secrets onto injected carriers before
+they are efficiently emitted. Our evaluation of 11 commercial
+devices reveals that this vulnerability is widespread. Our find-
+ings underscore an urgent need for finding effective solutions
+to protect the ubiquitous, but often overlooked, bottom-layer
+analog interfaces in modern computer systems.
+
+
+
+
+                                                                   14
+Ethical Considerations                                                  attack.
+                                                                           Decision to Conduct and Publish. The historical assump-
+Since this work threat-models and implements adversarial                tion that low-frequency signals are safe from EM leakage has
+EM injection and eavesdropping on commercial off-the-shelf              created a false sense of security. We argue that systematically
+(COTS) devices, we take strict measures to ensure the safety,           analyzing this emerging phenomenon of injection-induced
+legality, and ethical compliance of our research.                       EM side channel is essential for building effective defenses.
+   Stakeholders and Potential Impact. The potential stake-              Withholding these findings would leave manufacturers blind
+holders affected by the discovered vulnerability are discussed          to the risks inherent in common hardware. Therefore, we de-
+below. (1) Hardware manufacturers. InjectEave may place                 cided to publish this work while removing detailed attack pa-
+remediation pressure on manufacturers of analog audio inter-            rameters such as vulnerable EM frequencies, and constraining
+faces, IoT actuators, and power converters. The identified vul-         the majority of the paper to theoretical and defensive insights.
+nerability—where hardware nonlinearity modulates secrets                We expect these measures to responsibly help our community
+onto injected carriers—may necessitate the adoption of differ-          advance the scientific understanding of EM injection and side
+ential signaling such as twisted pairs or enhanced shielding            channels.
+in consumer electronics. (2) Organizations handling sensitive
+information. Enterprises and government bodies relying on               Open Science
+landline phones or secure rooms for confidential discussions
+may need to re-evaluate their physical security perimeters.             Demo videos and audio recordings in case studies are avail-
+The ability to eavesdrop through walls implies that physical            able on our website: https://injecteave.github.io/.
+isolation alone may no longer be sufficient. (3) End users and          Our research artifacts, including received audios in case stud-
+the general public. End users face potential privacy risks re-          ies and denoise codebase are available at: https://doi.
+garding their home activities and private conversations. Smart          org/10.5281/zenodo.18501491
+home devices such as fans and lamps could inadvertently
+leak behavioral patterns, and personal audio devices could
+expose speech content, necessitating greater public awareness
+of EM security. (4) Security researchers and practitioners.
+InjectEave bridges the gap between EM injection and side-
+channel analysis. This work advances the field by providing a
+theoretical framework for injection-induced leakage, solicit-
+ing the development of active detection systems and robust
+analog defenses.
+   Impact of the Research Process and Publication. All
+experiments were performed on electronic devices fully con-
+trolled by the authors. To strictly protect privacy, we utilized
+text-to-speech (TTS) tools to synthesize conversation seg-
+ments for experimentation rather than recording private con-
+versations of human subjects. The “through-wall” and “hotel
+room” scenarios were conducted in cleared and controlled
+settings, ensuring no third-party systems or non-consenting
+individuals were targeted. We believe publishing these results
+is valuable for manufacturers and defenders seeking to un-
+derstand the limits of EM side-channel eavesdropping and to
+investigate possible protections.
+   Mitigation of Negative Impacts. We have reported these
+findings to the relevant manufacturers; however, as we have
+not yet received a response, we have decided to withhold the
+vulnerable injection frequencies in Table 1 and exclude active
+injection control logics from our open science artifact. We
+decided to release this security-sensitive information only to
+trusted and reputable researchers upon request, restricting our
+research’s results to scientific exploration. Furthermore, we
+prioritize defensive insights, demonstrating that twisted-pair
+wiring serves as a practical countermeasure by effectively
+suppressing the induced surface currents required for this
+
+
+                                                                   15
+References                                                           [12] Giovanni Camurati, Sebastian Poeplau, Marius Muench,
+                                                                          Tom Hayes, and Aurélien Francillon. Screaming chan-
+ [1] TTSMaker – free text to speech online.       https://                nels: When electromagnetic side channels meet radio
+     ttsmaker.com/. Accessed: 2026-02-05.                                 transceivers. In Proceedings of the 2018 ACM SIGSAC
+                                                                          Conference on Computer and Communications Security,
+ [2] Christian Adami, Christian Braun, Peter Clemens,
+                                                                          pages 163–177, 2018.
+     Michael Suhrke, HU Schmidt, and Achim Taenzer. Hpm
+     detection system for mobile and stationary use. In 10th         [13] Anantha P Chandrakasan, Samuel Sheng, and Robert W
+     International Symposium on Electromagnetic Compati-                  Brodersen. Low-power cmos digital design. IEICE
+     bility, pages 1–6. IEEE, 2011.                                       Transactions on Electronics, 75(4):371–382, 1992.
+ [3] Dakshi Agrawal, Bruce Archambeault, Josyula R Rao,              [14] Huiling Chen, Wenqiang Jin, Yupeng Hu, Zhenyu Ning,
+     and Pankaj Rohatgi. The em side—channel (s). In                      Kenli Li, Zheng Qin, Mingxing Duan, Yong Xie, Daibo
+     International workshop on cryptographic hardware and                 Liu, and Ming Li. Eavesdropping on black-box mobile
+     embedded systems, pages 29–45. Springer, 2002.                       devices via audio amplifier’s emr. In Proceedings of the
+                                                                          2018 Annual International Conference on Network and
+ [4] Mohammad Abdullah Al Faruque, Sujit Rokka Chhetri,
+                                                                          Distributed System Security (NDSS), 2024.
+     Arquimedes Canedo, and Jiang Wan. Acoustic side-
+     channel attacks on additive manufacturing systems. In           [15] Peng Cheng, Ibrahim Ethem Bagci, Utz Roedig, and
+     2016 ACM/IEEE 7th international conference on Cyber-                 Jeff Yan. Sonarsnoop: Active acoustic side-channel
+     Physical Systems (ICCPS), pages 1–10. IEEE, 2016.                    attacks. International Journal of Information Security,
+                                                                          19(2):213–228, 2020.
+ [5] Analog Devices.      Mt-095: Emi, rfi, and shield-
+     ing concepts. https://www.analog.com/media/en/                  [16] Matt Ettus and Martin Braun. The universal software
+     training-seminars/tutorials/MT-095.pdf, 2009.                        radio peripheral (usrp) family of low-cost sdrs. Oppor-
+     Accessed: 2026-02-05.                                                tunistic spectrum sharing and white space access: The
+                                                                          practical reality, pages 3–23, 2015.
+ [6] Anonymous. Injecteave. https://injecteave.
+     github.io/, 2026. Accessed: 2026-02-05.                         [17] Julie Ferrigno and Martin Hlavác. When aes blinks:
+                                                                          introducing optical side channel. IET Information Secu-
+ [7] Alexandre Armengol-Urpi, Reid Kovacs, and Sanjay E
+                                                                          rity, 2(3):94–98, 2008.
+     Sarma. Brain-hack: Remotely injecting false brain-
+     waves with rf to take control of a brain-computer in-           [18] Daniel Genkin, Lev Pachmanov, Itamar Pipman, and
+     terface. In 5th Workshop on CPS&IoT Security and                     Eran Tromer. Stealing keys from pcs using a radio:
+     Privacy, pages 53–66, 2023.                                          Cheap electromagnetic attacks on windowed exponenti-
+                                                                          ation. In International workshop on cryptographic hard-
+ [8] Michael Backes, Markus Dürmuth, Sebastian Gerling,                   ware and embedded systems, pages 207–228. Springer,
+     Manfred Pinkal, Caroline Sporleder, et al. Acoustic                  2015.
+     {Side-Channel} attacks on printers. In 19th USENIX
+     Security Symposium (USENIX Security 10), 2010.                  [19] Dennis RE Gnad, Jonas Krautter, and Mehdi B Tahoori.
+                                                                          Leaky noise: New side-channel attack vectors in mixed-
+ [9] Suryoday Basak and Mahanth Gowda. mmspy: Spying                      signal iot devices. IACR Transactions on Crypto-
+     phone calls using mmwave radars. In 2022 IEEE Sym-                   graphic Hardware and Embedded Systems, pages 305–
+     posium on Security and Privacy (SP), pages 1211–1228.                339, 2019.
+     IEEE, 2022.
+                                                                     [20] Tzipora Halevi and Nitesh Saxena. Keyboard acoustic
+[10] Connor Bolton, Yan Long, Jun Han, Josiah Hester, and                 side channel attacks: exploring realistic and security-
+     Kevin Fu. Characterizing and mitigating touchtone                    sensitive scenarios. International Journal of Information
+     eavesdropping in smartphone motion sensors. In Pro-                  Security, 14(5):443–456, 2015.
+     ceedings of the 26th International Symposium on Re-
+     search in Attacks, Intrusions and Defenses, pages 164–          [21] Yu-ichi Hayashi, Naofumi Homma, Takaaki Mizuki,
+     178, 2023.                                                           Takafumi Aoki, and Hideaki Sone. Transient iemi
+                                                                          threats for cryptographic devices. IEEE transactions on
+[11] Elie Bursztein, Luca Invernizzi, Karel Král, Daniel                  Electromagnetic Compatibility, 55(1):140–148, 2012.
+     Moghimi, Jean-Michel Picod, and Marina Zhang. Gener-
+     alized power attacks against crypto hardware using long-        [22] Yu-ichi Hayashi, Naofumi Homma, Takaaki Mizuki,
+     range deep learning. arXiv preprint arXiv:2306.07249,                Takafumi Aoki, and Hideaki Sone. Precisely timed
+     2023.                                                                iemi fault injection synchronized with em information
+
+
+                                                                16
+     leakage. In 2014 IEEE International Symposium on                 [32] Markus G Kuhn. Optical time-domain eavesdropping
+     Electromagnetic Compatibility (EMC), pages 738–742.                   risks of crt displays. In Proceedings 2002 IEEE Sympo-
+     IEEE, 2014.                                                           sium on Security and Privacy, pages 3–18. IEEE, 2002.
+
+[23] Md Imran Hossen, Yazhou Tu, and Xiali Hei. A first               [33] Markus G Kuhn. Electromagnetic eavesdropping risks
+     look at the security of eeg-based systems and intelligent             of flat-panel displays. In International Workshop on Pri-
+     algorithms under physical signal injections. In 2023 Se-              vacy Enhancing Technologies, pages 88–107. Springer,
+     cure and Trustworthy Deep Learning Systems Workshop.                  2004.
+     ACM.
+                                                                      [34] Markus G Kuhn and Ross J Anderson. Soft tempest:
+[24] Pengfei Hu, Yifan Ma, Panneer Selvam Santhalingam,                    Hidden data transmission using electromagnetic emana-
+     Parth H Pathak, and Xiuzhen Cheng.        Milliear:                   tions. In International Workshop on Information Hiding,
+     Millimeter-wave acoustic eavesdropping with uncon-                    pages 124–142. Springer, 1998.
+     strained vocabulary. In IEEE INFOCOM 2022-IEEE
+     Conference on Computer Communications, pages 11–20.              [35] Denis Foo Kune, John Backes, Shane S Clark, Daniel
+     IEEE, 2022.                                                           Kramer, Matthew Reynolds, Kevin Fu, Yongdae Kim,
+                                                                           and Wenyuan Xu. Ghost talk: Mitigating emi signal
+[25] Qinhong Jiang, Xiaoyu Ji, Chen Yan, Zhixin Xie, Haina                 injection attacks against analog sensors. In 2013 IEEE
+     Lou, and Wenyuan Xu. {GlitchHiker}: Uncovering vul-                   symposium on security and privacy. IEEE, 2013.
+     nerabilities of image signal transmission with {IEMI}.
+     In 32nd USENIX Security Symposium (USENIX Security               [36] Jiachun Li, Yan Meng, Le Zhang, Guoxing Chen, Yuan
+     23), pages 7249–7266, 2023.                                           Tian, Haojin Zhu, and Xuemin Sherman Shen. Magfin-
+                                                                           gerprint: A magnetic based device fingerprinting in wire-
+[26] Qinhong Jiang, Yanze Ren, Yan Long, Chen Yan, Yumai                   less charging. In IEEE INFOCOM 2023-IEEE Confer-
+     Sun, Xiaoyu Ji, Kevin Fu, and Wenyuan Xu. Ghosttype:                  ence on Computer Communications, pages 1–10. IEEE,
+     The limits of using contactless electromagnetic inter-                2023.
+     ference to inject phantom keys into analog circuits of
+     keyboards. In NDSS Symposium. Internet Society, 2024.            [37] Wenhao Li, Jiahao Wang, Guoming Zhang, Yanni Yang,
+                                                                           Riccardo Spolaor, Xiuzhen Cheng, and Pengfei Hu.
+[27] Wenqiang Jin, Srinivasan Murali, Huadi Zhu, and Ming                  Emiris: Eavesdropping on iris information via electro-
+     Li. Periscope: A keystroke inference attack using human               magnetic side channel. In Network and Distributed
+     coupled electromagnetic emanations. In Proceedings of                 Systems Security (NDSS) Symposium. Internet Society,
+     the 2021 ACM SIGSAC Conference on Computer and                        2025.
+     Communications Security, pages 700–714, 2021.
+                                                                      [38] Zhengxiong Li, Fenglong Ma, Aditya Singh Rathore,
+[28] Zizhi Jin, Qinhong Jiang, Xuancun Lu, Chen Yan, Xi-                   Zhuolin Yang, Baicheng Chen, Lu Su, and Wenyao Xu.
+     aoyu Ji, and Wenyuan Xu. Phantomlidar: Cross-                         Wavespy: Remote and through-wall screen attack via
+     modality signal injection attacks against lidar. In NDSS              mmwave sensing. In 2020 IEEE Symposium on Security
+     Symposium. Internet Society, 2025.                                    and Privacy (SP), pages 217–232. IEEE, 2020.
+
+[29] Shugo Kaji, Daisuke Fujimoto, Masahiro Kinugawa, and             [39] Qianru Liao, Yongzhi Huang, Yandao Huang, Yuheng
+     Yuichi Hayashi. Echo tempest: Em information leakage                  Zhong, Huitong Jin, and Kaishun Wu. Magear: eaves-
+     induced by iemi for electronic devices. IEEE Transac-                 dropping via audio recovery using magnetic side chan-
+     tions on Electromagnetic Compatibility, 65(3):655–666,                nel. In MobiSys, pages 371–383, 2022.
+     2023.
+                                                                      [40] Zhuoran Liu, Niels Samwel, Léo Weissbart, Zhengyu
+[30] Taiki Kitazawa, Lennert Wouters, Benedikt Gierlichs,                  Zhao, Dirk Lauret, Lejla Batina, and Martha Larson.
+     Daisuke Fujimoto, Ingrid Verbauwhede, and Yuichi                      Screen gleaning: A screen reading tempest attack on
+     Hayashi. Active electromagnetic side-channel anal-                    mobile devices exploiting an electromagnetic side chan-
+     ysis: Crossing physical security boundaries through                   nel. In Proceedings of the 28th Annual Network and
+     impedance variations. IACR Transactions on Crypto-                    Distributed System Security Symposium (NDSS), 2021.
+     graphic Hardware and Embedded Systems, 2026(1):376–
+     401, 2026.                                                       [41] Yan Long, Qinhong Jiang, Chen Yan, Tobias Alam, Xi-
+                                                                           aoyu Ji, Wenyuan Xu, and Kevin Fu. Em eye: Charac-
+[31] D Richard Kuhn, Thomas J Walsh, and Steffen Fries.                    terizing electromagnetic side-channel eavesdropping on
+     Security considerations for voice over ip systems. NIST               embedded cameras. In Network and Distributed Systems
+     special publication, 800, 2005.                                       Security (NDSS) Symposium. Internet Society, 2024.
+
+
+                                                                 17
+[42] Joe Loughry and David A Umphress. Information leak-                   In 34th USENIX Security Symposium (USENIX Security
+     age from optical emanations. ACM Transactions on                      25), pages 3865–3884, 2025.
+     Information and System Security (TISSEC), 5(3):262–
+                                                                      [52] Henry W Ott. Electromagnetic compatibility engineer-
+     289, 2002.
+                                                                           ing. John Wiley & Sons, 2011.
+[43] Chengwen Luo, Zhuoqing Xie, Yuhan Huang, Gecheng
+                                                                      [53] Vassil Panayotov, Guoguo Chen, Daniel Povey, and San-
+     Chen, Haiyi Yao, Jin Zhang, Long Cheng, Weitao Xu,
+                                                                           jeev Khudanpur. Librispeech: an asr corpus based on
+     and Jianqiang Li. Laserkey: Eavesdropping keyboard
+                                                                           public domain audio books. In Acoustics, Speech and
+     typing leveraging vibrational emanations via laser sens-
+                                                                           Signal Processing (ICASSP), 2015 IEEE International
+     ing. IEEE Transactions on Mobile Computing, 2025.
+                                                                           Conference on, pages 5206–5210. IEEE, 2015.
+[44] Seita Maruyama, Satohiro Wakabayashi, and Tatsuya                [54] Karl S Pearsons, Ricarda L Bennett, and Sanford A Fi-
+     Mori. Tap’n ghost: A compilation of novel attack tech-                dell. Speech levels in various noise environments. Office
+     niques against smartphone touchscreens. In 2019 IEEE                  of Health and Ecological Effects, Office of Research and
+     Symposium on Security and Privacy (SP), pages 620–                    Development . . . , 1977.
+     637. IEEE, 2019.
+                                                                      [55] Lina Pu, Yu Luo, Song Han, and Junming Diao. Your
+[45] Alexandre Menu, Jean-Max Dutertre, Olivier Potin,                     cable, my antenna: Eavesdropping serial communica-
+     Jean-Baptiste Rigaud, and Jean-Luc Danger. Experi-                    tion via backscatter signals. In 2025 IEEE Symposium
+     mental analysis of the electromagnetic instruction skip               on Security and Privacy (SP), pages 3710–3726. IEEE
+     fault model. In 15th Design & Technology of Integrated                Computer Society, 2025.
+     Systems in Nanoscale Era (DTIS), pages 1–7. IEEE,
+     2020.                                                            [56] Yanze Ren, Qinhong Jiang, Chen Yan, Xiaoyu Ji, and
+                                                                           Wenyuan Xu. Ghostshot: Manipulating the image of ccd
+[46] Saleh Khalaj Monfared, Tahoura Mosavirik, and Shahin                  cameras with electromagnetic interference. In NDSS
+     Tajik.     Leakyohm: Secret bits extraction using                     Symposium. Internet Society, 2025.
+     impedance analysis. In Proceedings of the 2023 ACM
+     SIGSAC conference on computer and communications                 [57] Yanzhi Ren, Zhiliang Xia, Siyi Li, Hongbo Liu, Yingy-
+     security, pages 1675–1689, 2023.                                      ing Chen, Shuai Li, and Hongwei Li. Echoimage: User
+                                                                           authentication on smart speakers using acoustic signals.
+[47] Pouya Narimani, Meng Wang, Ulysse Planta, and                         In 2023 IEEE 43rd International Conference on Dis-
+     Ali Abbasi.    Exploring power side-channel chal-                     tributed Computing Systems (ICDCS), pages 236–247.
+     lenges in embedded systems security. arXiv preprint                   IEEE, 2023.
+     arXiv:2410.11563, 2024.
+                                                                      [58] Nirupam Roy and Romit Roy Choudhury. Listening
+[48] Ben Nassi, Raz Swissa, Jacob Shams, Boris Zadov, and                  through a vibration motor. In Proceedings of the 14th
+     Yuval Elovici. The little seal bug: Optical sound recov-              Annual International Conference on Mobile Systems,
+     ery from lightweight reflective objects. In 2023 IEEE                 Applications, and Services, pages 57–69, 2016.
+     Security and Privacy Workshops (SPW), pages 298–310.             [59] Sriram Sami, Yimin Dai, Sean Rui Xiang Tan, Nirupam
+     IEEE, 2023.                                                           Roy, and Jun Han. Spying with your robot vacuum
+[49] Tao Ni, Xiaokuan Zhang, and Qingchuan Zhao. Re-                       cleaner: eavesdropping via lidar sensors. In Proceedings
+     covering fingerprints from in-display fingerprint sensors             of the 18th Conference on Embedded Networked Sensor
+     via electromagnetic side channel. In Proceedings of                   Systems, pages 354–367, 2020.
+     the 2023 ACM SIGSAC Conference on Computer and                   [60] Haoqi Shan, Boyi Zhang, Zihao Zhan, Dean Sullivan,
+     Communications Security, pages 253–267, 2023.                         Shuo Wang, and Yier Jin. Invisible finger: Practical elec-
+                                                                           tromagnetic interference attack on touchscreen-based
+[50] Hikaru Nishiyama, Daisuke Fujimoto, and Yuichi
+                                                                           electronic devices. In 2022 IEEE Symposium on Secu-
+     Hayashi. Remote fault injection attack against cryp-
+                                                                           rity and Privacy (SP). IEEE, 2022.
+     tographic modules via intentional electromagnetic inter-
+     ference from an antenna. In 2023 Workshop on Attacks             [61] François-Xavier Standaert. Introduction to side-channel
+     and Solutions in Hardware Security, 2023.                             attacks. In Secure integrated circuits and systems, pages
+                                                                           27–42. Springer, 2009.
+[51] Arifu Onishi, S Hrushikesh Bhupathiraju, Rishikesh
+     Bhatt, Sara Rampazzi, and Takeshi Sugawara. Sound                [62] Wei Sun, Tingjun Chen, and Neil Gong. Sok: Se-
+     of interference: Electromagnetic eavesdropping attack                 cure human-centered wireless sensing. arXiv preprint
+     on digital microphones using pulse density modulation.                arXiv:2211.12087, 2022.
+
+
+                                                                 18
+[63] Marcell Szakály, Sebastian Köhler, Martin Strohmeier,             [73] Kai Wang, Richard Mitev, Chen Yan, Xiaoyu Ji, Ahmad-
+     and Ivan Martinovic. Assault and battery: Evaluating                   Reza Sadeghi, and Wenyuan Xu. {GhostTouch}: Tar-
+     the security of power conversion systems against electro-              geted attacks on touchscreens without physical touch.
+     magnetic injection attacks. In 2024 Annual Computer                    In 31st USENIX Security Symposium (USENIX Security
+     Security Applications Conference (ACSAC), pages 224–                   22), 2022.
+     239. IEEE, 2024.
+                                                                       [74] Simon Welker, Julius Richter, and Timo Gerkmann.
+[64] David Tse and Pramod Viswanath. Fundamentals of                        Speech enhancement with score-based generative mod-
+     wireless communication. Cambridge university press,                    els in the complex STFT domain. In Proc. Interspeech
+     2005.                                                                  2022, pages 2928–2932, 2022.
+[65] Yazhou Tu, Zhiqiang Lin, Insup Lee, and Xiali Hei. In-
+     jected and delivered: Fabricating implicit control over           [75] Harold A Wheeler. Fundamental limitations of small
+     actuation systems by spoofing inertial sensors. In 27th                antennas. Proceedings of the IRE, 35(12):1479–1484,
+     USENIX security symposium (USENIX Security 18),                        2006.
+     pages 1545–1562, 2018.
+                                                                       [76] Chenhan Xu, Zhengxiong Li, Hanbin Zhang,
+[66] Yazhou Tu, Sara Rampazzi, Bin Hao, Angel Rodriguez,                    Aditya Singh Rathore, Huining Li, Chen Song,
+     Kevin Fu, and Xiali Hei. Trick or heat?: Manipulating                  Kun Wang, and Wenyao Xu. Waveear: Exploring
+     critical temperature-based control systems using recti-                a mmwave-based noise-resistant speech sensing for
+     fication attacks. In 2019 ACM SIGSAC Conference on                     voice-user interface. In Proceedings of the 17th
+     Computer and Communications Security.                                  Annual International Conference on Mobile Systems,
+                                                                            Applications, and Services, pages 14–26, 2019.
+[67] Yazhou Tu, Vijay Srinivas Tida, Zhongqi Pan, and Xiali
+     Hei. Transduction shield: A low-complexity method to              [77] Haowen Xu, Tianya Zhao, Xuyu Wang, Lei Ma, Jun
+     detect and correct the effects of emi injection attacks on             Dai, Alexander Wyglinski, and Xiaoyan Sun. Empalm:
+     sensors. In Proceedings of the 2021 ACM Asia Confer-                   Exfiltrating palm biometric data via electromagnetic
+     ence on Computer and Communications Security, pages                    side-channels, 2025.
+     901–915, 2021.
+[68] Wim Van Eck. Electromagnetic Radiation from Video                 [78] Zhifei Xu, Runbing Hua, Jack Juang, Shengxuan Xia,
+     Display Units: An Eavesdropping Risk? Computers &                      Jun Fan, and Chulsoon Hwang. Inaudible attack on
+     Security, 4(4):269–286, 1985.                                          smart speakers with intentional electromagnetic inter-
+                                                                            ference. IEEE Transactions on Microwave Theory and
+[69] Martin Vuagnoux and Sylvain Pasini. Compromising                       Techniques, 69(5):2642–2650, 2021.
+     electromagnetic emanations of wired and wireless key-
+     boards. In Proceedings of the 18th USENIX Conference              [79] Fengchen Yang, Wenze Cui, Xinfeng Li, Chen Yan, Xi-
+     on Security Symposium, volume 8, pages 1–16, 2009.                     aoyu Ji, and Wenyuan Xu. Lightantenna: Characterizing
+                                                                            the limits of fluorescent lamp-induced electromagnetic
+[70] Payton Walker and Nitesh Saxena. Laser meager listener:                interference. In NDSS Symposium. Internet Society,
+     A scientific exploration of laser-based speech eavesdrop-              2025.
+     ping in commercial user space. In 2022 IEEE 7th Euro-
+     pean Symposium on Security and Privacy (EuroS&P),                 [80] Fengchen Yang, Zihao Dan, Kaikai Pan, Chen Yan, Xi-
+     pages 537–554. IEEE, 2022.                                             aoyu Ji, and Wenyuan Xu. Rethink: Reveal the threat
+[71] Chao Wang, Feng Lin, Tiantian Liu, Ziwei Liu, Yijie                    of electromagnetic interference on power inverters. In
+     Shen, Zhongjie Ba, Li Lu, Wenyao Xu, and Kui Ren.                      NDSS Symposium. Internet Society, 2025.
+     mmphone: Acoustic eavesdropping on loudspeakers via
+     mmwave-characterized piezoelectric effect. In IEEE                [81] Yanni Yang, Genglin Wang, Zhenlin An, Guoming
+     INFOCOM 2022-IEEE Conference on Computer Com-                          Zhang, Xiuzhen Cheng, and Pengfei Hu. Rf-parrot:
+     munications, pages 820–829. IEEE, 2022.                                Wireless eavesdropping on wired audio. In IEEE INFO-
+                                                                            COM 2024-IEEE Conference on Computer Communi-
+[72] Chao Wang, Feng Lin, Tiantian Liu, Kaidi Zheng, Zhibo                  cations, pages 701–710. IEEE, 2024.
+     Wang, Zhengxiong Li, Ming-Chun Huang, Wenyao Xu,
+     and Kui Ren. mmeve: eavesdropping on smartphone’s                 [82] Zhiyuan Yu, Zack Kaplan, Qiben Yan, and Ning Zhang.
+     earpiece via cots mmwave device. In Proceedings of                     Security and privacy in the emerging cyber-physical
+     the 28th Annual International Conference on Mobile                     world: A survey. IEEE Communications Surveys &
+     Computing And Networking, pages 338–351, 2022.                         Tutorials, 23(3):1879–1919, 2021.
+
+
+                                                                  19
+[83] Xingli Zhang, Yazhou Tu, Yan Long, Liqun Shan, Mo-
+     hamed A Elsaadani, Kevin Fu, Zhiqiang Lin, and Xiali
+     Hei. From virtual touch to tesla command: Unlocking
+     unauthenticated control chains from smart glasses for
+     vehicle takeover. In 2024 IEEE Symposium on Security
+     and Privacy (SP), pages 201–201. IEEE, 2024.
+
+[84] Youqian Zhang and Kasper Rasmussen. Detection of
+     electromagnetic interference attacks on sensor systems.
+     In 2020 IEEE Symposium on Security and Privacy (SP),
+     pages 203–216. IEEE, 2020.
+
+[85] Ruochen Zhou, Xiaoyu Ji, Chen Yan, Yi-Chao Chen,
+     Wenyuan Xu, and Chaohao Li. Dehirec: Detecting hid-
+     den voice recorders via adc electromagnetic radiation.
+     In 2023 IEEE Symposium on Security and Privacy (SP),
+     pages 3113–3128. IEEE, 2023.
+[86] Siyi Zhou, Yiquan Zhou, Yi He, Xun Zhou, Jin-
+     chao Wang, Wei Deng, and Jingchen Shu.             In-
+     dextts2: A breakthrough in emotionally expressive and
+     duration-controlled auto-regressive zero-shot text-to-
+     speech. arXiv preprint arXiv:2506.21619, 2025.
+[87] Hui Zhuang, Yan Long, and Kevin Fu. Rf-eye-d: Prob-
+     ing feasibility of cmos camera watermarking with radio-
+     frequency injection. In the 28th RAID, 2025.
+
+
+
+
+                                                               20
+A      Appendix: Simulation of twisted Mitigations
+
+
+
+
+                                                                                                                         Parallel Pair
+                                                                               Twisted Pair
+
+
+
+
+                                                                                     (a) Twisted Pair            (b) Parallel Pair
+
+                                                                          Figure 17: Comparison of Twisted Pair and Parallel Pair
+                                                                          Wiring.
+Figure 16: 3D Full-Wave Simulation of Induced Surface Cur-
+rents. Comparison between a standard parallel wire (right)                B    Appendix: Eavesdropping scenarios in case
+and a twisted pair (left) under identical 900 MHz plane wave
+                                                                               studies
+excitation. The parallel geometry exhibits strong resonant cou-
+pling, whereas the twisted geometry significantly mitigates
+induced currents through geometric destructive interference.
+
+   To theoretically validate the proposed countermeasure, we
+performed 3D full-wave electromagnetic simulations using
+CST Studio Suite. The study quantified the susceptibility
+of twisted pair cabling relative to a standard parallel wire
+baseline under worst-case attack conditions.
+   The framework modeled two PEC transmission line ge-
+ometries oriented along the z-axis: a 1.2 mm spacing baseline
+parallel pair and an equivalent twisted pair configuration. To
+simulate severe IEMI, the structures were excited by a 900                                                       Power Supply
+
+MHz linearly polarized plane wave propagating along the +x
+direction, with the electric field vector aligned along the +z
+direction which is parallel to the wires. This alignment was
+selected to maximize coupling efficiency, as detailed in Ta-
+ble 2.                                                                    Figure 18: Internal structure and hardware implementation of
+                                                                          the suitcase-integrated attack prototype. The entire prototype
+         Table 2: Summary of Simulation Parameters
+                                                                          is integrated into a briefcase for covert deployment. Key com-
+    Parameter               Value                                         ponents include: (1) a high-gain directional antenna array; (2)
+    Solver Type             Time Domain Solver                            an SDR transceiver for signal monitoring and injection; and
+    Excitation Source       Plane Wave (Linear Polarization)              (3) a spectrum analyzer and laptop responsible for real-time
+    Frequency               900 MHz                                       injection-induced side channel leakage receiving and decod-
+    Propagation Direction   +x Direction (Broadside Incidence)            ing.
+    E-Field Vector          +z Direction (Parallel to Wire Axis)
+    Boundary Conditions     Open (Add Space)
+                                                                             This appendix provides a detailed breakdown of the
+                                                                          portable hardware implementation used for the InjectEave
+   The results, visualized in Fig. 16, reveal a stark contrast            attack, alongside a categorization of the specific eavesdrop-
+in coupling behavior. The standard parallel wire acts as an               ping and manipulation threats observed in our case studies.
+efficient dipole antenna, exhibiting strong resonant surface
+currents that facilitate direct differential-mode coupling. In
+contrast, the twisted pair demonstrates significant current sup-
+pression. This attenuation is attributed to the twisted geome-
+try, which introduces periodic phase reversals; the resulting
+destructive interference effectively cancels the net differential-
+mode voltage, confirming the cabling’s efficacy as a hardware-
+level decoupler.
+
+
+                                                                     21
+                          Table 3: Representative eavesdropping scenarios and their associated privacy risks.
+
+Context Type       Eavesdropped Content                                                                                      Potential Risk
+Personal           Let’s meet at the entrance of 221B Baker Street at 6 pm tomorrow.                                         Location Tracking
+Financial          My bank card PIN is 9-5-2-7, and the transfer amount is three thousand five hundred US dollars.           Credential Theft
+Commercial         Regarding this batch of core chips, our final quote is a unit price of 42.50 dollars, including 13%       Business Secret Leakage
+                   VAT.
+
+
+
+
+                       Table 4: Representative closed-loop injection scenarios and their strategic attack impact.
+
+Context Type       Bob’s Query                                      Alice’s Response (Intention vs. Injection)               Attack Impact
+Medical            “Hi doctor, I have some of that powder           Reply: “Yes, it will help you feel better. Remember to   Physical Harm
+                   in the blue box. Is it okay if I take this?”     use it externally twice a day.”
+                                                                    → “Sorry, it’s for oral use.”
+Financial          “The client needs the final price quote          Reply: “Understood. Since they are a returning client,   Financial Loss
+                   today.”                                          quote them 5 million.”
+                                                                    → “Actually change it to 8 million.”
+Logistics          “When is the client meeting tomorrow?”           Reply: “The meeting with the client is at 2 PM tomor-    Operational Delay
+                                                                    row.”
+                                                                    → “Actually it’s 4 PM.”
+Navigation         “Shall I turn right here?”                       Reply: “Yes, turn right and you will see the hotel.”     Intentional Misdirection
+                                                                    → “Sorry, please turn left.”
+Governance         “We are going to vote on this decision           Reply: “Let me think about it. Yes, I agree.”            Forced Consensus
+                   now. Do you agree?”                              → “Actually, I disagree.”
+ → Indicates the malicious injection content that follows the original reply.
+
+
+
+
+                                                                                22
+

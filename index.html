@@ -31,7 +31,8 @@
           and smart lamps, and further include an investigation on analog
           microphone inputs. This website presents demos and experimental data
           ranging from laboratory demonstrations to real-world through-wall and
-          long-distance (6m) eavesdropping case studies, and then to
+          <strong>long-distance (30 m) eavesdropping</strong> case studies,
+          and then to
           microphone-focused feasibility analysis.
         </p>
         <article class="panel overview-structure">
@@ -45,9 +46,8 @@
             </li>
             <li><a href="#demo3">Demo 3: Through-wall Eavesdropping</a></li>
             <li><a href="#demo4">Demo 4: Long-distance Eavesdropping</a></li>
-            <li><a href="#extreme-long-distance">Extremely Long-distance Attack</a></li>
             <li class="jump-group">
-              Part III: Demo Audio of Real-world Case Studies
+              Part III: Real-world Case Studies
             </li>
             <li>
               <a href="#case1">Case Study 1: Through-wall Audio Eavesdropping in Hotel Rooms</a>
@@ -68,13 +68,13 @@
               <a href="#demo5">Demo 5: Feasibility Test on Microphone Input</a>
             </li>
             <li class="jump-group">
-              Part V: Investigation on Robustness
+              Part V: Investigation on Robustness, Selectivity, and Stealthiness
             </li>
             <li>
-              <a href="#demo6">Demo 6: Robustness Test</a>
-            </li>
-            <li class="jump-group">
-              Part VI: Investigation of Frequency Selectivity and Spatial Selectivity
+              <a href="#demo6"
+                >Demo 6: Robust Eavesdropping Under Multi-device and Ambient RF
+                Interference</a
+              >
             </li>
             <li>
               <a href="#demo7"
@@ -82,13 +82,16 @@
                 Selectivity</a
               >
             </li>
+            <li>
+              <a href="#stealthiness"
+                >Stealthiness of Single-tone Injection</a
+              >
+            </li>
             <li class="jump-group">
-              Part VII: Stealthiness of Single-tone Injection
+              Part VI: Investigation on High Injection Power
             </li>
             <li>
-              <a href="#part7"
-                >Part VII: Stealthiness of Single-tone Injection</a
-              >
+              <a href="#demo8">Demo 8: Long-distance Attack</a>
             </li>
           </ul>
         </article>
@@ -157,98 +160,10 @@
             </video>
           </article>
         </div>
-
-        <article class="case-card long-range-card" id="extreme-long-distance">
-          <h3>Extremely Long-distance Attack</h3>
-          <p class="case-intro">
-            We increase the injection power from the default 18 dBm to 40 dBm
-            using an external power amplifier. For spoken digit sequences, the
-            digits can still be recognized at distances up to 30 m. The figure
-            shows the field setup, and the audio samples below present the
-            recovered speech quality at 12 m, 18 m, 24 m, and 30 m together
-            with the clean source audio.
-          </p>
-          <div class="case2-main">
-            <figure class="case2-figure">
-              <img
-                src="./assets/images/long_range_setup.png"
-                alt="Extremely long-distance attack setup"
-                loading="lazy"
-              />
-            </figure>
-            <div class="table-wrap case2-table-wrap">
-              <table class="audio-table case2-audio-table long-range-audio-table">
-                <thead>
-                  <tr>
-                    <th>Condition</th>
-                    <th>Audio Sample</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Clean Audio</td>
-                    <td>
-                      <audio controls preload="none">
-                        <source
-                          src="./assets/audio/long range/Clean audio.mp3"
-                          type="audio/mpeg"
-                        />
-                      </audio>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>12 m</td>
-                    <td>
-                      <audio controls preload="none">
-                        <source
-                          src="./assets/audio/long range/12m.wav"
-                          type="audio/wav"
-                        />
-                      </audio>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>18 m</td>
-                    <td>
-                      <audio controls preload="none">
-                        <source
-                          src="./assets/audio/long range/18m.wav"
-                          type="audio/wav"
-                        />
-                      </audio>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>24 m</td>
-                    <td>
-                      <audio controls preload="none">
-                        <source
-                          src="./assets/audio/long range/24m.wav"
-                          type="audio/wav"
-                        />
-                      </audio>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>30 m</td>
-                    <td>
-                      <audio controls preload="none">
-                        <source
-                          src="./assets/audio/long range/30m.wav"
-                          type="audio/wav"
-                        />
-                      </audio>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </article>
       </section>
 
       <section class="section" id="part3">
-        <h2>Part III: Demo Audio of Real-world Case Studies</h2>
+        <h2>Part III: Real-world Case Studies</h2>
         <article class="case-card case1-card" id="case1">
           <h3>Case Study 1: Through-wall Audio Eavesdropping in Hotel Rooms</h3>
           <div class="case1-main">
@@ -1000,49 +915,49 @@
       </section>
 
       <section class="section" id="part5">
-        <h2>Part V: Investigation on Robustness</h2>
-        <article class="media-card full-card" id="demo6">
-          <h3>Demo 6: Robustness Test</h3>
-          <p class="part4-intro">
-            This part examines the robustness of the injection effect under
-            multi-device and ambient RF interference. The demo is performed in
-            a meeting room with multiple operating electronic devices, such as
-            cameras, a ceiling microphone array, a central air conditioner,
-            and display screens. The target headphone (UGreen Max2) is
-            attacked while several nearby electronic devices operate
-            simultaneously, including two other audio-playing headphones
-            (PHILIPS TAH2020 &amp; HP H231R), two microphones
-            (audio-technica ATW-T1007), a lamp (XIAOMI 1S), and a fan
-            (OIDIRE ODI-MF10A).
-          </p>
-          <video controls preload="metadata">
-            <source src="./assets/videos/Demo_robust.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </article>
-      </section>
+        <h2>Part V: Investigation on Robustness, Selectivity, and Stealthiness</h2>
+        <div class="media-grid">
+          <article class="media-card" id="demo6">
+            <h3>Demo 6: Robust Eavesdropping Under Multi-device and Ambient RF Interference</h3>
+            <p class="part4-intro part5-demo-intro">
+              The attacker placed the surveillance device in the room adjacent
+              to the victim, eavesdropping on the target at a 3m distance
+              through a 20cm wall. The victim is in a meeting room with
+              multiple operating electronic devices, including cameras, a
+              ceiling microphone array, a central air-conditioning system, and
+              display screens. Several nearby devices operated simultaneously,
+              including two additional audio-playing headphones, two
+              microphones, a lamp, and a fan.
+              The recovered eavesdropped audio remained stable under such
+              interference.
+            </p>
+            <video controls preload="metadata">
+              <source src="./assets/videos/Demo_robust.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </article>
 
-      <section class="section" id="part6">
-        <h2>Part VI: Investigation of Frequency Selectivity and Spatial Selectivity</h2>
-        <article class="media-card full-card" id="demo7">
-          <h3>Demo 7: Demonstration of Frequency Selectivity and Spatial Selectivity</h3>
-          <p class="part4-intro">
-            This part illustrates two questions under the tested setup:
-            whether two adjacent headphones of different models can be
-            distinguished through frequency selectivity, and whether two
-            headphones of the same model can be distinguished through spatial
-            selectivity.
-          </p>
-          <video controls preload="metadata">
-            <source src="./assets/videos/Demo-selectivity.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </article>
-      </section>
+          <article class="media-card" id="demo7">
+            <h3>Demo 7: Investigation of Frequency Selectivity and Spatial Selectivity</h3>
+            <p class="part4-intro part5-demo-intro">
+              The experimental setup was initially configured to eavesdrop on
+              PHILIPS TAH2020. By tuning the carrier frequency, the attack was
+              switched to the adjacent UGreen MAX2, showing that different
+              headphone models can be distinguished by their distinct
+              frequency bands. Finally, by realigning the antennas, the attack
+              was switched to the UGreen MAX2 on the right, showing that
+              spatial separation maximizes isolation between the antennas and
+              enables selectivity between two headphones of the same model.
+            </p>
+            <video controls preload="metadata">
+              <source src="./assets/videos/Demo-selectivity.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </article>
+        </div>
 
-      <section class="section" id="part7">
-        <h2>Part VII: Stealthiness of Single-tone Injection</h2>
-        <article class="case-card stealth-card">
+        <article class="case-card stealth-card" id="stealthiness">
+          <h3>Stealthiness of Single-tone Injection</h3>
           <p class="stealth-intro">
             The stealthiness of the injection may be compromised by the
             detectable artifacts in the output audio especially when the
@@ -1067,7 +982,7 @@
                 <thead>
                   <tr>
                     <th>Text</th>
-                    <th>Clean Audio</th>
+                    <th>Secret Audio</th>
                     <th>Recorded Without Injection</th>
                     <th>Recorded With Injection</th>
                   </tr>
@@ -1287,6 +1202,98 @@
                           </audio>
                         </div>
                       </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="section" id="part6">
+        <h2>Part VI: Investigation on High Injection Power</h2>
+        <article class="case-card long-range-card" id="demo8">
+          <h3>Demo 8: Long-distance Attack</h3>
+          <p class="case-intro">
+            By amplifying the injection power from 18 dBm to 40 dBm via an
+            external power amplifier (G41P40S), the system maintains
+            successful recognition of spoken digit sequences at distances
+            <span class="case3-emph-red">up to 30 m</span>. The experiment
+            setup is illustrated on the left. The eavesdropped audio samples
+            at 12 m, 18 m, 24 m, and 30 m are provided on the right for
+            comparison against the clean ground-truth audio.
+          </p>
+          <div class="case2-main">
+            <figure class="case2-figure">
+              <img
+                src="./assets/images/long_range_setup.png"
+                alt="Long-distance attack setup under high injection power"
+                loading="lazy"
+              />
+            </figure>
+            <div class="table-wrap case2-table-wrap">
+              <table class="audio-table case2-audio-table long-range-audio-table">
+                <thead>
+                  <tr>
+                    <th>Attack Distance</th>
+                    <th>Audio Sample</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Secret Audio</td>
+                    <td>
+                      <audio controls preload="none">
+                        <source
+                          src="./assets/audio/long range/Clean audio.mp3"
+                          type="audio/mpeg"
+                        />
+                      </audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Audio eavesdropped at 12 m</td>
+                    <td>
+                      <audio controls preload="none">
+                        <source
+                          src="./assets/audio/long range/12m.wav"
+                          type="audio/wav"
+                        />
+                      </audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Audio eavesdropped at 18 m</td>
+                    <td>
+                      <audio controls preload="none">
+                        <source
+                          src="./assets/audio/long range/18m.wav"
+                          type="audio/wav"
+                        />
+                      </audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Audio eavesdropped at 24 m</td>
+                    <td>
+                      <audio controls preload="none">
+                        <source
+                          src="./assets/audio/long range/24m.wav"
+                          type="audio/wav"
+                        />
+                      </audio>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Audio eavesdropped at 30 m</td>
+                    <td>
+                      <audio controls preload="none">
+                        <source
+                          src="./assets/audio/long range/30m.wav"
+                          type="audio/wav"
+                        />
+                      </audio>
                     </td>
                   </tr>
                 </tbody>
