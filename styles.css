@@ -600,14 +600,12 @@ video {
   .case-header,
   .case1-main,
   .case2-main,
-  .case3-main,
-  .stealth-main {
+  .case3-main {
     grid-template-columns: 1fr;
   }
 
   .case1-main,
-  .case2-main,
-  .stealth-main {
+  .case2-main {
     height: auto;
   }
 
@@ -628,15 +626,8 @@ video {
   .case2-figure,
   .case2-table-wrap,
   .case3-figure,
-  .case3-explain,
-  .stealth-figure,
-  .stealth-table-wrap {
+  .case3-explain {
     height: auto;
-  }
-
-  .stealth-main > .stealth-table-wrap {
-    overflow-x: auto;
-    overflow-y: visible;
   }
 }
 
@@ -654,5 +645,22 @@ video {
   .case2-audio-table,
   .stealth-audio-table {
     min-width: 680px;
+  }
+}
+
+@media (max-width: 780px) {
+  .stealth-main {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .stealth-figure,
+  .stealth-table-wrap {
+    height: auto;
+  }
+
+  .stealth-main > .stealth-table-wrap {
+    overflow-x: auto;
+    overflow-y: visible;
   }
 }
