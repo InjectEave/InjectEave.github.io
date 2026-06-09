@@ -2317,6 +2317,10 @@
               behavior: reduceMotion ? "auto" : "smooth"
             });
 
+            if (link.closest(".site-nav-links")) {
+              setActiveNav(link);
+            }
+
             if (history.pushState) {
               history.pushState(null, "", href);
             }
@@ -2347,7 +2351,7 @@
           }
 
           var navOffset = nav ? nav.offsetHeight : 0;
-          var activationY = window.scrollY + navOffset + Math.min(260, window.innerHeight * 0.42);
+          var activationY = window.scrollY + navOffset + Math.min(96, window.innerHeight * 0.18);
           var active = null;
           var nearest = null;
           var nearestDistance = Infinity;
@@ -2367,10 +2371,7 @@
           });
 
           var lastTarget = navTargets[navTargets.length - 1];
-          if (
-            window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2 &&
-            lastTarget.target.getBoundingClientRect().top + window.scrollY <= activationY
-          ) {
+          if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
             active = lastTarget;
           }
 
