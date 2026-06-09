@@ -3,97 +3,949 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>InjectEave | Injected and Leaked</title>
-    <link rel="stylesheet" href="./styles.css" />
+
+    <title>
+      InjectEave: Injection-Induced EM Side Channels (Injected and Leaked) | USENIX Security 2026
+    </title>
+    <meta
+      name="description"
+      content="InjectEave (Injected and Leaked) introduces Injection-Induced EM Side Channels: a threat model in which active electromagnetic injection plus ubiquitous hardware nonlinearity modulate low-frequency analog secrets (speech audio, device power, control signals) onto an injected carrier, up-converting them into measurable EM leakage. Demonstrated eavesdropping on headphone/landline audio up to 30 m and through walls on 11 commercial off-the-shelf devices."
+    />
+    <meta
+      name="keywords"
+      content="injection-induced side channel, electromagnetic side channel, EM injection, hardware nonlinearity, intermodulation, active side-channel analysis, audio eavesdropping, through-wall eavesdropping, analog side channel, RF eavesdropping, side-channel leakage, USRP, software-defined radio, InjectEave, USENIX Security 2026, EM leakage, power side channel, closed-loop EM attack, backscattering eavesdropping"
+    />
+    <meta name="author" content="Haoran Yan, Ziyu Shao, Shuhao Zhang, Qinhong Jiang, Yan Long" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://injecteave.github.io/" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="InjectEave" />
+    <meta
+      property="og:title"
+      content="InjectEave: Injected and Leaked — Injection-Induced EM Side Channels"
+    />
+    <meta
+      property="og:description"
+      content="Active EM injection plus hardware nonlinearity up-converts low-frequency analog secrets (speech, power, control signals) into measurable EM leakage. Through-wall and up-to-30 m audio eavesdropping demonstrated on 11 COTS devices."
+    />
+    <meta property="og:url" content="https://injecteave.github.io/" />
+    <meta property="og:image" content="https://injecteave.github.io/assets/images/em-comparison.png" />
+    <meta property="og:image:alt" content="Injected EM carriers piggyback low-frequency secrets into an efficient EM emission band." />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="InjectEave: Injected and Leaked — Injection-Induced EM Side Channels"
+    />
+    <meta
+      name="twitter:description"
+      content="Active EM injection + hardware nonlinearity turns low-frequency analog secrets into measurable EM leakage. Through-wall and 30 m audio eavesdropping on 11 COTS devices."
+    />
+    <meta name="twitter:image" content="https://injecteave.github.io/assets/images/em-comparison.png" />
+
+    <meta
+      name="citation_title"
+      content="Injected and Leaked: Actively Inducing Side-Channel Leakage Using Electromagnetic Injection and Hardware Nonlinearity"
+    />
+    <meta name="citation_author" content="Yan, Haoran" />
+    <meta name="citation_author" content="Shao, Ziyu" />
+    <meta name="citation_author" content="Zhang, Shuhao" />
+    <meta name="citation_author" content="Jiang, Qinhong" />
+    <meta name="citation_author" content="Long, Yan" />
+    <meta name="citation_publication_date" content="2026" />
+    <meta name="citation_conference_title" content="USENIX Security Symposium" />
+    <meta name="citation_pdf_url" content="https://injecteave.github.io/paper.pdf" />
+    <meta name="citation_abstract_html_url" content="https://injecteave.github.io/" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ScholarlyArticle",
+        "name": "Injected and Leaked: Actively Inducing Side-Channel Leakage Using Electromagnetic Injection and Hardware Nonlinearity",
+        "headline": "Injected and Leaked: Actively Inducing Side-Channel Leakage Using Electromagnetic Injection and Hardware Nonlinearity",
+        "alternateName": "InjectEave",
+        "url": "https://injecteave.github.io/",
+        "author": [
+          { "@type": "Person", "name": "Haoran Yan", "affiliation": "The Hong Kong University of Science and Technology (Guangzhou)" },
+          { "@type": "Person", "name": "Ziyu Shao", "affiliation": "The Hong Kong University of Science and Technology (Guangzhou)" },
+          { "@type": "Person", "name": "Shuhao Zhang", "affiliation": "The Hong Kong University of Science and Technology (Guangzhou)" },
+          { "@type": "Person", "name": "Qinhong Jiang", "affiliation": "The Hong Kong Polytechnic University" },
+          { "@type": "Person", "name": "Yan Long", "affiliation": "The Hong Kong University of Science and Technology (Guangzhou)" }
+        ],
+        "datePublished": "2026",
+        "inLanguage": "en",
+        "abstract": "Electromagnetic (EM) side-channel leakage and injection are typically treated as distinct physical phenomena, threatening data confidentiality and integrity respectively. This work investigates how EM injection can be used to amplify side-channel leakage that is otherwise infeasible. We introduce a framework for Injection-Induced EM Side Channels to enable integrated, closed-loop EM security analysis. Theoretical modeling and experimental measurements reveal that nonlinear hardware components, such as ubiquitous amplifiers, analog-to-digital converters, and power converters, can modulate secret analog signals onto an injected EM carrier and thus up-convert low-frequency secrets into measurable EM emissions. We design the InjectEave attack and demonstrate eavesdropping on audio played through wired and wireless headphones from up to 6 m away, in through-wall scenarios, and up to 30 m using a low-cost commodity RF amplifier.",
+        "keywords": "injection-induced side channel; electromagnetic side channel; EM injection; hardware nonlinearity; intermodulation; active side-channel analysis; audio eavesdropping; through-wall eavesdropping; analog side channel",
+        "publisher": { "@type": "Organization", "name": "USENIX Association" },
+        "isPartOf": { "@type": "PublicationEvent", "name": "USENIX Security Symposium 2026" },
+        "sameAs": "https://doi.org/10.5281/zenodo.20432240"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": "InjectEave research artifact",
+        "description": "Received audio recordings from the case studies and the speech-enhancement (SGMSE-based) codebase for the InjectEave attack. Vulnerable injection frequencies and active injection-control logic are withheld for ethical reasons.",
+        "codeRepository": "https://doi.org/10.5281/zenodo.20432240",
+        "license": "https://doi.org/10.5281/zenodo.20432240",
+        "author": "Haoran Yan, Ziyu Shao, Shuhao Zhang, Qinhong Jiang, Yan Long"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "When and how much should I worry about this attack?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Whenever vulnerable analog hardware is active, an adversary can inject a carrier and induce it to leak information, without physical access to or modification of the device. Our distance results suggest that InjectEave may pose the most serious threats to everyday audio peripherals and always-on smart-home devices from up to tens of meters away. As hardware nonlinearity is inevitable in computer systems, any device built with nonlinear components is potentially exposed to this attack." }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the broader impact of this side channel?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Audio is only one of many low-frequency analog secrets, alongside device power consumption, actuation-control signals, and analog sensor inputs. The same Injection-Modulation-Emission mechanism applies to any device with nonlinear components, and such nonlinearity is inevitable in contemporary computer systems. As a result, any device built with nonlinear components is potentially exposed to this attack." }
+          },
+          {
+            "@type": "Question",
+            "name": "What are some possible defenses?",
+            "acceptedAnswer": { "@type": "Answer", "text": "InjectEave is immune to digital defenses such as encryption, masking, and randomization, because the leakage comes from the analog path. Hardware-aware mitigations such as twisted-pair wiring, shielding, and filtering can lower the energy that the injected carrier couples into the device, reducing the exposure. These mitigations raise the bar, but they do not guarantee immunity. Since injection-induced leakage grows with the injected power, a well-resourced adversary can often overcome them by transmitting at higher power." }
+          }
+        ]
+      }
+    </script>
+
+    <link rel="stylesheet" href="./styles.css?v=demo-nav-structured" />
+    <style>
+      .gsap-enhanced .site-nav {
+        transition: box-shadow 180ms ease, border-color 180ms ease;
+      }
+
+      .gsap-enhanced .site-nav.is-scrolled {
+        border-bottom-color: #c7d3e3;
+        box-shadow: 0 8px 24px rgba(20, 37, 63, 0.08);
+      }
+
+      .gsap-enhanced .site-nav-progress {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #0a4ea2, #b52126);
+        transform: scaleX(0);
+        transform-origin: left center;
+        will-change: transform;
+        pointer-events: none;
+      }
+
+      .gsap-enhanced .site-nav-links a {
+        position: relative;
+      }
+
+      .gsap-enhanced .site-nav-links a.is-active {
+        color: #0a4ea2;
+        border-bottom-color: transparent;
+      }
+
+      .gsap-enhanced .site-nav-links a.is-active::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -2px;
+        height: 2px;
+        background: #0a4ea2;
+        pointer-events: none;
+      }
+
+      .nav-signal-demo {
+        flex: 0 0 300px;
+        height: 48px;
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        overflow: visible;
+      }
+
+      .nav-signal-demo svg {
+        width: 300px;
+        height: 48px;
+        display: block;
+        overflow: visible;
+      }
+
+      .nav-signal-demo .signal-baseline {
+        stroke: #d7dce5;
+        stroke-width: 1;
+      }
+
+      .nav-signal-demo .inject-wave,
+      .nav-signal-demo .am-wave {
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .nav-signal-demo .inject-wave {
+        stroke: #0a4ea2;
+      }
+
+      .nav-signal-demo .am-wave {
+        stroke: #ad1f1f;
+        stroke-width: 2.4;
+      }
+
+      .nav-signal-demo .am-envelope {
+        fill: none;
+        stroke: rgba(173, 31, 31, 0.34);
+        stroke-width: 1.25;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .nav-signal-demo .target-device-shell,
+      .nav-signal-demo .target-device-pin,
+      .nav-signal-demo .target-device-curve {
+        fill: none;
+        stroke: #27384f;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .nav-signal-demo .target-device-shell {
+        fill: rgba(10, 78, 162, 0.04);
+      }
+
+      .nav-signal-demo .target-device-pin {
+        stroke-width: 1.7;
+      }
+
+      .nav-signal-demo .target-device-curve {
+        stroke: #1f8f4a;
+        stroke-width: 1.8;
+      }
+
+      .nav-signal-demo .carrier-dot {
+        fill: #0a4ea2;
+      }
+
+      .nav-signal-demo .reflection-dot {
+        fill: #ad1f1f;
+      }
+
+      .nav-signal-demo .flow-arrow {
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .nav-signal-demo .flow-arrow-in {
+        stroke: #0a4ea2;
+      }
+
+      .nav-signal-demo .flow-arrow-out {
+        stroke: #ad1f1f;
+      }
+
+      .nav-signal-demo .target-device-pulse {
+        fill: none;
+        stroke: rgba(10, 78, 162, 0.28);
+        stroke-width: 1.4;
+      }
+
+      @media (max-width: 1540px) {
+        .nav-signal-demo {
+          display: none;
+        }
+      }
+
+      .gsap-enhanced .page-header h1,
+      .gsap-enhanced .hero-author-list li,
+      .gsap-enhanced .hero-affils,
+      .gsap-enhanced .page-header #summary,
+      .gsap-enhanced .hero-summary,
+      .gsap-enhanced .section,
+      .gsap-enhanced .panel,
+      .gsap-enhanced .media-card,
+      .gsap-enhanced .case-card,
+      .gsap-enhanced .figure-block,
+      .gsap-enhanced .devices-figure {
+        will-change: transform, opacity;
+      }
+
+      .gsap-enhanced .media-card,
+      .gsap-enhanced .case-card,
+      .gsap-enhanced .panel,
+      .gsap-enhanced .figure-block img,
+      .gsap-enhanced video {
+        transform-origin: center center;
+      }
+
+      .animated-figure-frame {
+        position: relative;
+        line-height: 0;
+      }
+
+      .animated-figure-frame > img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .figure-wave-overlay {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: visible;
+      }
+
+      .figure-wave-overlay path {
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        vector-effect: non-scaling-stroke;
+      }
+
+      .figure-wave-overlay .trace-flow {
+        stroke-width: 4;
+        stroke-dasharray: 16 18;
+        opacity: 0.72;
+      }
+
+      .figure-wave-overlay .dynamic-wave {
+        stroke-width: 3;
+        opacity: 0.9;
+      }
+
+      .figure-wave-overlay .fig1-wave-cover {
+        fill: #fff;
+      }
+
+      .figure-wave-overlay .fig1-panel-border {
+        stroke: #000;
+        vector-effect: none;
+        stroke-linecap: butt;
+      }
+
+      .figure-wave-overlay .em-burst-dot {
+        animation: fig1-burst-dot 2.4s ease-in-out infinite;
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+
+      .figure-wave-overlay .em-burst-arc {
+        stroke-width: 3;
+        opacity: 0.16;
+        animation: fig1-burst-arc 2.4s ease-in-out infinite;
+      }
+
+      .figure-wave-overlay .em-burst-3 .em-burst-dot {
+        fill: #28afe5;
+      }
+
+      .figure-wave-overlay .em-burst-3 .em-burst-arc {
+        stroke: #28afe5;
+      }
+
+      .figure-wave-overlay .em-burst-2 .em-burst-dot {
+        fill: #ef2b24;
+      }
+
+      .figure-wave-overlay .em-burst-2 .em-burst-arc {
+        stroke: #ef2b24;
+      }
+
+      .figure-wave-overlay .em-burst-1 .em-burst-dot {
+        fill: #15181d;
+      }
+
+      .figure-wave-overlay .em-burst-1 .em-burst-arc {
+        stroke: #15181d;
+      }
+
+      .figure-wave-overlay .em-burst-3 .em-burst-dot {
+        animation-delay: 0s;
+      }
+
+      .figure-wave-overlay .em-burst-3 .em-burst-arc-1 {
+        animation-delay: 0.1s;
+      }
+
+      .figure-wave-overlay .em-burst-3 .em-burst-arc-2 {
+        animation-delay: 0.24s;
+      }
+
+      .figure-wave-overlay .em-burst-3 .em-burst-arc-3 {
+        animation-delay: 0.38s;
+      }
+
+      .figure-wave-overlay .em-burst-2 .em-burst-dot {
+        animation-delay: 0.95s;
+      }
+
+      .figure-wave-overlay .em-burst-2 .em-burst-arc-1 {
+        animation-delay: 1.05s;
+      }
+
+      .figure-wave-overlay .em-burst-2 .em-burst-arc-2 {
+        animation-delay: 1.19s;
+      }
+
+      .figure-wave-overlay .em-burst-2 .em-burst-arc-3 {
+        animation-delay: 1.33s;
+      }
+
+      .figure-wave-overlay .em-burst-1 .em-burst-dot {
+        animation-delay: 1.05s;
+      }
+
+      .figure-wave-overlay .em-burst-1 .em-burst-arc-1 {
+        animation-delay: 1.15s;
+      }
+
+      .figure-wave-overlay .em-burst-1 .em-burst-arc-2 {
+        animation-delay: 1.29s;
+      }
+
+      .figure-wave-overlay .em-burst-1 .em-burst-arc-3 {
+        animation-delay: 1.43s;
+      }
+
+      @keyframes fig1-burst-arc {
+        0% {
+          opacity: 0.16;
+        }
+
+        20% {
+          opacity: 0.92;
+        }
+
+        45%,
+        100% {
+          opacity: 0.16;
+        }
+      }
+
+      @keyframes fig1-burst-dot {
+        0%,
+        100% {
+          opacity: 0.5;
+          transform: scale(1);
+        }
+
+        20% {
+          opacity: 1;
+          transform: scale(1.25);
+        }
+
+        45% {
+          opacity: 0.5;
+          transform: scale(1);
+        }
+      }
+
+      .figure-wave-sensitive {
+        stroke: #f1b81c;
+      }
+
+      .figure-wave-leakage {
+        stroke: #28afe5;
+      }
+
+      .figure-wave-carrier {
+        stroke: #ef2b24;
+      }
+
+      .figure-wave-secret {
+        stroke: #178f35;
+      }
+
+      .figure-wave-dark {
+        stroke: #101820;
+      }
+
+      .figure-wave-overlay .fig2-wave-inj {
+        stroke: #0000ff;
+        stroke-width: 2;
+      }
+
+      .figure-wave-overlay .fig2-wave-eav {
+        stroke: #ff0000;
+        stroke-width: 2;
+      }
+
+      .figure-wave-overlay .fig2-wave-sig {
+        stroke: #008600;
+      }
+
+      .gsap-enhanced .faq-list details {
+        will-change: height;
+      }
+
+      .gsap-enhanced .faq-list details p {
+        transform-origin: top center;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .gsap-enhanced .page-header h1,
+        .gsap-enhanced .hero-author-list li,
+        .gsap-enhanced .hero-affils,
+        .gsap-enhanced .page-header #summary,
+        .gsap-enhanced .hero-summary,
+        .gsap-enhanced .section,
+        .gsap-enhanced .panel,
+        .gsap-enhanced .media-card,
+        .gsap-enhanced .case-card,
+        .gsap-enhanced .figure-block,
+        .gsap-enhanced .devices-figure,
+        .gsap-enhanced .faq-list details {
+          will-change: auto;
+        }
+
+        .figure-wave-overlay .em-burst-dot {
+          animation: none;
+          opacity: 1;
+          transform: none;
+        }
+
+        .figure-wave-overlay .em-burst-arc {
+          animation: none;
+          opacity: 0.5;
+        }
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <svg class="icon-sprite" aria-hidden="true" focusable="false">
+      <symbol id="icon-fan" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="2.2" />
+        <path d="M12 9.8 C10 6.6 11.4 3.6 14.3 3.2 C16 5.4 15.4 8 12 9.8 Z" />
+        <path d="M14 13.2 C17.7 13.1 19.7 15.7 18.6 18.4 C15.9 18.8 13.8 17.1 14 13.2 Z" />
+        <path d="M10.2 13.2 C8.5 16.5 5.2 16.9 3.4 14.6 C4.3 12 6.8 10.9 10.2 13.2 Z" />
+        <circle cx="12" cy="12" r="9" />
+      </symbol>
+      <symbol id="icon-lamp" viewBox="0 0 24 24">
+        <path d="M9 3 H15 L18 11 H6 L9 3 Z" />
+        <path d="M12 11 V19" />
+        <path d="M8 21 H16" />
+      </symbol>
+      <symbol id="icon-wall-audio" viewBox="0 0 24 24">
+        <path d="M5 5 V19" />
+        <path d="M9 7 H19" />
+        <path d="M9 12 H19" />
+        <path d="M9 17 H19" />
+        <path d="M3 9 C4.4 10.1 4.4 13.9 3 15" />
+      </symbol>
+      <symbol id="icon-outdoor" viewBox="0 0 24 24">
+        <path d="M12 20 V9" />
+        <path d="M8 13 L12 7 L16 13 H8 Z" />
+        <path d="M4 20 H20" />
+        <path d="M17 6 C18.7 7.2 19.6 8.9 19.6 11" />
+        <path d="M19.8 3.8 C22 5.5 23 7.8 23 11" />
+      </symbol>
+      <symbol id="icon-bed" viewBox="0 0 24 24">
+        <path d="M4 6 V19" />
+        <path d="M20 11 V19" />
+        <path d="M4 13 H20" />
+        <path d="M4 10 H10 C11.4 10 12 10.6 12 12 V13" />
+        <path d="M4 19 H20" />
+      </symbol>
+      <symbol id="icon-users" viewBox="0 0 24 24">
+        <circle cx="9" cy="8" r="3" />
+        <path d="M3.5 19 C4.5 15.8 6.3 14.5 9 14.5 C11.7 14.5 13.5 15.8 14.5 19" />
+        <circle cx="17" cy="9" r="2.2" />
+        <path d="M15.6 14.8 C18 14.8 19.6 16 20.5 18.4" />
+      </symbol>
+      <symbol id="icon-loop-phone" viewBox="0 0 24 24">
+        <path d="M7 5 H11 L12.2 8.4 L9.8 10 C11 12.3 12.7 14 15 15.2 L16.6 12.8 L20 14 V18 C20 19.1 19.1 20 18 20 C10.3 20 4 13.7 4 6 C4 5.4 4.4 5 5 5 H7 Z" />
+        <path d="M15 4 H20 V9" />
+        <path d="M20 4 L15 9" />
+      </symbol>
+      <symbol id="icon-mic" viewBox="0 0 24 24">
+        <rect x="9" y="3" width="6" height="11" rx="3" />
+        <path d="M5 11 C5 15 7.8 18 12 18 C16.2 18 19 15 19 11" />
+        <path d="M12 18 V21" />
+        <path d="M8 21 H16" />
+      </symbol>
+      <symbol id="icon-radio" viewBox="0 0 24 24">
+        <path d="M5 20 H19" />
+        <path d="M12 20 V8" />
+        <path d="M7 12 C8.1 10.7 9.7 10 12 10 C14.3 10 15.9 10.7 17 12" />
+        <path d="M4 8 C6.2 5.9 8.8 5 12 5 C15.2 5 17.8 5.9 20 8" />
+        <path d="M9.5 15 H14.5" />
+      </symbol>
+      <symbol id="icon-selectivity" viewBox="0 0 24 24">
+        <path d="M4 6 H20" />
+        <path d="M4 12 H20" />
+        <path d="M4 18 H20" />
+        <circle cx="9" cy="6" r="2" />
+        <circle cx="15" cy="12" r="2" />
+        <circle cx="11" cy="18" r="2" />
+      </symbol>
+      <symbol id="icon-stealth" viewBox="0 0 24 24">
+        <path d="M3 12 C5.7 7.5 8.7 5.5 12 5.5 C15.3 5.5 18.3 7.5 21 12 C19.7 14.2 18.3 15.8 16.7 16.9" />
+        <path d="M9.8 17.6 C7.4 16.9 5.1 15 3 12" />
+        <circle cx="12" cy="12" r="3" />
+        <path d="M4 4 L20 20" />
+      </symbol>
+    </svg>
+
+    <nav class="site-nav" aria-label="Section navigation">
+      <div class="site-nav-inner">
+        <a class="site-nav-brand" href="#top">Inject<span class="brand-eave">Eave</span></a>
+        <ul class="site-nav-links">
+          <li><a href="#summary">Overview</a></li>
+          <li><a href="#causality">Mechanism</a></li>
+          <li><a href="#affected-devices">Devices</a></li>
+          <li><a href="#demos">Demos</a></li>
+          <li><a href="#implementation">Implementation</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+        <div class="nav-signal-demo" aria-hidden="true">
+          <svg viewBox="0 0 300 64" role="img">
+            <line class="signal-baseline" x1="8" y1="32" x2="292" y2="32" />
+            <path class="inject-wave" d="" />
+            <circle class="carrier-dot" r="3" cx="14" cy="32" />
+            <path class="flow-arrow flow-arrow-in" d="M113 27 L122 32 L113 37" />
+
+            <g class="target-device-symbol">
+              <circle class="target-device-pulse" cx="150" cy="32" r="21" />
+              <path class="target-device-pin" d="M126 22 L134 22 M126 29 L134 29 M126 36 L134 36 M126 43 L134 43 M166 22 L174 22 M166 29 L174 29 M166 36 L174 36 M166 43 L174 43" />
+              <rect class="target-device-shell" x="134" y="17" width="32" height="30" rx="5" />
+              <path class="target-device-curve" d="M140 34 C143 24 147 24 150 34 C153 44 157 44 160 34" />
+              <path class="target-device-shell" d="M142 24 L158 24 M142 41 L158 41" opacity="0.34" />
+            </g>
+
+            <path class="flow-arrow flow-arrow-out" d="M178 27 L187 32 L178 37" />
+            <path class="am-wave" d="" />
+            <path class="am-envelope am-envelope-top" d="" />
+            <path class="am-envelope am-envelope-bottom" d="" />
+            <circle class="reflection-dot" r="3" cx="198" cy="32" />
+          </svg>
+        </div>
+      </div>
+    </nav>
+
     <header class="page-header" id="top">
       <h1>
         <span class="title-blue">Injected</span> and
         <span class="title-red">Leaked</span>:<br />
-        Actively Inducing Side-channel Leakage Using Electromagnetic Injection
-        and Hardware Non-linearity
+        <span class="title-subtitle"
+          >Actively Inducing Side-Channel Leakage Using Electromagnetic Injection
+          and Hardware Nonlinearity</span
+        >
       </h1>
-      <p class="paper-note">Paper #651, submitted to USENIX Security 2026</p>
+
+      <div class="hero-authors">
+        <ul class="hero-author-list">
+          <li><span class="author-name">Haoran Yan</span><sup class="affil-mark">¶</sup></li>
+          <li><span class="author-name">Ziyu Shao</span><sup class="affil-mark">¶</sup></li>
+          <li><span class="author-name">Shuhao Zhang</span><sup class="affil-mark">¶</sup></li>
+          <li>
+            <a class="author-name" href="https://jackjiang313.github.io/" target="_blank" rel="noopener">Qinhong Jiang</a><sup class="affil-mark">*</sup>
+          </li>
+          <li>
+            <a class="author-name" href="https://yanlong.site/" target="_blank" rel="noopener">Yan Long</a><sup class="affil-mark">¶</sup>
+          </li>
+        </ul>
+        <div class="hero-affils">
+          <span class="hero-affil">
+            <sup class="affil-mark">¶</sup>
+            <img src="./assets/images/hkust-gz-logo.png" alt="The Hong Kong University of Science and Technology (Guangzhou)" />
+          </span>
+          <span class="hero-affil">
+            <sup class="affil-mark">*</sup>
+            <img src="./assets/images/polyu-logo.svg" alt="The Hong Kong Polytechnic University" />
+          </span>
+        </div>
+      </div>
+
+      <h2 id="summary">Overview</h2>
+      <p class="hero-summary">
+        <span class="title-blue">Inject</span><span class="title-red">Eave</span> investigates a cybersecurity attack where
+        attackers exploit active electromagnetic injection and ubiquitous
+        hardware nonlinearity to induce EM side-channel leakage of low-frequency
+        analog secrets. This vulnerability exists in ubiquitous nonlinear
+        analog interfaces across the 11 commercial off-the-shelf devices we
+        evaluated, allowing attackers to eavesdrop on headphone and landline
+        audio, infer smart-fan speed and smart-lamp brightness, and recover
+        other analog secrets that digital encryption and software defenses can
+        hardly protect. We demonstrate eavesdropping on audio played through
+        wired and wireless headphones from up to <strong>30 m</strong> away, as well
+        as in through-wall scenarios, and characterize injection-induced EM
+        leakage of other low-frequency secrets. Case studies further demonstrate
+        closed-loop eavesdropping and manipulation of landline-phone conversations.
+      </p>
+      <div class="overview-video">
+        <video controls preload="metadata" playsinline>
+          <source src="./assets/videos/main.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <p class="password-prompt">
+          Try eavesdropping yourself: can you recover the password?
+          <button class="password-check-button" type="button" aria-controls="overview-password" aria-expanded="false">
+            Check the password
+          </button>
+          <span class="password-answer" id="overview-password" hidden>Password: 4815162342</span>
+        </p>
+      </div>
     </header>
 
-    <main class="container">
-      <section class="section" id="overview">
-        <h2>Overview</h2>
-        <p class="overview-summary">
-          This paper discovers <em>InjectEave</em> attack that demonstrates how
-          active EM injection and hardware non-linearity can induce
-          controllable, previously infeasible side-channel leakage, enabling
-          both high-fidelity eavesdropping and closed-loop conversation
-          manipulation. To ground this new threat model in practical settings,
-          we evaluate 11 commercial COTS devices across five categories,
-          including wired and wireless headphones, landline phones, smart fans,
-          and smart lamps, and further include an investigation on analog
-          microphone inputs. This website presents demos and experimental data
-          ranging from laboratory demonstrations to real-world through-wall and
-          <strong>long-distance (30 m) eavesdropping</strong> case studies,
-          and then to
-          microphone-focused feasibility analysis.
-        </p>
-        <article class="panel overview-structure">
-          <h3>Quick Links</h3>
-          <ul class="jump-list">
-            <li class="jump-group">Part I: Demonstrations in a Laboratory Setting</li>
-            <li><a href="#demo1">Demo 1: Eavesdropping on Smart Fans' Control Signal</a></li>
-            <li><a href="#demo2">Demo 2: Eavesdropping on Smart Lamps' Brightness</a></li>
-            <li class="jump-group">
-              Part II: Real-time Audio Eavesdropping in Real-world Scenarios
-            </li>
-            <li><a href="#demo3">Demo 3: Through-wall Eavesdropping</a></li>
-            <li><a href="#demo4">Demo 4: Long-distance Eavesdropping</a></li>
-            <li class="jump-group">
-              Part III: Real-world Case Studies
-            </li>
-            <li>
-              <a href="#case1">Case Study 1: Through-wall Audio Eavesdropping in Hotel Rooms</a>
-            </li>
-            <li>
-              <a href="#case2">Case Study 2: Through-wall Audio Eavesdropping in Meeting Rooms</a>
-            </li>
-            <li>
-              <a href="#case3"
-                >Case Study 3: Closed-loop Conversation Eavesdropping &amp;
-                Manipulation on Landline Devices</a
-              >
-            </li>
-            <li class="jump-group">
-              Part IV: Analog Microphone Inputs
-            </li>
-            <li>
-              <a href="#demo5">Demo 5: Feasibility Test on Microphone Input</a>
-            </li>
-            <li class="jump-group">
-              Part V: Robustness, Selectivity, and Stealthiness
-            </li>
-            <li>
-              <a href="#demo6"
-                >Demo 6: Robust Eavesdropping Under Multi-device and Ambient RF
-                Interference</a
-              >
-            </li>
-            <li>
-              <a href="#demo7"
-                >Demo 7: Frequency Selectivity and Spatial
-                Selectivity</a
-              >
-            </li>
-            <li>
-              <a href="#stealthiness"
-                >Stealthiness of Single-tone Injection</a
-              >
-            </li>
-            <li class="jump-group">
-              Part VI: High Injection Power
-            </li>
-            <li>
-              <a href="#demo8">Demo 8: Long-distance Attack</a>
-            </li>
-          </ul>
+    <main class="container" id="main">
+
+      <section class="section" id="causality">
+        <h2>How Injection Induces Leakage</h2>
+
+        <article class="causality-part">
+          <h3>The problem — spectral mismatch</h3>
+          <p>
+            In a conventional EM side channel, a device's electrical traces act
+            as unintentional antennas that radiate its internal signals. The
+            intuition is that <strong>the frequency of the secret signal and
+            the device's efficient EM emission frequency often face a
+            mismatch</strong>: low-frequency analog secrets such as human speech
+            audio (below
+            20&nbsp;kHz) and power-consumption or actuation-control signals
+            (below 200&nbsp;Hz) sit far from the efficient EM leakage frequencies
+            (MHz or GHz range) of the unintentional antenna structures within the
+            device, making them highly challenging targets for passive
+            eavesdropping. An injected EM carrier lets the secret piggyback into that
+            efficient band, overcoming the mismatch.
+          </p>
+          <figure class="figure-block figure-sm">
+            <div class="animated-figure-frame">
+              <img
+                src="./assets/images/em-comparison.png"
+                alt="Passive vs InjectEave: injected EM carriers shift sensitive info into efficient emission band."
+                loading="lazy"
+              />
+              <svg class="figure-wave-overlay fig1-wave-overlay" viewBox="0 0 1509 306" aria-hidden="true">
+                <rect class="fig1-wave-cover" x="576" y="178" width="100" height="82" />
+                <rect class="fig1-wave-cover" x="823" y="164" width="108" height="124" />
+                <g class="em-burst em-burst-1">
+                  <circle class="em-burst-dot" cx="593" cy="222" r="7" />
+                  <path class="em-burst-arc em-burst-arc-1" pathLength="1" d="M612 211 C620 218 620 228 612 235" />
+                  <path class="em-burst-arc em-burst-arc-2" pathLength="1" d="M631 205 C644 217 644 232 631 245" />
+                  <path class="em-burst-arc em-burst-arc-3" pathLength="1" d="M650 199 C668 216 668 236 650 253" />
+                </g>
+                <g class="em-burst em-burst-2">
+                  <path class="em-burst-arc em-burst-arc-1" pathLength="1" d="M891 177 C879 185 879 205 891 213" />
+                  <path class="em-burst-arc em-burst-arc-2" pathLength="1" d="M870 174 C854 185 854 209 870 220" />
+                  <path class="em-burst-arc em-burst-arc-3" pathLength="1" d="M849 171 C829 185 829 212 849 225" />
+                  <circle class="em-burst-dot" cx="914" cy="193" r="7" />
+                </g>
+                <g class="em-burst em-burst-3">
+                  <circle class="em-burst-dot" cx="838" cy="249" r="7" />
+                  <path class="em-burst-arc em-burst-arc-1" pathLength="1" d="M861 235 C872 244 872 256 861 265" />
+                  <path class="em-burst-arc em-burst-arc-2" pathLength="1" d="M881 230 C896 243 896 259 881 272" />
+                  <path class="em-burst-arc em-burst-arc-3" pathLength="1" d="M902 226 C921 243 921 263 902 279" />
+                </g>
+                <path class="fig1-panel-border" stroke-width="4" d="M630 150 L630 272" />
+                <path class="fig1-panel-border" stroke-width="3" d="M878.5 150 L878.5 288" />
+              </svg>
+            </div>
+            <figcaption>
+              Fig. 1: Injected EM carriers can piggyback secret signals,
+              overcoming the mismatch between target signal frequencies and
+              efficient EM emissions.
+            </figcaption>
+          </figure>
+        </article>
+
+        <article class="causality-part">
+          <h3>The mechanism — Injection–Modulation–Emission</h3>
+          <p>
+            <span class="title-blue">Inject</span><span class="title-red">Eave</span>
+            follows an <em>Injection–Modulation–Emission</em> model.
+            <strong>Injection:</strong> the carrier couples into the device's
+            unintentional antennas.
+            <strong>Modulation:</strong> a nonlinear component mixes the secret
+            with the carrier, up-converting it into sidebands at the carrier
+            frequency.
+            <strong>Emission:</strong> unintentional antennas leaked the
+            modulated signal, and the adversary demodulates it back to the
+            secret.
+          </p>
+          <figure class="figure-block figure-sm">
+            <div class="animated-figure-frame">
+              <img
+                src="./assets/images/leakage-model.png"
+                alt="Model of the injection-induced leakage process: a signal generator injects a carrier into an attacked device whose nonlinear components modulate the secret signal, which is re-radiated by an unintentional antenna and demodulated by the adversary."
+                loading="lazy"
+              />
+              <svg class="figure-wave-overlay fig2-wave-overlay" viewBox="0 0 1600 616" aria-hidden="true">
+                <rect class="fig1-wave-cover" x="854" y="141" width="186" height="80" />
+                <rect class="fig1-wave-cover" x="1352" y="210" width="188" height="82" />
+                <rect class="fig1-wave-cover" x="852" y="405" width="190" height="83" />
+                <rect class="fig1-wave-cover" x="29" y="528" width="187" height="82" />
+                <path class="dynamic-wave fig2-wave-inj" data-x1="860" data-x2="1035" data-y="180" data-amp="35" data-cycles="22" data-speed="14" />
+                <path class="dynamic-wave fig2-wave-sig" data-x1="1358" data-x2="1532" data-y="251" data-amp="34" data-cycles="3.7" data-speed="4.2" />
+                <path class="dynamic-wave fig2-wave-eav" data-x1="860" data-x2="1038" data-y="446" data-amp="35" data-cycles="18" data-speed="11" data-envelope="am" />
+                <path class="dynamic-wave fig2-wave-sig" data-x1="35" data-x2="208" data-y="569" data-amp="34" data-cycles="3.3" data-speed="4.2" />
+              </svg>
+            </div>
+            <figcaption>
+              Fig. 2: Model of the injection-induced leakage process.
+            </figcaption>
+          </figure>
+        </article>
+
+        <article class="causality-part">
+          <h3>The evidence — nonlinear components</h3>
+          <p>
+            We characterized the four most common nonlinear hardware
+            components: amplifiers, ADCs, switching MOSFETs, and power
+            converters. Under passive conditions, wideband sweeps from 0 to
+            2&nbsp;GHz show no discernible leakage. Replacing them with
+            linear resistance loads removes the leakage, confirming that
+            <strong>hardware nonlinearity is the key to injection-induced
+            leakage</strong>.
+          </p>
+          <figure class="figure-block">
+            <img
+              src="./assets/images/feasibility1.png"
+              alt="Spectrograms showing that ubiquitous nonlinear components — amplifier, ADC, MOSFET, and power converter — leak secret analog information under EM injection, compared against the conventional passive case."
+              loading="lazy"
+            />
+            <figcaption>
+              Fig. 3: Ubiquitous nonlinearities in commodity computing hardware
+              can unintentionally leak secret analog information under EM
+              injection. <sup>*</sup>Directly measured baseband signal.
+              <sup>+</sup>Baseband signal recovered by down-converting from the
+              carrier frequency. The two segments of signals are concatenated
+              together post-hoc for easier comparison.
+            </figcaption>
+          </figure>
+        </article>
+      </section>
+
+      <section class="section" id="affected-devices">
+        <h2>Affected Devices</h2>
+        <div class="affected-intro">
+          <p>
+            We evaluate <span class="title-blue">Inject</span><span class="title-red">Eave</span>
+            on 11 commercial devices of 5 different categories, conducted without
+            physical access or hardware/software modifications to the devices.
+            These span audio peripherals such as wireless headphones, wired
+            headphones, and landlines, which are ubiquitous in both public and
+            private spaces, and IoT smart appliances such as smart fans and lamps
+            that are deeply integrated into private environments. By eavesdropping
+            on these devices, an adversary can recover private audio and reveal
+            the operating states of smart-home appliances, directly threatening
+            user privacy.
+          </p>
+        </div>
+
+        <article class="causality-part devices-article">
+          <div class="devices-layout">
+            <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Device type</th>
+                  <th>Brand &amp; model</th>
+                  <th>Year</th>
+                  <th>Leakage source</th>
+                  <th>Max. dist.</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Wired headphone</td><td>Sony ZX110AP</td><td>2014</td><td>Amplifier</td><td>5 m</td>
+                </tr>
+                <tr class="grp">
+                  <td>Wired earbuds</td><td>Apple Earbuds</td><td>2016</td><td>Amplifier</td><td>1 m</td>
+                </tr>
+                <tr class="grp">
+                  <td rowspan="3">Wireless headphone</td><td>UGreen MAX2</td><td>2024</td><td rowspan="3">Amplifier</td><td>6 m</td>
+                </tr>
+                <tr><td>PHILIPS TAH2020</td><td>2025</td><td>6 m</td></tr>
+                <tr><td>HP H231R</td><td>2023</td><td>4 m</td></tr>
+                <tr class="grp">
+                  <td>Landline (VoIP)</td><td>Flyingvoice P23GW</td><td>2023</td><td>ADC &amp; amplifier</td><td>3 m</td>
+                </tr>
+                <tr class="grp">
+                  <td rowspan="2">Smart fan</td><td>OIDIRE ODI-MF10A</td><td>2023</td><td rowspan="2">Switching MOSFET</td><td>6 m</td>
+                </tr>
+                <tr><td>Xiaomi BPLDS10DM</td><td>2025</td><td>4 m</td></tr>
+                <tr class="grp">
+                  <td rowspan="2">Smart lamp</td><td>JINGZAO JDO-06</td><td>2024</td><td rowspan="2">Power converter</td><td>3 m</td>
+                </tr>
+                <tr><td>Xiaomi 1S</td><td>2019</td><td>3 m</td></tr>
+              </tbody>
+            </table>
+            </div>
+            <figure class="figure-block devices-figure">
+              <img
+                src="./assets/images/experiment-setup.png"
+                alt="Hardware setup for evaluating COTS devices: a USRP and Tx antenna inject the carrier while an Rx antenna and spectrum analyzer capture the leakage, controlled from a laptop."
+                loading="lazy"
+              />
+              <figcaption>
+                Fig. 4: The hardware setup for evaluating COTS devices.
+              </figcaption>
+            </figure>
+          </div>
+        </article>
+      </section>
+
+      <section class="section" id="demos">
+        <h2>Demos</h2>
+        <article class="panel overview-structure demo-nav-panel">
+          <div class="demo-nav-heading">
+            <h3>Quick Links</h3>
+            <p>Jump directly to a demo, case study, or robustness result.</p>
+          </div>
+          <nav class="demo-link-groups" aria-label="Demo quick links">
+            <section class="demo-link-group" aria-labelledby="demo-nav-part1">
+              <h4 id="demo-nav-part1"><span>Part I</span> Demonstrations in a Laboratory Setting</h4>
+              <div class="demo-link-list">
+                <a href="#demo1"><span>Demo 1</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-fan" /></svg>Eavesdropping on Smart Fans' Control Signal</a>
+                <a href="#demo2"><span>Demo 2</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-lamp" /></svg>Eavesdropping on Smart Lamps' Brightness</a>
+              </div>
+            </section>
+            <section class="demo-link-group" aria-labelledby="demo-nav-part2">
+              <h4 id="demo-nav-part2"><span>Part II</span> Real-time Audio Eavesdropping in Real-world Scenarios</h4>
+              <div class="demo-link-list">
+                <a href="#demo3"><span>Demo 3</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-wall-audio" /></svg>Through-wall Eavesdropping</a>
+                <a href="#demo4"><span>Demo 4</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-outdoor" /></svg>Outdoor Hidden Eavesdropping</a>
+              </div>
+            </section>
+            <section class="demo-link-group" aria-labelledby="demo-nav-part3">
+              <h4 id="demo-nav-part3"><span>Part III</span> Real-world Case Studies</h4>
+              <div class="demo-link-list">
+                <a href="#case1"><span>Case 1</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-bed" /></svg>Through-wall Audio Eavesdropping in Hotel Rooms</a>
+                <a href="#case2"><span>Case 2</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-users" /></svg>Through-wall Audio Eavesdropping in Meeting Rooms</a>
+                <a href="#case3"><span>Case 3</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-loop-phone" /></svg>Closed-loop Conversation Eavesdropping &amp; Manipulation</a>
+              </div>
+            </section>
+            <section class="demo-link-group" aria-labelledby="demo-nav-part4">
+              <h4 id="demo-nav-part4"><span>Part IV</span> Analog Microphone Inputs</h4>
+              <div class="demo-link-list">
+                <a href="#demo5"><span>Demo 5</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-mic" /></svg>Feasibility Test on Microphone Input</a>
+              </div>
+            </section>
+            <section class="demo-link-group" aria-labelledby="demo-nav-part5">
+              <h4 id="demo-nav-part5"><span>Part V</span> Robustness, Selectivity, and Stealthiness</h4>
+              <div class="demo-link-list">
+                <a href="#demo6"><span>Demo 6</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-radio" /></svg>Robust Eavesdropping Under Multi-device and Ambient RF Interference</a>
+                <a href="#demo7"><span>Demo 7</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-selectivity" /></svg>Frequency Selectivity and Spatial Selectivity</a>
+                <a href="#stealthiness"><span>Demo 8</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-stealth" /></svg>Stealthiness of Single-tone Injection</a>
+              </div>
+            </section>
+          </nav>
         </article>
       </section>
 
@@ -106,9 +958,9 @@
               As the fan speed increases, the frequency of the received control
               signal gradually increases, indicating that the fan's current
               operating state can be inferred from the received control signal.
-              This enables “Context Inference” attacks: for example, 
-              detecting “Sleep Mode” at night can confirm a user’s rest 
-              schedule and infer occupancy 
+              This enables “Context Inference” attacks: for example,
+              detecting “Sleep Mode” at night can confirm a user’s rest
+              schedule and infer occupancy
               without the need for visual surveillance.
             </p>
             <video controls preload="metadata">
@@ -123,9 +975,9 @@
               As the lamp becomes brighter, the intensity of the received power
               signal gradually increases.
               By mapping these power levels to vendor-specific presets (e.g., 20% brightness for
-              “Reading”), an adversary can perform “Behavioral Profiling,” transforming a 
-              light source into a beacon that exposes a user’s specific activities and routines 
-              without requiring any network-level access. 
+              “Reading”), an adversary can perform “Behavioral Profiling,” transforming a
+              light source into a beacon that exposes a user’s specific activities and routines
+              without requiring any network-level access.
             </p>
             <video controls preload="metadata">
               <source src="./assets/videos/Demo_lamp.mp4" type="video/mp4" />
@@ -141,7 +993,7 @@
           <article class="media-card" id="demo3">
             <h3>Demo 3: Through-wall Eavesdropping</h3>
             <p>
-              The attacker placed the surveillance device in the room adjacent to the victim, eavesdropping on the target at a 1m distance through a 30cm concrete wall.
+              The attacker placed the surveillance device in the room adjacent to the victim, eavesdropping on the target at a 1 m distance through a 30 cm concrete wall.
             </p>
             <video controls preload="metadata">
               <source src="./assets/videos/Demo_behind-the-wall.mp4" type="video/mp4" />
@@ -150,12 +1002,12 @@
           </article>
 
           <article class="media-card" id="demo4">
-            <h3>Demo 4: Long-distance Eavesdropping</h3>
+            <h3>Demo 4: Outdoor Hidden Eavesdropping</h3>
             <p>
-              The attacker hid the surveillance device behind the bushes and conducted long-range eavesdropping on the victim from a distance of 6 meters.
+              The attacker hid the surveillance device behind the bushes and conducted long-range eavesdropping on the victim from a distance of 6 m.
             </p>
             <video controls preload="metadata">
-              <source src="./assets/videos/Demo_long-distance.mp4" type="video/mp4" />
+              <source src="./assets/videos/Demo_outdoor.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </article>
@@ -170,7 +1022,7 @@
             <figure class="case1-figure">
               <img
                 src="./assets/images/case-study-1.png"
-                alt="Case Study 1 setup diagram"
+                alt="Case Study 1 setup diagram: adversary in an adjacent hotel room eavesdropping through a concrete wall."
                 loading="lazy"
               />
             </figure>
@@ -180,8 +1032,8 @@
                   <tr>
                     <th>Text</th>
                     <th>Secret Audio</th>
-                    <th>InjectEave w/o Denoise</th>
-                    <th>InjectEave w/ Denoise</th>
+                    <th><span class="title-blue">Inject</span><span class="title-red">Eave</span> w/o Denoise</th>
+                    <th><span class="title-blue">Inject</span><span class="title-red">Eave</span> w/ Denoise</th>
                 </tr>
               </thead>
               <tbody>
@@ -413,7 +1265,7 @@
             <figure class="case2-figure">
               <img
                 src="./assets/images/case-study-2.png"
-                alt="Case Study 2 setup diagram"
+                alt="Case Study 2 setup diagram: adversary eavesdropping into a meeting room through a wall."
                 loading="lazy"
               />
             </figure>
@@ -423,8 +1275,8 @@
                   <tr>
                     <th>Text</th>
                     <th>Secret Audio</th>
-                    <th>InjectEave w/o Denoise</th>
-                    <th>InjectEave w/ Denoise</th>
+                    <th><span class="title-blue">Inject</span><span class="title-red">Eave</span> w/o Denoise</th>
+                    <th><span class="title-blue">Inject</span><span class="title-red">Eave</span> w/ Denoise</th>
                 </tr>
               </thead>
               <tbody>
@@ -659,19 +1511,19 @@
             <figure class="case3-figure">
               <img
                 src="./assets/images/case-study-3.png"
-                alt="Case Study 3 setup diagram"
+                alt="Case Study 3 setup diagram: closed-loop eavesdrop, synthesize, and inject pipeline against a landline phone."
                 loading="lazy"
               />
             </figure>
             <div class="case3-explain">
               <p class="case3-explain-title">Attack Process</p>
               <p>
-                Case study 3 follows an
+                Case Study 3 follows an
                 "Eavesdrop-Synthesize-Inject" closed-loop pipeline.
               </p>
               <p>
-                <strong>Step 1: Eavesdrop.</strong> The attacker monitors side
-                channel leakage to obtain call context in real time.
+                <strong>Step 1: Eavesdrop.</strong> The attacker monitors
+                side-channel leakage to obtain call context in real time.
               </p>
               <p>
                 <strong>Step 2: Synthesize.</strong> When trigger keywords
@@ -718,8 +1570,8 @@
               <thead>
                 <tr>
                   <th>Secret Audio</th>
-                  <th>InjectEave w/o Denoise</th>
-                  <th>InjectEave w/ Denoise</th>
+                  <th><span class="title-blue">Inject</span><span class="title-red">Eave</span> w/o Denoise</th>
+                  <th><span class="title-blue">Inject</span><span class="title-red">Eave</span> w/ Denoise</th>
                 </tr>
               </thead>
               <tbody>
@@ -903,8 +1755,8 @@
         <article class="media-card full-card" id="demo5">
           <h3>Demo 5: Feasibility Test on Microphone Input</h3>
           <p class="part4-intro">
-            This part examines whether analog input such as microphone can also
-            exhibit injection-induced leakage. The demo provides a feasibility
+            This part examines whether an analog input such as a microphone can
+            also exhibit injection-induced leakage. The demo provides a feasibility
             case showing signal reception and recovery behavior.
           </p>
           <video controls preload="metadata">
@@ -920,16 +1772,11 @@
           <article class="media-card" id="demo6">
             <h3>Demo 6: Robust Eavesdropping Under Multi-device and Ambient RF Interference</h3>
             <p class="part4-intro part5-demo-intro">
-              The attacker placed the surveillance device in the room adjacent
-              to the victim, eavesdropping on the target at a 3m distance
-              through a 20cm wall. The victim is in a meeting room with
-              multiple operating electronic devices, including cameras, a
-              ceiling microphone array, a central air-conditioning system, and
-              display screens. Several nearby devices operated simultaneously,
-              including two additional audio-playing headphones, two
-              microphones, a lamp, and a fan.
-              The recovered eavesdropped audio remained stable under such
-              interference.
+              The attack is launched on a commercial headphone in a meeting room
+              full of operating electronics and BLE/Wi-Fi appliances, forming a
+              noisy RF environment. The recovered audio
+              remains stable in the presence of nearby active electronics and
+              ambient RF activity.
             </p>
             <video controls preload="metadata">
               <source src="./assets/videos/Demo_robust.mp4" type="video/mp4" />
@@ -940,14 +1787,13 @@
           <article class="media-card" id="demo7">
             <h3>Demo 7: Frequency Selectivity and Spatial Selectivity</h3>
             <p class="part4-intro part5-demo-intro">
-              The experimental setup was initially configured to eavesdrop on
-              PHILIPS TAH2020. By tuning the carrier frequency, the attack was
-              switched to the adjacent UGreen MAX2, showing that different
-              headphone models can be distinguished by their distinct
-              frequency bands. Finally, by realigning the antennas, the attack
-              was switched to the UGreen MAX2 on the right, showing that
-              spatial separation maximizes isolation between the antennas and
-              enables selectivity between two headphones of the same model.
+              The adversary was initially configured to eavesdrop on the PHILIPS
+              TAH2020. Tuning the carrier frequency switched the attack to the
+              adjacent UGreen MAX2, showing that different headphone models are
+              separable by their distinct frequency bands. Realigning the antennas then
+              isolated one of two same-model UGreen MAX2 units, showing that
+              spatial separation enables selectivity even between identical
+              models.
             </p>
             <video controls preload="metadata">
               <source src="./assets/videos/Demo-selectivity.mp4" type="video/mp4" />
@@ -957,12 +1803,12 @@
         </div>
 
         <article class="case-card stealth-card" id="stealthiness">
-          <h3>Stealthiness of Single-tone Injection</h3>
+          <h3>Demo 8: Stealthiness of Single-tone Injection</h3>
           <p class="stealth-intro">
             The stealthiness of the injection may be compromised by the
-            detectable artifacts in the output audio especially when the
+            detectable artifacts in the output audio, especially when the
             injection strength is very strong. To assess whether the injected
-            tone is detectable even in a worst case condition, we specifically
+            tone is detectable even under a worst-case condition, we specifically
             place the transmitting antenna adjacent to the target headphone
             (UGreen MAX2) and radiate the single-tone injection carrier at
             18 dBm power, while ensuring this setting can induce recoverable
@@ -972,12 +1818,12 @@
           <div class="stealth-main">
             <figure class="stealth-figure">
               <img
-                src="./assets/images/stealthiness-setup.png"
-                alt="Stealthiness evaluation setup with transmitter antenna, recorder, microphone, and headphone"
+                src="./assets/images/injection_stealthiness.png"
+                alt="Stealthiness evaluation setup: the transmitting antenna placed adjacent to the target UGreen MAX2 headphone, injecting the single-tone carrier at 18 dBm."
                 loading="lazy"
               />
             </figure>
-            <div class="table-wrap stealth-table-wrap">
+            <div class="stealth-table-wrap">
               <table class="audio-table stealth-audio-table">
                 <thead>
                   <tr>
@@ -1211,15 +2057,15 @@
         </article>
       </section>
 
-      <section class="section" id="part6">
+      <section class="section" id="part6" hidden>
         <h2>Part VI: High Injection Power</h2>
-        <article class="case-card long-range-card" id="demo8">
-          <h3>Demo 8: Long-distance Attack</h3>
+        <article class="case-card long-range-card" id="demo9">
+          <h3>Demo 9: Long-distance Attack</h3>
           <p class="case-intro">
             By amplifying the injection power from 18 dBm to 40 dBm via an
             external power amplifier (G41P40S), the system maintains
             successful recognition of spoken digit sequences at distances
-            <span class="case3-emph-red">up to 30 m</span>. The experiment
+            <span class="case3-emph-red">up to 30 m</span>. The experimental
             setup is illustrated on the left. The eavesdropped audio samples
             at 12 m, 18 m, 24 m, and 30 m are provided on the right for
             comparison against the clean ground-truth audio.
@@ -1302,14 +2148,611 @@
           </div>
         </article>
       </section>
+
+      <section class="section" id="implementation">
+        <h2>Implementation &amp; Code</h2>
+        <p>
+          <span class="title-blue">Inject</span><span class="title-red">Eave</span> is built entirely from commodity RF equipment:
+        </p>
+        <ul class="impl-list">
+          <li>
+            <strong>Signal source:</strong> USRP B210,
+            transmitting a single-tone carrier.
+          </li>
+          <li>
+            <strong>Antennas:</strong> one for injection (Tx), one for receiving
+            the leakage (Rx).
+          </li>
+          <li>
+            <strong>Receiver:</strong> Siglent SSA3075X Plus spectrum analyzer,
+            demodulating at the injected carrier frequency.
+          </li>
+          <li>
+            <strong>Host:</strong> a laptop that controls the USRP.
+          </li>
+          <li>
+            <strong>Optional:</strong> a low-cost RF power amplifier to increase
+            the transmit power.
+          </li>
+        </ul>
+        <p>
+          These are entry-level choices, and each can be swapped for higher-end
+          equipment to push performance further: a <strong>lower-phase-noise</strong>
+          signal source and spectrum analyzer suppress the system noise floor, a
+          <strong>higher-power</strong> signal source and a higher-gain power
+          amplifier strengthen the injection, and <strong>more directional</strong>
+          antennas focus the injected energy
+          on the target and capture more of the returning leakage, together
+          extending the achievable eavesdropping range.
+        </p>
+        <p>
+          The received signal can be enhanced by a Score-based Generative Model
+          for Speech Enhancement (SGMSE) that restores intelligible speech by
+          filtering out the inter-modulation distortions and suppressing the
+          background noise.
+          The model is open-sourced on
+          <a href="https://doi.org/10.5281/zenodo.20432240">Zenodo</a>.
+        </p>
+      </section>
+
+
+
+      <section class="section" id="faq">
+        <h2>FAQ</h2>
+        <div class="faq-list">
+          <details>
+            <summary>When and how much should I worry about this attack?</summary>
+            <p>
+              Whenever vulnerable analog hardware is active, an adversary can
+              inject a carrier and induce it to leak information, without
+              physical access to or modification of the device. Our distance
+              results suggest that
+              <span class="title-blue">Inject</span><span class="title-red">Eave</span>
+              may pose the most serious threats to everyday audio peripherals
+              and always-on smart-home devices from <strong>up to tens of meters
+              away</strong>. As hardware nonlinearity is inevitable in computer
+              systems, any device built with nonlinear components is potentially
+              exposed to this attack.
+            </p>
+          </details>
+          <details>
+            <summary>What is the broader impact of this side channel?</summary>
+            <p>
+              Audio is only one of many low-frequency analog secrets, alongside
+              device power consumption, actuation-control signals, and analog
+              sensor inputs. The same Injection–Modulation–Emission mechanism
+              applies to any device with nonlinear components, and
+              <strong>such nonlinearity is inevitable in contemporary computer
+              systems</strong>. As a result, any device built with nonlinear
+              components is potentially exposed to this attack.
+            </p>
+          </details>
+          <details>
+            <summary>What are some possible defenses?</summary>
+            <p>
+              <span class="title-blue">Inject</span><span class="title-red">Eave</span>
+              is immune to digital defenses such as encryption, masking, and
+              randomization, because the leakage comes from the analog path.
+              Hardware-aware mitigations
+              such as twisted-pair wiring, shielding, and filtering can lower the
+              energy that the injected carrier couples into the device, reducing
+              the exposure. These mitigations
+              raise the bar, but they do not guarantee immunity. Since
+              injection-induced leakage grows with the injected power, a
+              well-resourced adversary can often overcome them by transmitting at
+              higher power.
+            </p>
+          </details>
+        </div>
+      </section>
+
     </main>
 
-    <footer class="footer">
-      <p>
-        InjectEave demo website for Paper #651 (USENIX Security 2026
-        submission)
-      </p>
-      <a href="#top">Back to top</a>
-    </footer>
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        document.body.classList.add("gsap-enhanced");
+
+        var nav = document.querySelector(".site-nav");
+        var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var passwordButton = document.querySelector(".password-check-button");
+        var passwordAnswer = document.querySelector("#overview-password");
+
+        if (passwordButton && passwordAnswer) {
+          passwordButton.addEventListener("click", function () {
+            passwordAnswer.hidden = false;
+            passwordButton.setAttribute("aria-expanded", "true");
+            passwordButton.disabled = true;
+          });
+        }
+
+        var progressEl = null;
+        if (nav && !nav.querySelector(".site-nav-progress")) {
+          var progress = document.createElement("span");
+          progress.className = "site-nav-progress";
+          progress.setAttribute("aria-hidden", "true");
+          nav.appendChild(progress);
+        }
+        progressEl = document.querySelector(".site-nav-progress");
+
+        function updateScrollProgress() {
+          if (!progressEl) {
+            return;
+          }
+
+          var maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+          var progress = Math.max(0, Math.min(1, window.scrollY / maxScroll));
+          progressEl.style.transform = "scaleX(" + progress.toFixed(4) + ")";
+        }
+
+        var updateNavState = function () {
+          if (nav) {
+            nav.classList.toggle("is-scrolled", window.scrollY > 8);
+          }
+          updateScrollProgress();
+        };
+        updateNavState();
+        window.addEventListener("scroll", updateNavState, { passive: true });
+
+        function getAnchorScrollTop(target) {
+          var navOffset = nav ? nav.offsetHeight : 0;
+          var top = target.getBoundingClientRect().top + window.scrollY;
+          return Math.max(0, top - navOffset - 18);
+        }
+
+        document.querySelectorAll("a[href^='#']").forEach(function (link) {
+          link.addEventListener("click", function (event) {
+            var href = link.getAttribute("href");
+            if (!href || href.length < 2) {
+              return;
+            }
+
+            var target = document.querySelector(href);
+            if (!target) {
+              return;
+            }
+
+            event.preventDefault();
+            window.scrollTo({
+              top: getAnchorScrollTop(target),
+              behavior: reduceMotion ? "auto" : "smooth"
+            });
+
+            if (history.pushState) {
+              history.pushState(null, "", href);
+            }
+          });
+        });
+
+        var navLinks = Array.prototype.slice.call(document.querySelectorAll(".site-nav-links a[href^='#']"));
+        var navTargets = navLinks
+          .map(function (link) {
+            return {
+              link: link,
+              target: document.querySelector(link.getAttribute("href"))
+            };
+          })
+          .filter(function (item) {
+            return item.target;
+          });
+
+        function setActiveNav(link) {
+          navLinks.forEach(function (item) {
+            item.classList.toggle("is-active", item === link);
+          });
+        }
+
+        function updateActiveNav() {
+          if (!navTargets.length) {
+            return;
+          }
+
+          var navOffset = nav ? nav.offsetHeight : 0;
+          var activationY = window.scrollY + navOffset + Math.min(260, window.innerHeight * 0.42);
+          var active = null;
+          var nearest = null;
+          var nearestDistance = Infinity;
+
+          navTargets.forEach(function (item) {
+            var targetTop = item.target.getBoundingClientRect().top + window.scrollY;
+            var distance = Math.abs(targetTop - activationY);
+
+            if (distance < nearestDistance) {
+              nearest = item;
+              nearestDistance = distance;
+            }
+
+            if (targetTop <= activationY) {
+              active = item;
+            }
+          });
+
+          var lastTarget = navTargets[navTargets.length - 1];
+          if (
+            window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2 &&
+            lastTarget.target.getBoundingClientRect().top + window.scrollY <= activationY
+          ) {
+            active = lastTarget;
+          }
+
+          setActiveNav((active || nearest || navTargets[0]).link);
+        }
+
+        updateActiveNav();
+        window.addEventListener("scroll", updateActiveNav, { passive: true });
+        window.addEventListener("resize", updateActiveNav);
+
+        if (!window.gsap) {
+          return;
+        }
+
+        var gsap = window.gsap;
+        var ScrollTrigger = window.ScrollTrigger;
+        gsap.defaults({ duration: 0.65, ease: "power2.out" });
+
+        if (ScrollTrigger) {
+          gsap.registerPlugin(ScrollTrigger);
+        }
+
+        function wavePath(xStart, xEnd, yMid, amp, cycles, phase, envelopeFn) {
+          // Sample densely enough for the wave's frequency (>= ~14 points per
+          // cycle) so high-frequency carriers don't alias into jagged blobs.
+          var steps = Math.max(56, Math.ceil(cycles * 14));
+          var width = xEnd - xStart;
+          var d = "";
+
+          for (var i = 0; i <= steps; i += 1) {
+            var u = i / steps;
+            var env = envelopeFn ? envelopeFn(u) : 1;
+            var x = xStart + width * u;
+            var y = yMid - amp * env * Math.sin(Math.PI * 2 * cycles * u + phase);
+            d += (i === 0 ? "M" : "L") + x.toFixed(2) + " " + y.toFixed(2) + " ";
+          }
+
+          return d;
+        }
+
+        function envelopePath(xStart, xEnd, yMid, amp, phase, sign) {
+          var steps = 40;
+          var width = xEnd - xStart;
+          var d = "";
+
+          for (var i = 0; i <= steps; i += 1) {
+            var u = i / steps;
+            var env = 0.18 + 0.82 * (0.5 + 0.5 * Math.sin(Math.PI * 2 * 1.25 * u + phase));
+            var x = xStart + width * u;
+            var y = yMid + sign * amp * env;
+            d += (i === 0 ? "M" : "L") + x.toFixed(2) + " " + y.toFixed(2) + " ";
+          }
+
+          return d;
+        }
+
+        function setupNavSignalDemo() {
+          var demo = document.querySelector(".nav-signal-demo");
+          if (!demo) {
+            return;
+          }
+
+          var injectWave = demo.querySelector(".inject-wave");
+          var amWave = demo.querySelector(".am-wave");
+          var amEnvelopeTop = demo.querySelector(".am-envelope-top");
+          var amEnvelopeBottom = demo.querySelector(".am-envelope-bottom");
+          var carrierDot = demo.querySelector(".carrier-dot");
+          var reflectionDot = demo.querySelector(".reflection-dot");
+          var targetDeviceSymbol = demo.querySelector(".target-device-symbol");
+          var pulse = demo.querySelector(".target-device-pulse");
+          var innerWave = demo.querySelector(".target-device-curve");
+          var flowArrows = demo.querySelectorAll(".flow-arrow");
+
+          if (
+            !injectWave ||
+            !amWave ||
+            !amEnvelopeTop ||
+            !amEnvelopeBottom ||
+            !carrierDot ||
+            !reflectionDot ||
+            !targetDeviceSymbol ||
+            !pulse ||
+            !innerWave
+          ) {
+            return;
+          }
+
+          function drawSignal(time) {
+            var injectPhase = -time * 7.5;
+            var amPhase = -time * 11;
+            var envelopePhase = -time * 2.4;
+            var devicePhase = -time * 5.2;
+
+            injectWave.setAttribute("d", wavePath(10, 106, 32, 7, 2.4, injectPhase));
+            innerWave.setAttribute("d", wavePath(140, 160, 34, 7.5, 1.05, devicePhase));
+
+            var amEnvelope = function (u) {
+              return 0.18 + 0.82 * (0.5 + 0.5 * Math.sin(Math.PI * 2 * 1.25 * u + envelopePhase));
+            };
+
+            amWave.setAttribute("d", wavePath(190, 294, 32, 13, 9.5, amPhase, amEnvelope));
+            amEnvelopeTop.setAttribute("d", envelopePath(190, 294, 32, 13, envelopePhase, -1));
+            amEnvelopeBottom.setAttribute("d", envelopePath(190, 294, 32, 13, envelopePhase, 1));
+
+            var carrierT = (time * 0.38) % 1;
+            var carrierX = 10 + 96 * carrierT;
+            var carrierY = 32 - 7 * Math.sin(Math.PI * 2 * 2.4 * carrierT + injectPhase);
+            carrierDot.setAttribute("cx", carrierX.toFixed(2));
+            carrierDot.setAttribute("cy", carrierY.toFixed(2));
+
+            var reflectionT = (time * 0.28) % 1;
+            var envelope = amEnvelope(reflectionT);
+            var reflectionX = 190 + 104 * reflectionT;
+            var reflectionY = 32 - 13 * envelope * Math.sin(Math.PI * 2 * 9.5 * reflectionT + amPhase);
+            reflectionDot.setAttribute("cx", reflectionX.toFixed(2));
+            reflectionDot.setAttribute("cy", reflectionY.toFixed(2));
+          }
+
+          drawSignal(0);
+
+          if (reduceMotion) {
+            return;
+          }
+
+          gsap.to(targetDeviceSymbol, {
+            y: -1.5,
+            duration: 0.7,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
+          });
+
+          gsap.to(pulse, {
+            scale: 1.22,
+            autoAlpha: 0.25,
+            transformOrigin: "center center",
+            duration: 0.7,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
+          });
+
+          if (flowArrows.length) {
+            gsap.fromTo(
+              flowArrows,
+              { x: -4, autoAlpha: 0.35 },
+              {
+                x: 4,
+                autoAlpha: 1,
+                duration: 0.62,
+                repeat: -1,
+                ease: "sine.inOut",
+                stagger: 0.16
+              }
+            );
+          }
+
+          gsap.ticker.add(drawSignal);
+        }
+
+        function setupFigureWaveAnimations() {
+          var dynamicWaves = Array.prototype.slice.call(document.querySelectorAll(".figure-wave-overlay .dynamic-wave"));
+          var traceFlows = Array.prototype.slice.call(document.querySelectorAll(".figure-wave-overlay .trace-flow"));
+
+          if (!dynamicWaves.length && !traceFlows.length) {
+            return;
+          }
+
+          function readNumber(element, name, fallback) {
+            var value = parseFloat(element.getAttribute(name));
+            return Number.isFinite(value) ? value : fallback;
+          }
+
+          function drawFigureWaves(time) {
+            dynamicWaves.forEach(function (wave) {
+              var xStart = readNumber(wave, "data-x1", 0);
+              var xEnd = readNumber(wave, "data-x2", 100);
+              var yMid = readNumber(wave, "data-y", 50);
+              var amp = readNumber(wave, "data-amp", 10);
+              var cycles = readNumber(wave, "data-cycles", 2);
+              var speed = readNumber(wave, "data-speed", 4);
+              var phase = -time * speed;
+              var envelopeFn = null;
+
+              if (wave.getAttribute("data-envelope") === "am") {
+                envelopeFn = function (u) {
+                  return 0.32 + 0.68 * (0.5 + 0.5 * Math.sin(Math.PI * 2 * 2.1 * u - time * 2.2));
+                };
+              }
+
+              wave.setAttribute("d", wavePath(xStart, xEnd, yMid, amp, cycles, phase, envelopeFn));
+            });
+          }
+
+          drawFigureWaves(0);
+
+          if (reduceMotion) {
+            return;
+          }
+
+          if (traceFlows.length) {
+            gsap.to(traceFlows, {
+              strokeDashoffset: -144,
+              duration: 1.9,
+              repeat: -1,
+              ease: "none",
+              stagger: 0.08
+            });
+          }
+
+          gsap.ticker.add(drawFigureWaves);
+        }
+
+        function setupFaqAnimations() {
+          document.querySelectorAll(".faq-list details").forEach(function (details) {
+            var summary = details.querySelector("summary");
+            var content = Array.prototype.slice.call(details.children).filter(function (child) {
+              return child !== summary;
+            });
+
+            if (!summary || !content.length) {
+              return;
+            }
+
+            summary.addEventListener("click", function (event) {
+              event.preventDefault();
+
+              if (details._faqTween) {
+                details._faqTween.kill();
+              }
+
+              var isOpen = details.hasAttribute("open");
+              if (isOpen) {
+                var openHeight = details.offsetHeight;
+                var closedHeight = summary.offsetHeight;
+
+                details._faqTween = gsap.timeline({
+                  onUpdate: function () {
+                    updateActiveNav();
+                    updateNavState();
+                  },
+                  onComplete: function () {
+                    details.removeAttribute("open");
+                    gsap.set(details, { clearProps: "height,overflow" });
+                    gsap.set(content, { clearProps: "autoAlpha,y" });
+                    details._faqTween = null;
+                    if (ScrollTrigger) {
+                      ScrollTrigger.refresh();
+                    }
+                    window.requestAnimationFrame(updateActiveNav);
+                  }
+                });
+
+                details._faqTween
+                  .set(details, { height: openHeight, overflow: "hidden" })
+                  .to(content, { autoAlpha: 0, y: -4, duration: 0.14, ease: "power1.out" }, 0)
+                  .to(details, { height: closedHeight, duration: 0.28, ease: "power2.inOut" }, 0);
+              } else {
+                details.setAttribute("open", "");
+
+                var startHeight = summary.offsetHeight;
+                var targetHeight = details.offsetHeight;
+
+                details._faqTween = gsap.timeline({
+                  onUpdate: function () {
+                    updateActiveNav();
+                    updateNavState();
+                  },
+                  onComplete: function () {
+                    gsap.set(details, { clearProps: "height,overflow" });
+                    gsap.set(content, { clearProps: "autoAlpha,y" });
+                    details._faqTween = null;
+                    if (ScrollTrigger) {
+                      ScrollTrigger.refresh();
+                    }
+                    window.requestAnimationFrame(updateActiveNav);
+                  }
+                });
+
+                details._faqTween
+                  .set(details, { height: startHeight, overflow: "hidden" })
+                  .set(content, { autoAlpha: 0, y: -4 })
+                  .to(details, { height: targetHeight, duration: 0.3, ease: "power2.out" }, 0)
+                  .to(content, { autoAlpha: 1, y: 0, duration: 0.22, ease: "power2.out" }, 0.08);
+              }
+            });
+          });
+        }
+
+        if (reduceMotion) {
+          if (ScrollTrigger) {
+            ScrollTrigger.refresh();
+          }
+          setupNavSignalDemo();
+          setupFigureWaveAnimations();
+          return;
+        }
+
+        setupNavSignalDemo();
+        setupFigureWaveAnimations();
+        setupFaqAnimations();
+
+        var intro = gsap.timeline({ defaults: { ease: "power2.out" } });
+        intro
+          .from(".site-nav", { autoAlpha: 0, y: -10, duration: 0.45 })
+          .from(".page-header h1", { autoAlpha: 0, y: 18, duration: 0.7 }, "-=0.2")
+          .from(".hero-author-list li", { autoAlpha: 0, y: 10, stagger: 0.045, duration: 0.38 }, "-=0.25")
+          .from(".hero-affils", { autoAlpha: 0, y: 10, duration: 0.4 }, "-=0.15")
+          .from([".page-header #summary", ".hero-summary"], { autoAlpha: 0, y: 12, stagger: 0.08, duration: 0.5 }, "-=0.1");
+
+        if (!ScrollTrigger) {
+          return;
+        }
+
+        gsap.set(".section", { autoAlpha: 0.96, y: 14 });
+        ScrollTrigger.batch(".section", {
+          start: "top 86%",
+          once: true,
+          onEnter: function (batch) {
+            gsap.to(batch, {
+              autoAlpha: 1,
+              y: 0,
+              stagger: 0.06,
+              duration: 0.55,
+              overwrite: "auto",
+              clearProps: "visibility"
+            });
+          }
+        });
+
+        gsap.set(".panel, .media-card, .case-card, .figure-block, .devices-figure", { autoAlpha: 0, y: 18 });
+        ScrollTrigger.batch(".panel, .media-card, .case-card, .figure-block, .devices-figure", {
+          start: "top 88%",
+          once: true,
+          interval: 0.08,
+          batchMax: 5,
+          onEnter: function (batch) {
+            gsap.to(batch, {
+              autoAlpha: 1,
+              y: 0,
+              stagger: 0.05,
+              duration: 0.52,
+              overwrite: "auto",
+              clearProps: "visibility"
+            });
+          }
+        });
+
+        document.querySelectorAll(".figure-block img").forEach(function (image) {
+          gsap.fromTo(image, { scale: 0.992 }, {
+            scale: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: image,
+              start: "top 92%",
+              end: "bottom 35%",
+              scrub: 0.6
+            }
+          });
+        });
+
+        document.querySelectorAll(".media-card, .case-card, .panel").forEach(function (card) {
+          card.addEventListener("mouseenter", function () {
+            gsap.to(card, { y: -3, duration: 0.18, overwrite: "auto" });
+          });
+          card.addEventListener("mouseleave", function () {
+            gsap.to(card, { y: 0, duration: 0.22, overwrite: "auto" });
+          });
+        });
+
+        ScrollTrigger.create({
+          trigger: document.documentElement,
+          start: "top top",
+          end: "bottom bottom",
+          onUpdate: updateActiveNav,
+          onRefresh: updateActiveNav
+        });
+
+        window.addEventListener("load", function () {
+          ScrollTrigger.refresh();
+        });
+      });
+    </script>
   </body>
 </html>
