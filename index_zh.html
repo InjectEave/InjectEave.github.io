@@ -1,0 +1,2872 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>
+      InjectEave：注入诱导的电磁侧信道（Injected and Leaked）| USENIX Security '26
+    </title>
+    <meta
+      name="description"
+      content="InjectEave（Injected and Leaked）提出了注入诱导电磁侧信道：在这一威胁模型中，主动电磁注入与普遍存在的硬件非线性共同作用，将低频模拟秘密（语音音频、设备功耗、控制信号）调制到注入载波上，并将其上变频为可测量的电磁泄漏。该工作在 11 种商用现成设备上展示了最远 30 米及穿墙场景下对耳机/座机音频的窃听能力。"
+    />
+    <meta
+      name="keywords"
+      content="注入诱导电磁侧信道, injection-induced EM side channel, injection-induced EM side channels, electromagnetic side channel, EM injection, hardware nonlinearity, intermodulation, active side-channel analysis, audio eavesdropping, through-wall eavesdropping, analog side channel, RF eavesdropping, side-channel leakage, USRP, software-defined radio, InjectEave, USENIX Security '26, EM leakage, power side channel, closed-loop EM attack, backscattering eavesdropping"
+    />
+    <meta name="author" content="Haoran Yan, Ziyu Shao, Shuhao Zhang, Qinhong Jiang, Yan Long" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://injecteave.github.io/index_zh.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="InjectEave" />
+    <meta
+      property="og:title"
+      content="InjectEave：Injected and Leaked - 注入诱导的电磁侧信道"
+    />
+    <meta
+      property="og:description"
+      content="主动电磁注入与硬件非线性会将低频模拟秘密（语音、功耗、控制信号）上变频为可测量的电磁泄漏。该工作在 11 种商用现成设备上展示了穿墙及最远 30 米的音频窃听能力。"
+    />
+    <meta property="og:url" content="https://injecteave.github.io/index_zh.html" />
+    <meta property="og:image" content="https://injecteave.github.io/assets/images/em-comparison.png" />
+    <meta property="og:image:alt" content="Injected EM carriers piggyback low-frequency secrets into an efficient EM emission band." />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="InjectEave：Injected and Leaked - 注入诱导的电磁侧信道"
+    />
+    <meta
+      name="twitter:description"
+      content="主动电磁注入 + 硬件非线性会将低频模拟秘密转化为可测量的电磁泄漏。该工作在 11 种商用现成设备上实现了穿墙和 30 米音频窃听。"
+    />
+    <meta name="twitter:image" content="https://injecteave.github.io/assets/images/em-comparison.png" />
+
+    <meta
+      name="citation_title"
+      content="Injected and Leaked: Actively Inducing Side-Channel Leakage Using Electromagnetic Injection and Hardware Nonlinearity"
+    />
+    <meta name="citation_author" content="Yan, Haoran" />
+    <meta name="citation_author" content="Shao, Ziyu" />
+    <meta name="citation_author" content="Zhang, Shuhao" />
+    <meta name="citation_author" content="Jiang, Qinhong" />
+    <meta name="citation_author" content="Long, Yan" />
+    <meta name="citation_publication_date" content="2026" />
+    <meta name="citation_conference_title" content="USENIX Security '26" />
+    <meta name="citation_pdf_url" content="https://injecteave.github.io/InjectEave%20paper.pdf" />
+    <meta name="citation_abstract_html_url" content="https://injecteave.github.io/" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ScholarlyArticle",
+        "name": "Injected and Leaked: Actively Inducing Side-Channel Leakage Using Electromagnetic Injection and Hardware Nonlinearity",
+        "headline": "Injected and Leaked: Actively Inducing Side-Channel Leakage Using Electromagnetic Injection and Hardware Nonlinearity",
+        "alternateName": "InjectEave",
+        "url": "https://injecteave.github.io/index_zh.html",
+        "author": [
+          { "@type": "Person", "name": "Haoran Yan", "affiliation": "The Hong Kong University of Science and Technology (Guangzhou)" },
+          { "@type": "Person", "name": "Ziyu Shao", "affiliation": "The Hong Kong University of Science and Technology (Guangzhou)" },
+          { "@type": "Person", "name": "Shuhao Zhang", "affiliation": "The Hong Kong University of Science and Technology (Guangzhou)" },
+          { "@type": "Person", "name": "Qinhong Jiang", "affiliation": "The Hong Kong Polytechnic University" },
+          { "@type": "Person", "name": "Yan Long", "affiliation": "The Hong Kong University of Science and Technology (Guangzhou)" }
+        ],
+        "datePublished": "2026",
+        "inLanguage": "zh-CN",
+        "abstract": "电磁侧信道泄漏与电磁注入通常被视为不同的物理现象，分别威胁数据机密性与完整性。本工作展示了电磁注入如何放大原本难以利用的侧信道泄漏，并提出注入诱导电磁侧信道框架以支持集成式、闭环电磁安全分析。理论建模和实验测量表明，放大器、模数转换器和电源转换器等常见非线性硬件器件可以将秘密模拟信号调制到注入电磁载波上，从而将低频秘密信号上变频为可测量的电磁辐射。我们设计了 InjectEave 攻击，并展示了在穿墙场景以及最远 30 米距离下对有线和无线耳机播放音频的窃听。",
+        "keywords": "注入诱导电磁侧信道; injection-induced EM side channel; injection-induced EM side channels; electromagnetic side channel; EM injection; hardware nonlinearity; intermodulation; active side-channel analysis; audio eavesdropping; through-wall eavesdropping; analog side channel",
+        "publisher": { "@type": "Organization", "name": "USENIX Association" },
+        "isPartOf": { "@type": "PublicationEvent", "name": "USENIX Security '26" },
+        "sameAs": "https://doi.org/10.5281/zenodo.20432240"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": "InjectEave research artifact",
+        "description": "Received audio recordings from the case studies and the speech-enhancement (SGMSE-based) codebase for the InjectEave attack. Vulnerable injection frequencies and active injection-control logic are withheld for ethical reasons.",
+        "codeRepository": "https://doi.org/10.5281/zenodo.20432240",
+        "license": "https://doi.org/10.5281/zenodo.20432240",
+        "author": "Haoran Yan, Ziyu Shao, Shuhao Zhang, Qinhong Jiang, Yan Long"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "When and how much should I worry about this attack?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Whenever vulnerable analog hardware is active, an adversary can inject a carrier and induce it to leak information, without physical access to or modification of the device. Our distance results suggest that InjectEave may pose the most serious threats to everyday audio peripherals and always-on smart-home devices from up to tens of meters away. As hardware nonlinearity is inevitable in computer systems, any device built with nonlinear components is potentially exposed to this attack." }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the broader impact of this side channel?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Audio is only one of many low-frequency analog secrets, alongside device power consumption, actuation-control signals, and analog sensor inputs. The same Injection-Modulation-Emission mechanism applies to any device with nonlinear components, and such nonlinearity is inevitable in contemporary computer systems. As a result, any device built with nonlinear components is potentially exposed to this attack." }
+          },
+          {
+            "@type": "Question",
+            "name": "What are some possible defenses?",
+            "acceptedAnswer": { "@type": "Answer", "text": "InjectEave is immune to digital defenses such as encryption, masking, and randomization, because the leakage comes from the analog path. Hardware-aware mitigations such as twisted-pair wiring, shielding, and filtering can lower the energy that the injected carrier couples into the device, reducing the exposure. These mitigations raise the bar, but they do not guarantee immunity. Since injection-induced leakage grows with the injected power, a well-resourced adversary can often overcome them by transmitting at higher power." }
+          }
+        ]
+      }
+    </script>
+
+    <link rel="stylesheet" href="./styles.css?v=bilingual-revision" />
+    <style>
+      html[lang="zh-CN"] body {
+        font-family: "Times New Roman", "宋体", SimSun, serif;
+      }
+      .gsap-enhanced .site-nav {
+        transition: box-shadow 180ms ease, border-color 180ms ease;
+      }
+
+      .gsap-enhanced .site-nav.is-scrolled {
+        border-bottom-color: #c7d3e3;
+        box-shadow: 0 8px 24px rgba(20, 37, 63, 0.08);
+      }
+
+      .gsap-enhanced .site-nav-progress {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #0a4ea2, #b52126);
+        transform: scaleX(0);
+        transform-origin: left center;
+        will-change: transform;
+        pointer-events: none;
+      }
+
+      .gsap-enhanced .site-nav-links a {
+        position: relative;
+      }
+
+      .gsap-enhanced .site-nav-links a.is-active {
+        color: #0a4ea2;
+        border-bottom-color: transparent;
+      }
+
+      .gsap-enhanced .site-nav-links a.is-active::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -2px;
+        height: 2px;
+        background: #0a4ea2;
+        pointer-events: none;
+      }
+
+      .nav-signal-demo {
+        flex: 0 0 300px;
+        height: 48px;
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        overflow: visible;
+      }
+
+      .nav-signal-demo svg {
+        width: 300px;
+        height: 48px;
+        display: block;
+        overflow: visible;
+      }
+
+      .nav-signal-demo .signal-baseline {
+        stroke: #d7dce5;
+        stroke-width: 1;
+      }
+
+      .nav-signal-demo .inject-wave,
+      .nav-signal-demo .am-wave {
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .nav-signal-demo .inject-wave {
+        stroke: #0a4ea2;
+      }
+
+      .nav-signal-demo .am-wave {
+        stroke: #ad1f1f;
+        stroke-width: 2.4;
+      }
+
+      .nav-signal-demo .am-envelope {
+        fill: none;
+        stroke: rgba(173, 31, 31, 0.34);
+        stroke-width: 1.25;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .nav-signal-demo .target-device-shell,
+      .nav-signal-demo .target-device-pin,
+      .nav-signal-demo .target-device-curve {
+        fill: none;
+        stroke: #27384f;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .nav-signal-demo .target-device-shell {
+        fill: rgba(10, 78, 162, 0.04);
+      }
+
+      .nav-signal-demo .target-device-pin {
+        stroke-width: 1.7;
+      }
+
+      .nav-signal-demo .target-device-curve {
+        stroke: #1f8f4a;
+        stroke-width: 1.8;
+      }
+
+      .nav-signal-demo .carrier-dot {
+        fill: #0a4ea2;
+      }
+
+      .nav-signal-demo .reflection-dot {
+        fill: #ad1f1f;
+      }
+
+      .nav-signal-demo .flow-arrow {
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .nav-signal-demo .flow-arrow-in {
+        stroke: #0a4ea2;
+      }
+
+      .nav-signal-demo .flow-arrow-out {
+        stroke: #ad1f1f;
+      }
+
+      .nav-signal-demo .target-device-pulse {
+        fill: none;
+        stroke: rgba(10, 78, 162, 0.28);
+        stroke-width: 1.4;
+      }
+
+      @media (max-width: 1540px) {
+        .nav-signal-demo {
+          display: none;
+        }
+      }
+
+      .gsap-enhanced .page-header h1,
+      .gsap-enhanced .hero-author-list li,
+      .gsap-enhanced .hero-affils,
+      .gsap-enhanced .page-header #summary,
+      .gsap-enhanced .hero-summary,
+      .gsap-enhanced .section,
+      .gsap-enhanced .panel,
+      .gsap-enhanced .media-card,
+      .gsap-enhanced .case-card,
+      .gsap-enhanced .figure-block,
+      .gsap-enhanced .devices-figure {
+        will-change: transform, opacity;
+      }
+
+      .gsap-enhanced .media-card,
+      .gsap-enhanced .case-card,
+      .gsap-enhanced .panel,
+      .gsap-enhanced .figure-block img,
+      .gsap-enhanced video {
+        transform-origin: center center;
+      }
+
+      .animated-figure-frame {
+        position: relative;
+        line-height: 0;
+      }
+
+      .animated-figure-frame > img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .figure-wave-overlay {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: visible;
+      }
+
+      .figure-wave-overlay path {
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        vector-effect: non-scaling-stroke;
+      }
+
+      .figure-wave-overlay .trace-flow {
+        stroke-width: 4;
+        stroke-dasharray: 16 18;
+        opacity: 0.72;
+      }
+
+      .figure-wave-overlay .dynamic-wave {
+        stroke-width: 3;
+        opacity: 0.9;
+      }
+
+      .figure-wave-overlay .fig1-wave-cover {
+        fill: #fff;
+      }
+
+      .figure-wave-overlay .fig1-panel-border {
+        stroke: #000;
+        vector-effect: none;
+        stroke-linecap: butt;
+      }
+
+      .figure-wave-overlay .em-burst-dot {
+        animation: fig1-burst-dot 2.4s ease-in-out infinite;
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+
+      .figure-wave-overlay .em-burst-arc {
+        stroke-width: 3;
+        opacity: 0.16;
+        animation: fig1-burst-arc 2.4s ease-in-out infinite;
+      }
+
+      .figure-wave-overlay .em-burst-3 .em-burst-dot {
+        fill: #28afe5;
+      }
+
+      .figure-wave-overlay .em-burst-3 .em-burst-arc {
+        stroke: #28afe5;
+      }
+
+      .figure-wave-overlay .em-burst-2 .em-burst-dot {
+        fill: #ef2b24;
+      }
+
+      .figure-wave-overlay .em-burst-2 .em-burst-arc {
+        stroke: #ef2b24;
+      }
+
+      .figure-wave-overlay .em-burst-1 .em-burst-dot {
+        fill: #15181d;
+      }
+
+      .figure-wave-overlay .em-burst-1 .em-burst-arc {
+        stroke: #15181d;
+      }
+
+      .figure-wave-overlay .em-burst-3 .em-burst-dot {
+        animation-delay: 0s;
+      }
+
+      .figure-wave-overlay .em-burst-3 .em-burst-arc-1 {
+        animation-delay: 0.1s;
+      }
+
+      .figure-wave-overlay .em-burst-3 .em-burst-arc-2 {
+        animation-delay: 0.24s;
+      }
+
+      .figure-wave-overlay .em-burst-3 .em-burst-arc-3 {
+        animation-delay: 0.38s;
+      }
+
+      .figure-wave-overlay .em-burst-2 .em-burst-dot {
+        animation-delay: 0.95s;
+      }
+
+      .figure-wave-overlay .em-burst-2 .em-burst-arc-1 {
+        animation-delay: 1.05s;
+      }
+
+      .figure-wave-overlay .em-burst-2 .em-burst-arc-2 {
+        animation-delay: 1.19s;
+      }
+
+      .figure-wave-overlay .em-burst-2 .em-burst-arc-3 {
+        animation-delay: 1.33s;
+      }
+
+      .figure-wave-overlay .em-burst-1 .em-burst-dot {
+        animation-delay: 1.05s;
+      }
+
+      .figure-wave-overlay .em-burst-1 .em-burst-arc-1 {
+        animation-delay: 1.15s;
+      }
+
+      .figure-wave-overlay .em-burst-1 .em-burst-arc-2 {
+        animation-delay: 1.29s;
+      }
+
+      .figure-wave-overlay .em-burst-1 .em-burst-arc-3 {
+        animation-delay: 1.43s;
+      }
+
+      @keyframes fig1-burst-arc {
+        0% {
+          opacity: 0.16;
+        }
+
+        20% {
+          opacity: 0.92;
+        }
+
+        45%,
+        100% {
+          opacity: 0.16;
+        }
+      }
+
+      @keyframes fig1-burst-dot {
+        0%,
+        100% {
+          opacity: 0.5;
+          transform: scale(1);
+        }
+
+        20% {
+          opacity: 1;
+          transform: scale(1.25);
+        }
+
+        45% {
+          opacity: 0.5;
+          transform: scale(1);
+        }
+      }
+
+      .figure-wave-sensitive {
+        stroke: #f1b81c;
+      }
+
+      .figure-wave-leakage {
+        stroke: #28afe5;
+      }
+
+      .figure-wave-carrier {
+        stroke: #ef2b24;
+      }
+
+      .figure-wave-secret {
+        stroke: #178f35;
+      }
+
+      .figure-wave-dark {
+        stroke: #101820;
+      }
+
+      .figure-wave-overlay .fig2-wave-inj {
+        stroke: #0000ff;
+        stroke-width: 2;
+      }
+
+      .figure-wave-overlay .fig2-wave-eav {
+        stroke: #ff0000;
+        stroke-width: 2;
+      }
+
+      .figure-wave-overlay .fig2-wave-sig {
+        stroke: #008600;
+      }
+
+      .gsap-enhanced .faq-list details {
+        will-change: height;
+      }
+
+      .gsap-enhanced .faq-list details p {
+        transform-origin: top center;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .gsap-enhanced .page-header h1,
+        .gsap-enhanced .hero-author-list li,
+        .gsap-enhanced .hero-affils,
+        .gsap-enhanced .page-header #summary,
+        .gsap-enhanced .hero-summary,
+        .gsap-enhanced .section,
+        .gsap-enhanced .panel,
+        .gsap-enhanced .media-card,
+        .gsap-enhanced .case-card,
+        .gsap-enhanced .figure-block,
+        .gsap-enhanced .devices-figure,
+        .gsap-enhanced .faq-list details {
+          will-change: auto;
+        }
+
+        .figure-wave-overlay .em-burst-dot {
+          animation: none;
+          opacity: 1;
+          transform: none;
+        }
+
+        .figure-wave-overlay .em-burst-arc {
+          animation: none;
+          opacity: 0.5;
+        }
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳转到主要内容</a>
+    <svg class="icon-sprite" aria-hidden="true" focusable="false">
+      <symbol id="icon-fan" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="2.2" />
+        <path d="M12 9.8 C10 6.6 11.4 3.6 14.3 3.2 C16 5.4 15.4 8 12 9.8 Z" />
+        <path d="M14 13.2 C17.7 13.1 19.7 15.7 18.6 18.4 C15.9 18.8 13.8 17.1 14 13.2 Z" />
+        <path d="M10.2 13.2 C8.5 16.5 5.2 16.9 3.4 14.6 C4.3 12 6.8 10.9 10.2 13.2 Z" />
+        <circle cx="12" cy="12" r="9" />
+      </symbol>
+      <symbol id="icon-lamp" viewBox="0 0 24 24">
+        <path d="M9 3 H15 L18 11 H6 L9 3 Z" />
+        <path d="M12 11 V19" />
+        <path d="M8 21 H16" />
+      </symbol>
+      <symbol id="icon-wall-audio" viewBox="0 0 24 24">
+        <path d="M5 5 V19" />
+        <path d="M9 7 H19" />
+        <path d="M9 12 H19" />
+        <path d="M9 17 H19" />
+        <path d="M3 9 C4.4 10.1 4.4 13.9 3 15" />
+      </symbol>
+      <symbol id="icon-outdoor" viewBox="0 0 24 24">
+        <path d="M12 20 V9" />
+        <path d="M8 13 L12 7 L16 13 H8 Z" />
+        <path d="M4 20 H20" />
+        <path d="M17 6 C18.7 7.2 19.6 8.9 19.6 11" />
+        <path d="M19.8 3.8 C22 5.5 23 7.8 23 11" />
+      </symbol>
+      <symbol id="icon-bed" viewBox="0 0 24 24">
+        <path d="M4 6 V19" />
+        <path d="M20 11 V19" />
+        <path d="M4 13 H20" />
+        <path d="M4 10 H10 C11.4 10 12 10.6 12 12 V13" />
+        <path d="M4 19 H20" />
+      </symbol>
+      <symbol id="icon-users" viewBox="0 0 24 24">
+        <circle cx="9" cy="8" r="3" />
+        <path d="M3.5 19 C4.5 15.8 6.3 14.5 9 14.5 C11.7 14.5 13.5 15.8 14.5 19" />
+        <circle cx="17" cy="9" r="2.2" />
+        <path d="M15.6 14.8 C18 14.8 19.6 16 20.5 18.4" />
+      </symbol>
+      <symbol id="icon-loop-phone" viewBox="0 0 24 24">
+        <path d="M7 5 H11 L12.2 8.4 L9.8 10 C11 12.3 12.7 14 15 15.2 L16.6 12.8 L20 14 V18 C20 19.1 19.1 20 18 20 C10.3 20 4 13.7 4 6 C4 5.4 4.4 5 5 5 H7 Z" />
+        <path d="M15 4 H20 V9" />
+        <path d="M20 4 L15 9" />
+      </symbol>
+      <symbol id="icon-mic" viewBox="0 0 24 24">
+        <rect x="9" y="3" width="6" height="11" rx="3" />
+        <path d="M5 11 C5 15 7.8 18 12 18 C16.2 18 19 15 19 11" />
+        <path d="M12 18 V21" />
+        <path d="M8 21 H16" />
+      </symbol>
+      <symbol id="icon-radio" viewBox="0 0 24 24">
+        <path d="M5 20 H19" />
+        <path d="M12 20 V8" />
+        <path d="M7 12 C8.1 10.7 9.7 10 12 10 C14.3 10 15.9 10.7 17 12" />
+        <path d="M4 8 C6.2 5.9 8.8 5 12 5 C15.2 5 17.8 5.9 20 8" />
+        <path d="M9.5 15 H14.5" />
+      </symbol>
+      <symbol id="icon-selectivity" viewBox="0 0 24 24">
+        <path d="M4 6 H20" />
+        <path d="M4 12 H20" />
+        <path d="M4 18 H20" />
+        <circle cx="9" cy="6" r="2" />
+        <circle cx="15" cy="12" r="2" />
+        <circle cx="11" cy="18" r="2" />
+      </symbol>
+      <symbol id="icon-stealth" viewBox="0 0 24 24">
+        <path d="M3 12 C5.7 7.5 8.7 5.5 12 5.5 C15.3 5.5 18.3 7.5 21 12 C19.7 14.2 18.3 15.8 16.7 16.9" />
+        <path d="M9.8 17.6 C7.4 16.9 5.1 15 3 12" />
+        <circle cx="12" cy="12" r="3" />
+        <path d="M4 4 L20 20" />
+      </symbol>
+    </svg>
+
+    <nav class="site-nav" aria-label="章节导航">
+      <div class="site-nav-inner">
+        <a class="site-nav-brand" href="#top">Inject<span class="brand-eave">Eave</span></a>
+        <ul class="site-nav-links">
+          <li><a href="#summary">概览</a></li>
+          <li><a href="#key-concept">核心概念</a></li>
+          <li><a href="#causality">机制</a></li>
+          <li><a href="#affected-devices">受影响设备</a></li>
+          <li><a href="#demos">案例</a></li>
+          <li><a href="#implementation">实现</a></li>
+          <li><a href="#faq">常见问题</a></li>
+          <li><a href="#contact">联系方式</a></li>
+          <li><a class="lang-switch" href="./index.html" lang="en" aria-label="Switch to the English page">English</a></li>
+        </ul>
+        <div class="nav-signal-demo" role="button" tabindex="0" aria-label="触发彩蛋" data-easter-egg-text="老大哥正在看着你。">
+          <svg viewBox="0 0 300 64" role="img">
+            <line class="signal-baseline" x1="8" y1="32" x2="292" y2="32" />
+            <path class="inject-wave" d="" />
+            <circle class="carrier-dot" r="3" cx="14" cy="32" />
+            <path class="flow-arrow flow-arrow-in" d="M113 27 L122 32 L113 37" />
+
+            <g class="target-device-symbol">
+              <circle class="target-device-pulse" cx="150" cy="32" r="21" />
+              <path class="target-device-pin" d="M126 22 L134 22 M126 29 L134 29 M126 36 L134 36 M126 43 L134 43 M166 22 L174 22 M166 29 L174 29 M166 36 L174 36 M166 43 L174 43" />
+              <rect class="target-device-shell" x="134" y="17" width="32" height="30" rx="5" />
+              <path class="target-device-curve" d="M140 34 C143 24 147 24 150 34 C153 44 157 44 160 34" />
+              <path class="target-device-shell" d="M142 24 L158 24 M142 41 L158 41" opacity="0.34" />
+            </g>
+
+            <path class="flow-arrow flow-arrow-out" d="M178 27 L187 32 L178 37" />
+            <path class="am-wave" d="" />
+            <path class="am-envelope am-envelope-top" d="" />
+            <path class="am-envelope am-envelope-bottom" d="" />
+            <circle class="reflection-dot" r="3" cx="198" cy="32" />
+          </svg>
+        </div>
+      </div>
+    </nav>
+
+    <header class="page-header" id="top">
+      <h1>
+        <span class="title-blue">主动注入</span>，<span class="title-red">诱导泄漏</span>：<br />
+        <span class="title-subtitle"
+          >利用电磁注入与硬件非线性主动诱导侧信道泄漏</span
+        >
+      </h1>
+
+      <div class="hero-authors">
+        <ul class="hero-author-list">
+          <li><span class="author-name">闫浩然</span><sup class="affil-mark">¶</sup></li>
+          <li><span class="author-name">邵子郁</span><sup class="affil-mark">¶</sup></li>
+          <li><span class="author-name">张书豪</span><sup class="affil-mark">¶</sup></li>
+          <li>
+            <a class="author-name" href="https://jackjiang313.github.io/" target="_blank" rel="noopener">蒋沁宏</a><sup class="affil-mark">*</sup>
+          </li>
+          <li>
+            <a class="author-name" href="https://yanlong.site/" target="_blank" rel="noopener">龙颜</a><sup class="affil-mark">¶</sup>
+          </li>
+        </ul>
+        <div class="hero-affils">
+          <span class="hero-affil">
+            <sup class="affil-mark">¶</sup>
+            <img src="./assets/images/hkust-gz-logo.png" alt="香港科技大学（广州）" />
+          </span>
+          <span class="hero-affil">
+            <sup class="affil-mark">*</sup>
+            <img src="./assets/images/polyu-logo.svg" alt="香港理工大学" />
+          </span>
+        </div>
+      </div>
+
+      <h2 id="summary">概览</h2>
+      <p class="hero-summary">
+        <span class="title-blue">Inject</span><span class="title-red">Eave</span>
+        展示攻击者可以利用主动电磁注入和无处不在的硬件非线性，
+        诱导低频模拟信号产生电磁侧信道泄漏。我们发现
+        这一漏洞存在于广泛使用的非线性模拟接口中，并在11种商用设备上进行评估。
+        攻击者能够窃听耳机和座机音频、推断智能风扇转速和智能台灯亮度，
+        并恢复其他难以通过数字加密和软件防御保护的模拟秘密。
+        对有线和无线耳机播放音频的窃听最远距离可达 <strong>30 米</strong>，
+        并且能够在穿墙场景下实现窃听；同时，我们还分析了其他低频信号在电磁注入下产生的电磁泄漏。
+        案例研究进一步展示了对座机通话窃听与操控的闭环链路。
+      </p>
+      <!--
+        TODO for homepage video (requires editable video project files; cannot be done in this repo):
+        1. Replace soft background music with licensed cyber-style dynamic music.
+           TODO: provide licensed cyber-style background music for the homepage video.
+        2. Add authors and affiliations to the opening scene.
+        3. Add a clear headphone target shot after the adversary setup scene.
+        4. Add a black-background white-text transition after 11s explaining what the adversary is doing.
+        5. Smooth the transition between 11s and 12s.
+        6. Add subtitles.
+      -->
+      <div class="overview-video">
+        <video controls preload="metadata" playsinline>
+          <source src="./assets/videos/main.mp4" type="video/mp4" />
+          你的浏览器不支持 video 标签。
+        </video>
+        <p class="password-prompt">
+          尝试听取窃听得到的音频，恢复受害者耳机中播放的密码。
+          <button class="password-check-button" type="button" aria-controls="overview-password" aria-expanded="false">
+            查看密码
+          </button>
+          <span class="password-answer" id="overview-password" hidden>密码：4815162342</span>
+        </p>
+      </div>
+      <p class="overview-resource-note">
+        <span class="title-blue">Inject</span><span class="title-red">Eave</span>
+        研究论文已被
+        <a href="https://www.usenix.org/conference/usenixsecurity26" target="_blank" rel="noopener">USENIX Security '26</a>
+        接收。论文 PDF、代码和引用信息见下方。
+      </p>
+      <div class="overview-cards">
+        <!-- NOTE: InjectEave paper.pdf exists locally but is listed in .gitignore; ensure the final paper PDF is published with the site. -->
+        <a class="overview-card" href="./InjectEave%20paper.pdf" target="_blank" rel="noopener" aria-label="下载 InjectEave 论文 PDF">
+          <span class="overview-card-title">阅读论文</span>
+        </a>
+        <a class="overview-card" href="https://doi.org/10.5281/zenodo.20432240" target="_blank" rel="noopener" aria-label="打开 Zenodo 上的 InjectEave 代码">
+          <span class="overview-card-title">代码</span>
+        </a>
+        <button class="overview-card overview-card-button" type="button" data-copy-bibtex data-copy-success="已复制 BibTeX" data-copy-error="复制失败" aria-label="复制 BibTeX 到剪贴板">
+          <span class="overview-card-title" data-copy-label aria-live="polite">BibTeX 引用</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="container" id="main">
+
+      <section class="section" id="key-concept">
+        <h2>全新的发现：激发式电磁侧信道</h2>
+        <div class="key-concept-box">
+          <p>
+            <span class="title-blue">Inject</span><span class="title-red">Eave</span>
+            是首个展示电磁注入如何通过硬件非线性主动激发电磁侧信道泄漏的研究工作。
+            不同于被动电磁窃听，<span class="title-blue">Inject</span><span class="title-red">Eave</span>
+            揭示了一类新的<strong class="key-term">激发式电磁侧信道</strong>：
+            外部射频载波能够将低频模拟信号激发到容易泄露的路径，进而极大提升攻击的距离。
+            该工作将<strong class="key-term">激发式电磁侧信道</strong>确立为一个实际且系统性的研究问题。
+          </p>
+        </div>
+      <p class="hero-summary scope-note">
+        <span class="title-blue">Inject</span><span class="title-red">Eave</span>
+        并不利用 WiFi 或蓝牙等无线通信漏洞；相反，它针对的是电子设备中固有的非线性特性。因此，即使设备关闭网络或蓝牙功能，仍可能受到影响。
+      </p>
+      </section>
+
+      <section class="section" id="causality">
+        <h2>电磁注入如何诱导泄漏</h2>
+
+        <article class="causality-part">
+          <h3>问题：频谱失配</h3>
+          <p>
+            在传统电磁侧信道中，设备内部的电气走线会充当非故意天线，辐射其内部信号。
+            然后，<strong>内部信号的频率与设备的高效电磁辐射频率之间通常存在失配</strong>：
+            人类语音音频等低频模拟信号通常低于 20&nbsp;kHz，功耗或执行控制信号通常低于
+            200&nbsp;Hz，而设备内部非故意天线结构的有效电磁辐射频段通常位于 MHz 或 GHz
+            范围，两者相距甚远，因此低频模拟秘密很难通过被动窃听获得。
+            注入的电磁载波使低频信号能够“搭载”到有效辐射频段，从而克服这种频谱失配。
+          </p>
+          <figure class="figure-block figure-sm figure-with-key">
+            <div class="figure-with-wave-key">
+            <div class="animated-figure-frame">
+              <img
+                src="./assets/images/em-comparison.png"
+                alt="被动泄漏与 InjectEave 的对比：注入电磁载波将敏感信息转移到高效辐射频段。"
+                loading="lazy"
+              />
+              <svg class="figure-wave-overlay fig1-wave-overlay" viewBox="0 0 1509 306" aria-hidden="true">
+                <rect class="fig1-wave-cover" x="576" y="178" width="100" height="82" />
+                <rect class="fig1-wave-cover" x="823" y="164" width="108" height="124" />
+                <g class="em-burst em-burst-1">
+                  <circle class="em-burst-dot" cx="593" cy="222" r="7" />
+                  <path class="em-burst-arc em-burst-arc-1" pathLength="1" d="M612 211 C620 218 620 228 612 235" />
+                  <path class="em-burst-arc em-burst-arc-2" pathLength="1" d="M631 205 C644 217 644 232 631 245" />
+                  <path class="em-burst-arc em-burst-arc-3" pathLength="1" d="M650 199 C668 216 668 236 650 253" />
+                </g>
+                <g class="em-burst em-burst-2">
+                  <path class="em-burst-arc em-burst-arc-1" pathLength="1" d="M891 177 C879 185 879 205 891 213" />
+                  <path class="em-burst-arc em-burst-arc-2" pathLength="1" d="M870 174 C854 185 854 209 870 220" />
+                  <path class="em-burst-arc em-burst-arc-3" pathLength="1" d="M849 171 C829 185 829 212 849 225" />
+                  <circle class="em-burst-dot" cx="914" cy="193" r="7" />
+                </g>
+                <g class="em-burst em-burst-3">
+                  <circle class="em-burst-dot" cx="838" cy="249" r="7" />
+                  <path class="em-burst-arc em-burst-arc-1" pathLength="1" d="M861 235 C872 244 872 256 861 265" />
+                  <path class="em-burst-arc em-burst-arc-2" pathLength="1" d="M881 230 C896 243 896 259 881 272" />
+                  <path class="em-burst-arc em-burst-arc-3" pathLength="1" d="M902 226 C921 243 921 263 902 279" />
+                </g>
+                <path class="fig1-panel-border" stroke-width="4" d="M630 150 L630 272" />
+                <path class="fig1-panel-border" stroke-width="3" d="M878.5 150 L878.5 288" />
+              </svg>
+            </div>
+            <aside class="wave-key-panel" aria-label="图 1 信号图例">
+              <div class="wave-key-row">
+                <svg class="wave-legend-svg wave-key-burst" viewBox="0 0 74 44" aria-hidden="true">
+                  <g class="key-burst key-burst-passive">
+                    <circle class="em-burst-dot" cx="12" cy="22" r="4" />
+                    <path class="em-burst-arc em-burst-arc-1" pathLength="1" d="M24 16 C31 21 31 27 24 32" />
+                    <path class="em-burst-arc em-burst-arc-2" pathLength="1" d="M36 12 C47 20 47 28 36 36" />
+                    <path class="em-burst-arc em-burst-arc-3" pathLength="1" d="M48 8 C64 19 64 29 48 40" />
+                  </g>
+                </svg>
+                <p><strong>被动泄漏</strong></p>
+              </div>
+              <div class="wave-key-row">
+                <svg class="wave-legend-svg wave-key-burst" viewBox="0 0 74 44" aria-hidden="true">
+                  <g class="key-burst key-burst-induced">
+                    <circle class="em-burst-dot" cx="12" cy="22" r="4" />
+                    <path class="em-burst-arc em-burst-arc-1" pathLength="1" d="M24 16 C31 21 31 27 24 32" />
+                    <path class="em-burst-arc em-burst-arc-2" pathLength="1" d="M36 12 C47 20 47 28 36 36" />
+                    <path class="em-burst-arc em-burst-arc-3" pathLength="1" d="M48 8 C64 19 64 29 48 40" />
+                  </g>
+                </svg>
+                <p><strong>注入诱导泄漏</strong></p>
+              </div>
+              <div class="wave-key-row">
+                <svg class="wave-legend-svg wave-key-burst" viewBox="0 0 74 44" aria-hidden="true">
+                  <g class="key-burst key-burst-injected">
+                    <path class="em-burst-arc em-burst-arc-1" pathLength="1" d="M48 12 C40 19 40 25 48 32" />
+                    <path class="em-burst-arc em-burst-arc-2" pathLength="1" d="M36 9 C24 18 24 26 36 35" />
+                    <path class="em-burst-arc em-burst-arc-3" pathLength="1" d="M24 6 C8 17 8 27 24 38" />
+                    <circle class="em-burst-dot" cx="62" cy="22" r="4" />
+                  </g>
+                </svg>
+                <p><strong>注入信号</strong></p>
+              </div>
+            </aside>
+            </div>
+            <figcaption>
+              图 1：注入的电磁载波通过硬件非线性携带低频信号，从而克服低频信号与高效电磁辐射频段之间的失配。
+            </figcaption>
+          </figure>
+        </article>
+
+        <article class="causality-part">
+          <h3>机制：注入—调制—辐射</h3>
+          <p>
+            <span class="title-blue">Inject</span><span class="title-red">Eave</span>
+            遵循“注入—调制—辐射”模型。
+            <strong>注入：</strong>载波耦合进入设备的非故意天线。
+            <strong>调制：</strong>非线性器件将内部原始信号与载波混频，并将其上变频到载波频率附近的边带中。
+            <strong>辐射：</strong>非预期天线泄漏调制后的信号，攻击者随后将其解调恢复为原始信号。
+          </p>
+          <figure class="figure-block figure-sm figure-with-model-key">
+            <div class="figure-with-model-key-layout">
+            <div class="animated-figure-frame">
+              <img
+                src="./assets/images/leakage-model.png"
+                alt="注入诱导泄漏过程模型：信号发生器向受攻击设备注入载波，设备中的非线性器件调制秘密信号，该信号随后由非预期天线再次辐射，并被攻击者解调。"
+                loading="lazy"
+              />
+              <svg class="figure-wave-overlay fig2-wave-overlay" viewBox="0 0 1600 616" aria-hidden="true">
+                <rect class="fig1-wave-cover" x="854" y="141" width="186" height="80" />
+                <rect class="fig1-wave-cover" x="1352" y="210" width="188" height="82" />
+                <rect class="fig1-wave-cover" x="852" y="405" width="190" height="83" />
+                <rect class="fig1-wave-cover" x="29" y="528" width="187" height="82" />
+                <path class="dynamic-wave fig2-wave-inj" data-x1="860" data-x2="1035" data-y="180" data-amp="35" data-cycles="22" data-speed="14" />
+                <path class="dynamic-wave fig2-wave-sig" data-x1="1358" data-x2="1532" data-y="251" data-amp="34" data-cycles="3.7" data-speed="4.2" />
+                <path class="dynamic-wave fig2-wave-eav" data-x1="860" data-x2="1038" data-y="446" data-amp="35" data-cycles="18" data-speed="11" data-envelope="am" />
+                <path class="dynamic-wave fig2-wave-sig" data-x1="35" data-x2="208" data-y="569" data-amp="34" data-cycles="3.3" data-speed="4.2" />
+              </svg>
+            </div>
+            <aside class="model-key-panel" aria-label="图 2 信号图例">
+              <div class="model-key-row">
+                <svg class="model-key-svg" viewBox="850 130 200 100" aria-hidden="true">
+                  <path class="dynamic-wave fig2-wave-inj" data-x1="860" data-x2="1035" data-y="180" data-amp="35" data-cycles="22" data-speed="14" />
+                </svg>
+                <p><strong>注入信号</strong></p>
+              </div>
+              <div class="model-key-row">
+                <svg class="model-key-svg" viewBox="1340 200 210 100" aria-hidden="true">
+                  <path class="dynamic-wave fig2-wave-sig" data-x1="1358" data-x2="1532" data-y="251" data-amp="34" data-cycles="3.7" data-speed="4.2" />
+                </svg>
+                <p><strong>秘密信号</strong></p>
+              </div>
+              <div class="model-key-row">
+                <svg class="model-key-svg" viewBox="840 395 220 100" aria-hidden="true">
+                  <path class="dynamic-wave fig2-wave-eav" data-x1="860" data-x2="1038" data-y="446" data-amp="35" data-cycles="18" data-speed="11" data-envelope="am" />
+                </svg>
+                <p><strong>注入诱导信号</strong></p>
+              </div>
+            </aside>
+            </div>
+            <figcaption>
+              图 2：“注入-调制-辐射”模型。注入载波耦合进入目标设备的非线性器件，并将低频信号调制为易辐射的电磁泄漏信号，最终被攻击者恢复。
+            
+            </figcaption>
+          </figure>
+        </article>
+
+        <article class="causality-part">
+          <h3>可行性验证：非线性器件</h3>
+          <p>
+            我们在四类最常见的非线性硬件器件上进行了测试：放大器、ADC、开关
+            MOSFET 和电源转换器。在被动侧信道下，对 0 到 2&nbsp;GHz
+            的宽带扫频没有观察到可辨识的泄漏。将这些器件替换为线性电阻负载后，泄漏消失。
+            着确认了<strong>硬件非线性是激发式侧信道的关键因素</strong>。
+          </p>
+          <figure class="figure-block">
+            <img
+              src="./assets/images/feasibility1.png"
+              alt="频谱图展示了与传统被动场景相比，放大器、ADC、MOSFET 和电源转换器等普遍存在的非线性器件会在电磁注入下泄漏秘密模拟信息。"
+              loading="lazy"
+            />
+            <figcaption>
+              图 3：商用计算硬件中普遍存在的非线性器件会在电磁注入下非预期地泄漏秘密模拟信息。<sup>*</sup>直接测量的基带信号。<sup>+</sup>从载波频率下变频恢复得到的基带信号。为了便于比较，两段信号在后处理中被拼接在一起。
+            </figcaption>
+          </figure>
+        </article>
+      </section>
+
+      <section class="section" id="affected-devices">
+        <h2>受影响的设备</h2>
+        <div class="affected-intro">
+          <p>
+            我们在 5 类共 11 种商用设备上评估
+            <span class="title-blue">Inject</span><span class="title-red">Eave</span>，
+            整个过程无需物理接触目标设备，也无需对其进行硬件或软件修改。
+            这些设备包括无线耳机、有线耳机和座机等广泛存在于公共与私人空间中的音频外设，
+            也包括智能风扇和智能台灯等深度融入私人环境的 IoT 智能家电。
+            通过窃听这些设备，攻击者能够恢复音频并推断智能家居设备的运行状态，从而直接威胁用户隐私。
+          </p>
+        </div>
+
+        <article class="causality-part devices-article">
+          <div class="devices-layout">
+            <div class="table-wrap">
+            <table class="data-table">
+              <caption class="table-caption">
+                表 1：受 InjectEave 影响的商用现成设备。
+              </caption>
+              <thead>
+                <tr>
+                  <th>设备类型</th>
+                  <th>品牌与型号</th>
+                  <th>年份</th>
+                  <th>泄漏源</th>
+                  <th>最远距离</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>有线头戴式耳机</td><td>Sony ZX110AP</td><td>2014</td><td>放大器</td><td>5 米</td>
+                </tr>
+                <tr class="grp">
+                  <td>有线耳塞</td><td>Apple Earbuds</td><td>2016</td><td>放大器</td><td>1 米</td>
+                </tr>
+                <tr class="grp">
+                  <td rowspan="3">无线头戴式耳机</td><td>UGreen MAX2</td><td>2024</td><td rowspan="3">放大器</td><td>6 米</td>
+                </tr>
+                <tr><td>PHILIPS TAH2020</td><td>2025</td><td>6 米</td></tr>
+                <tr><td>HP H231R</td><td>2023</td><td>4 米</td></tr>
+                <tr class="grp">
+                  <td>座机（VoIP）</td><td>Flyingvoice P23GW</td><td>2023</td><td>ADC 与放大器</td><td>3 米</td>
+                </tr>
+                <tr class="grp">
+                  <td rowspan="2">智能风扇</td><td>OIDIRE ODI-MF10A</td><td>2023</td><td rowspan="2">开关 MOSFET</td><td>6 米</td>
+                </tr>
+                <tr><td>Xiaomi BPLDS10DM</td><td>2025</td><td>4 米</td></tr>
+                <tr class="grp">
+                  <td rowspan="2">智能台灯</td><td>JINGZAO JDO-06</td><td>2024</td><td rowspan="2">电源转换器</td><td>3 米</td>
+                </tr>
+                <tr><td>Xiaomi 1S</td><td>2019</td><td>3 米</td></tr>
+              </tbody>
+            </table>
+            </div>
+            <figure class="figure-block devices-figure">
+              <img
+                src="./assets/images/experiment-setup.png"
+                alt="用于评估商用现成设备的硬件设置：USRP 和发射天线注入载波，接收天线和频谱分析仪捕获泄漏信号，并由笔记本电脑进行控制。"
+                loading="lazy"
+              />
+              <figcaption>
+                图 4：用于评估商用现成设备的硬件设置。
+              </figcaption>
+            </figure>
+          </div>
+        </article>
+      </section>
+
+      <section class="section" id="demos">
+        <h2>案例</h2>
+        <article class="panel overview-structure demo-nav-panel">
+          <div class="demo-nav-heading">
+            <h3>快速链接</h3>
+            <p>直接跳转到案例、案例研究或鲁棒性结果。</p>
+          </div>
+          <nav class="demo-link-groups" aria-label="案例快速链接">
+            <section class="demo-link-group part-group-1" aria-labelledby="demo-nav-part1">
+              <h4 id="demo-nav-part1"><span>第一部分</span> 实验室环境中的案例</h4>
+              <div class="demo-link-list">
+                <a href="#demo1"><span>案例 1</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-fan" /></svg>窃听智能风扇控制信号</a>
+                <a href="#demo2"><span>案例 2</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-lamp" /></svg>窃听智能台灯亮度</a>
+              </div>
+            </section>
+            <section class="demo-link-group part-group-2" aria-labelledby="demo-nav-part2">
+              <h4 id="demo-nav-part2"><span>第二部分</span> 真实场景中的实时音频窃听</h4>
+              <div class="demo-link-list">
+                <a href="#demo3"><span>案例 3</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-wall-audio" /></svg>穿墙窃听（1 米）</a>
+                <a href="#demo4"><span>案例 4</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-outdoor" /></svg>室外隐蔽窃听（6 米）</a>
+              </div>
+            </section>
+            <section class="demo-link-group part-group-3" aria-labelledby="demo-nav-part3">
+              <h4 id="demo-nav-part3"><span>第三部分</span> 真实场景案例研究</h4>
+              <div class="demo-link-list">
+                <a href="#case1"><span>案例 5</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-bed" /></svg>酒店房间中的穿墙音频窃听</a>
+                <a href="#case2"><span>案例 6</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-users" /></svg>会议室中的穿墙音频窃听</a>
+                <a href="#case3"><span>案例 7</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-loop-phone" /></svg>座机电话的闭环窃听与操控</a>
+              </div>
+            </section>
+            <section class="demo-link-group part-group-4" aria-labelledby="demo-nav-part4">
+              <h4 id="demo-nav-part4"><span>第四部分</span> 模拟麦克风输入</h4>
+              <div class="demo-link-list">
+                <a href="#demo5"><span>案例 8</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-mic" /></svg>麦克风输入可行性测试</a>
+              </div>
+            </section>
+            <section class="demo-link-group part-group-5" aria-labelledby="demo-nav-part5">
+              <h4 id="demo-nav-part5"><span>第五部分</span> 鲁棒性、选择性与隐蔽性</h4>
+              <div class="demo-link-list">
+                <a href="#demo6"><span>案例 9</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-radio" /></svg>多设备和环境射频干扰下的鲁棒窃听</a>
+                <a href="#demo7"><span>案例 10</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-selectivity" /></svg>频率选择性与空间选择性</a>
+                <a href="#stealthiness"><span>案例 11</span><svg class="demo-link-icon" aria-hidden="true" focusable="false"><use href="#icon-stealth" /></svg>单音注入的隐蔽性</a>
+              </div>
+            </section>
+
+          </nav>
+        </article>
+      </section>
+
+      <section class="section" id="part1">
+        <h2><span class="part-label">第一部分</span><span class="part-title">实验室环境中的案例</span></h2>
+        <div class="media-grid">
+          <article class="media-card" id="demo1">
+            <h3>案例 1：窃听智能风扇控制信号</h3>
+            <p>
+              随着风扇转速升高，接收到的控制信号频率也逐渐升高，表明可以从接收到的控制信号中推断风扇当前的运行状态。
+              这使得“场景推断”攻击成为可能：例如，夜间检测到“睡眠模式”可以确认用户的休息时间，并在无需视觉监控的情况下推断房间占用情况。
+            </p>
+            <video controls preload="metadata">
+              <source src="./assets/videos/Demo_fan.mp4" type="video/mp4" />
+              你的浏览器不支持 video 标签。
+            </video>
+          </article>
+
+          <article class="media-card" id="demo2">
+            <h3>案例 2：窃听智能台灯亮度</h3>
+            <p>
+              随着台灯亮度升高，接收到的功率信号强度也逐渐增强。攻击者可以将这些功率水平映射到厂商特定的预设模式（例如，“阅读”模式对应
+              20% 亮度），从而进行“行为画像”攻击，将一个普通光源转化为暴露用户具体活动和日常习惯的信标，而无需任何网络层访问权限。
+            </p>
+            <video controls preload="metadata">
+              <source src="./assets/videos/Demo_lamp.mp4" type="video/mp4" />
+              你的浏览器不支持 video 标签。
+            </video>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="part2">
+        <h2><span class="part-label">第二部分</span><span class="part-title">真实场景中的实时音频窃听</span></h2>
+        <div class="media-grid">
+          <article class="media-card" id="demo3">
+            <h3>案例 3：穿墙窃听（1 米）</h3>
+            <p>
+              攻击者将监测设备放置在受害者相邻房间中，并通过一面 30 厘米厚的混凝土墙，在 1 米距离处窃听目标设备。
+            </p>
+            <video controls preload="metadata">
+              <source src="./assets/videos/Demo_behind-the-wall.mp4" type="video/mp4" />
+              你的浏览器不支持 video 标签。
+            </video>
+          </article>
+
+          <article class="media-card" id="demo4">
+            <h3>案例 4：室外隐蔽窃听（6 米）</h3>
+            <p>
+              攻击者将监测设备隐藏在灌木丛后方，并在 6 米距离处对受害者进行远距离窃听。
+            </p>
+            <video controls preload="metadata">
+              <source src="./assets/videos/Demo_outdoor.mp4" type="video/mp4" />
+              你的浏览器不支持 video 标签。
+            </video>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="part3">
+        <h2><span class="part-label">第三部分</span><span class="part-title">真实场景案例研究</span></h2>
+        <article class="case-card case1-card" id="case1">
+          <!-- TODO: confirm distance for this demo title -->
+          <h3>案例 5：酒店房间中的穿墙音频窃听</h3>
+          <div class="case1-main">
+            <figure class="case1-figure">
+              <img
+                src="./assets/images/case-study-1.png"
+                alt="案例 5 设置示意图：攻击者位于相邻酒店房间中，通过混凝土墙进行窃听。"
+                loading="lazy"
+              />
+              <figcaption class="case-figcaption">
+                （a）案例研究 1：酒店房间
+              </figcaption>
+            </figure>
+            <div class="table-wrap case1-table-wrap">
+              <table class="audio-table case1-audio-table">
+                <thead>
+                  <tr>
+                    <th>文本</th>
+                    <th>秘密音频</th>
+                    <th><span class="title-blue">Inject</span><span class="title-red">Eave</span>，未降噪</th>
+                    <th><span class="title-blue">Inject</span><span class="title-red">Eave</span>，已降噪</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                    <td>
+                      Let's meet at the entrance of 221B Baker Street at 6pm
+                      tomorrow.
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">女声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/benign_location.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">男声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/benign_location_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">女声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/injecteave_wo_location.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">男声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/injecteave_wo_location_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">女声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/denoised_location.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">男声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/denoised_location_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      My bank card PIN is 9-5-2-7, and the transfer amount is
+                      3,500 US dollars.
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">女声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/benign_financial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">男声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/benign_financial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">女声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/injecteave_wo_financial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">男声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/injecteave_wo_financial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">女声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/denoised_financial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">男声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/denoised_financial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Regarding this batch of core chips, our final quote is a
+                      unit price of 42.50 dollars, including 13% VAT.
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">女声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/benign_commercial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">男声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/benign_commercial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">女声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/injecteave_wo_commercial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">男声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/injecteave_wo_commercial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">女声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/denoised_commercial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">男声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/case1/denoised_commercial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+
+        <article class="case-card case2-card" id="case2">
+          <!-- TODO: confirm distance for this demo title -->
+          <h3>案例 6：会议室中的穿墙音频窃听</h3>
+          <div class="case2-main">
+            <figure class="case2-figure">
+              <img
+                src="./assets/images/case-study-2.png"
+                alt="案例 6 设置示意图：攻击者隔墙窃听会议室。"
+                loading="lazy"
+              />
+              <figcaption class="case-figcaption">
+                （b）案例研究 2：会议室
+              </figcaption>
+            </figure>
+            <div class="table-wrap case2-table-wrap">
+              <table class="audio-table case2-audio-table">
+                <thead>
+                  <tr>
+                    <th>文本</th>
+                    <th>秘密音频</th>
+                    <th><span class="title-blue">Inject</span><span class="title-red">Eave</span>，未降噪</th>
+                    <th><span class="title-blue">Inject</span><span class="title-red">Eave</span>，已降噪</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    Let's meet at the entrance of 221B Baker Street at 6pm
+                    tomorrow.
+                  </td>
+                  <td>
+                    <div class="audio-pair">
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">女声</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/benign_location.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">男声</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/benign_location_male.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="audio-pair">
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">女声</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/injecteave_wo_location.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">男声</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/injecteave_wo_location_male.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="audio-pair">
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">女声</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/denoised_location.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">男声</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/denoised_location_male.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    My bank card PIN is 9-5-2-7, and the transfer amount is
+                    3,500 US dollars.
+                  </td>
+                  <td>
+                    <div class="audio-pair">
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">女声</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/benign_financial.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">男声</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/benign_financial_male.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="audio-pair">
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">女声</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/injecteave_wo_financial.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">男声</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/injecteave_wo_financial_male.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="audio-pair">
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">女声</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/denoised_financial.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">男声</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/denoised_financial_male.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Regarding this batch of core chips, our final quote is a
+                    unit price of 42.50 dollars, including 13% VAT.
+                  </td>
+                  <td>
+                    <div class="audio-pair">
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">女声</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/benign_commercial.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">男声</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/benign_commercial_male.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="audio-pair">
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">女声</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/injecteave_wo_commercial.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">男声</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/injecteave_wo_commercial_male.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="audio-pair">
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">女声</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/denoised_commercial.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                      <div class="audio-entry">
+                        <span class="audio-sub-label">男声</span>
+                        <audio controls preload="none">
+                          <source
+                            src="./assets/audio/case2/denoised_commercial_male.wav"
+                            type="audio/wav"
+                          />
+                        </audio>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+
+        <article class="case-card case3-card" id="case3">
+          <h3>
+            案例 7：针对座机设备的闭环通话窃听与操控
+          </h3>
+          <div class="case3-main">
+            <figure class="case3-figure">
+              <img
+                src="./assets/images/case-study-3.png"
+                alt="案例 7 设置示意图：针对座机电话的闭环窃听、合成与注入流程。"
+                loading="lazy"
+              />
+              <figcaption class="case-figcaption">
+                （c）案例研究 3：办公室
+              </figcaption>
+            </figure>
+            <div class="case3-explain">
+              <p class="case3-explain-title">攻击流程</p>
+              <p>
+                案例 7 遵循"窃听-合成-注入"闭环流程。
+              </p>
+              <p>
+                <strong>第一步：窃听。</strong>攻击者实时监听侧信道泄露，获取通话上下文。
+              </p>
+              <p>
+                <strong>第二步：合成。</strong>当检测到触发关键词（如 "quote" 或
+                "confirmation"）时，IndexTTS-2 以相同的说话人音色合成伪造的恶意应答。
+              </p>
+              <p>
+                <strong>第三步：注入。</strong>合成音频经电磁耦合注入座机输出，
+                恶意操纵受害者的决策，例如将应答从"同意"改为"不同意"。
+              </p>
+              <p class="case3-explain-title">对话文本（音频为英文）</p>
+              <ol class="case3-text-list">
+                <li>
+                  <strong>应答：</strong>"Understood. Since they are a
+                  returning client, quote them
+                  <span class="case3-emph">5 million</span>."
+                  <span class="case3-inline-arrow">-></span>
+                  <strong>合成：</strong>"Actually change it to
+                  <span class="case3-emph-red">8 million</span>."
+                </li>
+                <li>
+                  <strong>应答：</strong>"Let me think about it.
+                  <span class="case3-emph">Yes, I agree</span>."
+                  <span class="case3-inline-arrow">-></span>
+                  <strong>合成：</strong>"Actually,
+                  <span class="case3-emph-red">I disagree</span>."
+                </li>
+                <li>
+                  <strong>应答：</strong>"Yes,
+                  <span class="case3-emph">turn right</span> and you will see
+                  the hotel."
+                  <span class="case3-inline-arrow">-></span>
+                  <strong>合成：</strong>"Sorry, please
+                  <span class="case3-emph-red">turn left</span>."
+                </li>
+              </ol>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="audio-table case3-audio-table">
+              <thead>
+                <tr>
+                  <th>秘密音频</th>
+                  <th><span class="title-blue">Inject</span><span class="title-red">Eave</span>，未降噪</th>
+                  <th><span class="title-blue">Inject</span><span class="title-red">Eave</span>，已降噪</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/speaker_quote.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/received_quote.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/denoised_quote.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/speaker_governance.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/received_governance.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/denoised_governance.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/speaker_navigation.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/received_navigation.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/denoised_navigation.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-wrap case3-secondary-wrap">
+            <table class="audio-table case3-audio-table">
+              <thead>
+                <tr>
+                  <th>合成音频</th>
+                  <th>麦克风录制的真实语音</th>
+                  <th>麦克风录制的注入合成语音</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/injected_quote.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/recorded by microphone/recorded_quote_mic.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/recorded by microphone/injected_quote_mic.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/injected_governance.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/recorded by microphone/recorded_governance_mic.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/recorded by microphone/injected_governance_mic.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/injected_navigation.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/recorded by microphone/recorded_navigation_mic.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                  <td>
+                    <audio controls preload="none">
+                      <source
+                        src="./assets/audio/case3/recorded by microphone/injected_navigation_mic.wav"
+                        type="audio/wav"
+                      />
+                    </audio>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <section class="section" id="part4">
+        <h2><span class="part-label">第四部分</span><span class="part-title">模拟麦克风输入</span></h2>
+        <article class="media-card full-card" id="demo5">
+          <h3>案例 8：麦克风输入可行性测试</h3>
+          <p class="part4-intro">
+            本部分检验麦克风等模拟输入是否同样存在激发式泄露。该案例给出了信号接收与恢复行为的可行性案例。
+          </p>
+          <video controls preload="metadata">
+            <source src="./assets/videos/Demo_microphone.mp4" type="video/mp4" />
+            你的浏览器不支持 video 标签。
+          </video>
+        </article>
+      </section>
+
+      <section class="section" id="part5">
+        <h2><span class="part-label">第五部分</span><span class="part-title">鲁棒性、选择性与隐蔽性</span></h2>
+        <div class="media-grid">
+          <article class="media-card" id="demo6">
+            <h3>案例 9：多设备和环境射频干扰下的鲁棒窃听</h3>
+            <p class="part4-intro part5-demo-intro">
+              在一间布满运行中电子设备及 BLE/Wi-Fi
+              设备、射频环境嘈杂的会议室中针对商用耳机发起攻击。在附近活跃电子设备与环境射频活动的影响下，恢复出的音频依然稳定。
+            </p>
+            <video controls preload="metadata">
+              <source src="./assets/videos/Demo_robust.mp4" type="video/mp4" />
+              你的浏览器不支持 video 标签。
+            </video>
+          </article>
+
+          <article class="media-card" id="demo7">
+            <h3>案例 10：频率选择性与空间选择性</h3>
+            <p class="part4-intro part5-demo-intro">
+              攻击者最初配置为窃听 PHILIPS TAH2020。调节载波频率后，攻击切换到相邻的
+              UGreen MAX2，表明不同型号的耳机可以按各自不同的频段加以区分。随后重新对准天线，
+              从两台同型号 UGreen MAX2 中分离出其中一台，表明空间分离使同型号设备之间也具备选择性。
+            </p>
+            <video controls preload="metadata">
+              <source src="./assets/videos/Demo-selectivity.mp4" type="video/mp4" />
+              你的浏览器不支持 video 标签。
+            </video>
+          </article>
+        </div>
+
+        <article class="case-card stealth-card" id="stealthiness">
+          <h3>案例 11：单音注入的隐蔽性</h3>
+          <p class="stealth-intro">
+            当注入强度很高时，输出音频中可察觉的伪迹可能损害注入的隐蔽性。
+            为了评估在最坏情况下注入单音是否可被察觉，我们特意将发射天线放置在目标耳机（UGreen
+            MAX2）旁边，以 18 dBm 功率辐射单音注入载波，同时确保该设置仍能激发可恢复的泄露。
+          </p>
+
+          <div class="stealth-main">
+            <figure class="stealth-figure">
+              <img
+                src="./assets/images/injection_stealthiness.png"
+                alt="隐蔽性评估场景：发射天线紧邻目标 UGreen MAX2 耳机，以 18 dBm 注入单音载波。"
+                loading="lazy"
+              />
+              <figcaption class="case-figcaption">
+                Fig. 8: Stealthiness evaluation setup
+              </figcaption>
+            </figure>
+            <div class="stealth-table-wrap">
+              <table class="audio-table stealth-audio-table">
+                <thead>
+                  <tr>
+                    <th>文本</th>
+                    <th>秘密音频</th>
+                    <th>无注入时录制</th>
+                    <th>注入时录制</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      Let's meet at the entrance of 221B Baker Street at 6pm
+                      tomorrow.
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">女声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/clean audio/benign_location.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">男声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/clean audio/benign_location_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">女声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone without injection/benign_location.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">男声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone without injection/benign_location_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">女声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone with injection/benign_location.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">男声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone with injection/benign_location_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      My bank card PIN is 9-5-2-7, and the transfer amount is
+                      3,500 US dollars.
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">女声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/clean audio/benign_financial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">男声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/clean audio/benign_financial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">女声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone without injection/benign_financial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">男声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone without injection/benign_financial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">女声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone with injection/benign_financial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">男声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone with injection/benign_financial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Regarding this batch of core chips, our final quote is a
+                      unit price of 42.50 dollars, including 13% VAT.
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">女声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/clean audio/benign_commercial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">男声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/clean audio/benign_commercial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">女声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone without injection/benign_commercial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">男声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone without injection/benign_commercial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="audio-pair">
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">女声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone with injection/benign_commercial.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                        <div class="audio-entry">
+                          <span class="audio-sub-label">男声</span>
+                          <audio controls preload="none">
+                            <source
+                              src="./assets/audio/stealthiness/audio recorded by microphone with injection/benign_commercial_male.wav"
+                              type="audio/wav"
+                            />
+                          </audio>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+      </section>
+
+
+
+      <section class="section" id="implementation">
+        <h2>实现与代码</h2>
+        <p>
+          <span class="title-blue">Inject</span><span class="title-red">Eave</span> 完全由商用射频设备搭建：
+        </p>
+        <ul class="impl-list">
+          <li>
+            <strong>信号源：</strong>USRP B210，发射单音载波。
+          </li>
+          <li>
+            <strong>天线：</strong>一根用于注入（Tx），一根用于接收泄露（Rx）。
+          </li>
+          <li>
+            <strong>接收机：</strong>Siglent SSA3075X Plus 频谱分析仪，在注入载波频率处解调。
+          </li>
+          <li>
+            <strong>主机：</strong>一台控制 USRP 的笔记本电脑。
+          </li>
+          <li>
+            <strong>可选：</strong>一台低成本射频功率放大器，用于提高发射功率。
+          </li>
+        </ul>
+        <p>
+          以上均为入门级选择，每一项都可以替换为更高端的设备以进一步提升性能：<strong>相位噪声更低</strong>的信号源和频谱分析仪可以压低系统噪声底，<strong>功率更高</strong>的信号源和增益更高的功率放大器可以增强注入，<strong>方向性更强</strong>的天线可以将注入能量聚焦到目标并捕获更多返回的泄露，从而共同扩展可达的窃听距离。
+        </p>
+        <p>
+          接收到的信号可由基于分数的语音增强生成模型（SGMSE）增强，该模型通过滤除互调失真并抑制背景噪声来恢复可懂语音。模型已开源于
+          <a href="https://doi.org/10.5281/zenodo.20432240">Zenodo</a>。
+        </p>
+      </section>
+
+
+
+      <section class="section" id="faq">
+        <h2>常见问题</h2>
+        <div class="faq-list">
+          <details>
+            <summary>我应该在何时、多大程度上担心这种攻击？</summary>
+            <p>
+              只要存在处于工作状态的易受攻击模拟硬件，攻击者就可以注入载波并诱使其泄露信息，而无需物理接触或修改设备。我们的距离实验结果表明，
+              <span class="title-blue">Inject</span><span class="title-red">Eave</span>
+              对日常音频外设和常开型智能家居设备的威胁可能最为严重，攻击距离可达<strong>数十米</strong>。由于硬件非线性在计算机系统中不可避免，任何包含非线性组件的设备都可能暴露于该攻击。
+            </p>
+          </details>
+          <details>
+            <summary>这种激发式侧信道的更广泛影响是什么？</summary>
+            <p>
+              音频只是众多低频模拟隐私信号之一，此外还有设备功耗、驱动控制信号和模拟传感器输入。同样的"注入-调制-发射"机理适用于任何包含非线性组件的设备，而<strong>这种非线性在当代计算机系统中不可避免</strong>。因此，任何包含非线性组件的设备都可能暴露于该攻击。
+            </p>
+          </details>
+          <details>
+            <summary>有哪些可能的防御措施？</summary>
+            <p>
+              由于泄露来自模拟通路，<span class="title-blue">Inject</span><span class="title-red">Eave</span>
+              不受加密、掩码和随机化等数字防御的影响。双绞线布线、屏蔽和滤波等面向硬件的缓解措施可以降低注入载波耦合进入设备的能量，从而减少暴露面。这些措施提高了攻击门槛，但并不能保证免疫：由于激发式泄露随注入功率增大而增强，资源充足的攻击者往往可以通过更高功率的发射来克服这些措施。
+            </p>
+          </details>
+        </div>
+      </section>
+
+      <section class="section" id="contact">
+        <h2>联系方式</h2>
+        <div class="contact-content">
+          <p>
+            如有进一步问题或合作需求，欢迎通过电子邮件联系我们。
+          </p>
+          <div class="contact-list">
+            <div class="contact-person">
+              <span class="contact-name">闫浩然</span>
+              <button class="contact-copy" type="button" data-copy-email="hyan097@connect.hkust-gz.edu.cn" data-copy-success="已复制" title="点击复制" aria-label="复制闫浩然的邮箱">
+              <strong>hyan097@connect.hkust-gz.edu.cn</strong>
+              <em aria-live="polite"></em>
+              </button>
+            </div>
+            <div class="contact-person">
+              <a class="contact-name" href="https://yanlong.site/" target="_blank" rel="noopener">龙颜</a>
+              <button class="contact-copy" type="button" data-copy-email="yanlong@hkust-gz.edu.cn" data-copy-success="已复制" title="点击复制" aria-label="复制龙颜的邮箱">
+              <strong>yanlong@hkust-gz.edu.cn</strong>
+              <em aria-live="polite"></em>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <script type="text/plain" id="bibtex-source">% TODO: add final BibTeX for InjectEave, USENIX Security '26.</script>
+
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        document.body.classList.add("gsap-enhanced");
+
+        var nav = document.querySelector(".site-nav");
+        var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var passwordButton = document.querySelector(".password-check-button");
+        var passwordAnswer = document.querySelector("#overview-password");
+
+        if (passwordButton && passwordAnswer) {
+          passwordButton.addEventListener("click", function () {
+            passwordAnswer.hidden = false;
+            passwordButton.setAttribute("aria-expanded", "true");
+            passwordButton.disabled = true;
+          });
+        }
+
+        function fallbackCopyText(text) {
+          var textarea = document.createElement("textarea");
+          textarea.value = text;
+          textarea.setAttribute("readonly", "");
+          textarea.style.position = "fixed";
+          textarea.style.top = "-9999px";
+          document.body.appendChild(textarea);
+          textarea.focus();
+          textarea.select();
+          textarea.setSelectionRange(0, textarea.value.length);
+          var copied = document.execCommand("copy");
+          document.body.removeChild(textarea);
+          return copied ? Promise.resolve() : Promise.reject(new Error("Copy command failed"));
+        }
+
+        function copyTextToClipboard(text) {
+          var clipboard = window.navigator && window.navigator.clipboard;
+          if (clipboard && window.isSecureContext) {
+            return clipboard.writeText(text).catch(function () {
+              return fallbackCopyText(text);
+            });
+          }
+
+          return fallbackCopyText(text);
+        }
+
+        document.querySelectorAll("[data-copy-bibtex]").forEach(function (button) {
+          var label = button.querySelector("[data-copy-label]");
+          var defaultLabel = label ? label.textContent : "";
+          var successLabel = button.getAttribute("data-copy-success") || "Copied BibTeX";
+          var errorLabel = button.getAttribute("data-copy-error") || "Copy failed";
+
+          button.addEventListener("click", function () {
+            var bibtex = document.querySelector("#bibtex-source");
+            var text = bibtex ? bibtex.textContent.trim() : "";
+            if (!text) {
+              return;
+            }
+
+            copyTextToClipboard(text).then(function () {
+              button.classList.add("is-copied");
+              if (label) {
+                label.textContent = successLabel;
+              }
+
+              window.setTimeout(function () {
+                button.classList.remove("is-copied");
+                if (label) {
+                  label.textContent = defaultLabel;
+                }
+              }, 1600);
+            }).catch(function () {
+              if (label) {
+                label.textContent = errorLabel;
+              }
+            });
+          });
+        });
+
+        document.querySelectorAll("[data-copy-email]").forEach(function (button) {
+          var status = button.querySelector("em");
+          var defaultStatus = status ? status.textContent : "";
+          var successLabel = button.getAttribute("data-copy-success") || "Copied";
+          var email = button.getAttribute("data-copy-email") || "";
+
+          button.addEventListener("click", function () {
+            if (!email) {
+              return;
+            }
+
+            copyTextToClipboard(email).then(function () {
+              if (status) {
+                status.textContent = successLabel;
+              }
+
+              window.setTimeout(function () {
+                if (status) {
+                  status.textContent = defaultStatus;
+                }
+              }, 1600);
+            });
+          });
+        });
+
+        var progressEl = null;
+        if (nav && !nav.querySelector(".site-nav-progress")) {
+          var progress = document.createElement("span");
+          progress.className = "site-nav-progress";
+          progress.setAttribute("aria-hidden", "true");
+          nav.appendChild(progress);
+        }
+        progressEl = document.querySelector(".site-nav-progress");
+
+        function updateScrollProgress() {
+          if (!progressEl) {
+            return;
+          }
+
+          var maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+          var progress = Math.max(0, Math.min(1, window.scrollY / maxScroll));
+          progressEl.style.transform = "scaleX(" + progress.toFixed(4) + ")";
+        }
+
+        var updateNavState = function () {
+          if (nav) {
+            nav.classList.toggle("is-scrolled", window.scrollY > 8);
+          }
+          updateScrollProgress();
+        };
+        updateNavState();
+        window.addEventListener("scroll", updateNavState, { passive: true });
+
+        function getAnchorScrollTop(target) {
+          var navOffset = nav ? nav.offsetHeight : 0;
+          var top = target.getBoundingClientRect().top + window.scrollY;
+          return Math.max(0, top - navOffset - 18);
+        }
+
+        document.querySelectorAll("a[href^='#']").forEach(function (link) {
+          link.addEventListener("click", function (event) {
+            var href = link.getAttribute("href");
+            if (!href || href.length < 2) {
+              return;
+            }
+
+            var target = document.querySelector(href);
+            if (!target) {
+              return;
+            }
+
+            event.preventDefault();
+            window.scrollTo({
+              top: getAnchorScrollTop(target),
+              behavior: reduceMotion ? "auto" : "smooth"
+            });
+
+            if (link.closest(".site-nav-links")) {
+              setActiveNav(link);
+            }
+
+            if (history.pushState) {
+              history.pushState(null, "", href);
+            }
+          });
+        });
+
+        var navLinks = Array.prototype.slice.call(document.querySelectorAll(".site-nav-links a[href^='#']"));
+        var navTargets = navLinks
+          .map(function (link) {
+            return {
+              link: link,
+              target: document.querySelector(link.getAttribute("href"))
+            };
+          })
+          .filter(function (item) {
+            return item.target;
+          });
+
+        function setActiveNav(link) {
+          navLinks.forEach(function (item) {
+            item.classList.toggle("is-active", item === link);
+          });
+        }
+
+        function updateActiveNav() {
+          if (!navTargets.length) {
+            return;
+          }
+
+          var navOffset = nav ? nav.offsetHeight : 0;
+          var activationY = window.scrollY + navOffset + Math.min(96, window.innerHeight * 0.18);
+          var active = null;
+          var nearest = null;
+          var nearestDistance = Infinity;
+
+          navTargets.forEach(function (item) {
+            var targetTop = item.target.getBoundingClientRect().top + window.scrollY;
+            var distance = Math.abs(targetTop - activationY);
+
+            if (distance < nearestDistance) {
+              nearest = item;
+              nearestDistance = distance;
+            }
+
+            if (targetTop <= activationY) {
+              active = item;
+            }
+          });
+
+          var lastTarget = navTargets[navTargets.length - 1];
+          if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
+            active = lastTarget;
+          }
+
+          setActiveNav((active || nearest || navTargets[0]).link);
+        }
+
+        updateActiveNav();
+        window.addEventListener("scroll", updateActiveNav, { passive: true });
+        window.addEventListener("resize", updateActiveNav);
+
+        if (!window.gsap) {
+          return;
+        }
+
+        var gsap = window.gsap;
+        var ScrollTrigger = window.ScrollTrigger;
+        gsap.defaults({ duration: 0.65, ease: "power2.out" });
+
+        if (ScrollTrigger) {
+          gsap.registerPlugin(ScrollTrigger);
+        }
+
+        function wavePath(xStart, xEnd, yMid, amp, cycles, phase, envelopeFn) {
+          // Sample densely enough for the wave's frequency (>= ~14 points per
+          // cycle) so high-frequency carriers don't alias into jagged blobs.
+          var steps = Math.max(56, Math.ceil(cycles * 14));
+          var width = xEnd - xStart;
+          var d = "";
+
+          for (var i = 0; i <= steps; i += 1) {
+            var u = i / steps;
+            var env = envelopeFn ? envelopeFn(u) : 1;
+            var x = xStart + width * u;
+            var y = yMid - amp * env * Math.sin(Math.PI * 2 * cycles * u + phase);
+            d += (i === 0 ? "M" : "L") + x.toFixed(2) + " " + y.toFixed(2) + " ";
+          }
+
+          return d;
+        }
+
+        function envelopePath(xStart, xEnd, yMid, amp, phase, sign) {
+          var steps = 40;
+          var width = xEnd - xStart;
+          var d = "";
+
+          for (var i = 0; i <= steps; i += 1) {
+            var u = i / steps;
+            var env = 0.18 + 0.82 * (0.5 + 0.5 * Math.sin(Math.PI * 2 * 1.25 * u + phase));
+            var x = xStart + width * u;
+            var y = yMid + sign * amp * env;
+            d += (i === 0 ? "M" : "L") + x.toFixed(2) + " " + y.toFixed(2) + " ";
+          }
+
+          return d;
+        }
+
+        function setupNavSignalDemo() {
+          var demo = document.querySelector(".nav-signal-demo");
+          if (!demo) {
+            return;
+          }
+
+          var injectWave = demo.querySelector(".inject-wave");
+          var amWave = demo.querySelector(".am-wave");
+          var amEnvelopeTop = demo.querySelector(".am-envelope-top");
+          var amEnvelopeBottom = demo.querySelector(".am-envelope-bottom");
+          var carrierDot = demo.querySelector(".carrier-dot");
+          var reflectionDot = demo.querySelector(".reflection-dot");
+          var targetDeviceSymbol = demo.querySelector(".target-device-symbol");
+          var pulse = demo.querySelector(".target-device-pulse");
+          var innerWave = demo.querySelector(".target-device-curve");
+          var flowArrows = demo.querySelectorAll(".flow-arrow");
+
+          if (
+            !injectWave ||
+            !amWave ||
+            !amEnvelopeTop ||
+            !amEnvelopeBottom ||
+            !carrierDot ||
+            !reflectionDot ||
+            !targetDeviceSymbol ||
+            !pulse ||
+            !innerWave
+          ) {
+            return;
+          }
+
+          function drawSignal(time) {
+            var injectPhase = -time * 7.5;
+            var amPhase = -time * 11;
+            var envelopePhase = -time * 2.4;
+            var devicePhase = -time * 5.2;
+
+            injectWave.setAttribute("d", wavePath(10, 106, 32, 7, 2.4, injectPhase));
+            innerWave.setAttribute("d", wavePath(140, 160, 34, 7.5, 1.05, devicePhase));
+
+            var amEnvelope = function (u) {
+              return 0.18 + 0.82 * (0.5 + 0.5 * Math.sin(Math.PI * 2 * 1.25 * u + envelopePhase));
+            };
+
+            amWave.setAttribute("d", wavePath(190, 294, 32, 13, 9.5, amPhase, amEnvelope));
+            amEnvelopeTop.setAttribute("d", envelopePath(190, 294, 32, 13, envelopePhase, -1));
+            amEnvelopeBottom.setAttribute("d", envelopePath(190, 294, 32, 13, envelopePhase, 1));
+
+            var carrierT = (time * 0.38) % 1;
+            var carrierX = 10 + 96 * carrierT;
+            var carrierY = 32 - 7 * Math.sin(Math.PI * 2 * 2.4 * carrierT + injectPhase);
+            carrierDot.setAttribute("cx", carrierX.toFixed(2));
+            carrierDot.setAttribute("cy", carrierY.toFixed(2));
+
+            var reflectionT = (time * 0.28) % 1;
+            var envelope = amEnvelope(reflectionT);
+            var reflectionX = 190 + 104 * reflectionT;
+            var reflectionY = 32 - 13 * envelope * Math.sin(Math.PI * 2 * 9.5 * reflectionT + amPhase);
+            reflectionDot.setAttribute("cx", reflectionX.toFixed(2));
+            reflectionDot.setAttribute("cy", reflectionY.toFixed(2));
+          }
+
+          drawSignal(0);
+
+          if (reduceMotion) {
+            return;
+          }
+
+          gsap.to(targetDeviceSymbol, {
+            y: -1.5,
+            duration: 0.7,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
+          });
+
+          gsap.to(pulse, {
+            scale: 1.22,
+            autoAlpha: 0.25,
+            transformOrigin: "center center",
+            duration: 0.7,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
+          });
+
+          if (flowArrows.length) {
+            gsap.fromTo(
+              flowArrows,
+              { x: -4, autoAlpha: 0.35 },
+              {
+                x: 4,
+                autoAlpha: 1,
+                duration: 0.62,
+                repeat: -1,
+                ease: "sine.inOut",
+                stagger: 0.16
+              }
+            );
+          }
+
+          function closeEasterEgg(overlay) {
+            document.body.classList.remove("easter-egg-active");
+            if (overlay && overlay.parentNode) {
+              overlay.parentNode.removeChild(overlay);
+            }
+          }
+
+          function showEasterEgg() {
+            var existing = document.querySelector(".easter-egg-overlay");
+            if (existing) {
+              closeEasterEgg(existing);
+            }
+
+            var text = demo.getAttribute("data-easter-egg-text") || "老大哥正在看着你。";
+            var overlay = document.createElement("div");
+            var message = document.createElement("div");
+            var index = 0;
+
+            overlay.className = "easter-egg-overlay";
+            overlay.setAttribute("role", "dialog");
+            overlay.setAttribute("aria-modal", "true");
+            overlay.setAttribute("aria-label", text);
+            message.className = "easter-egg-message";
+            overlay.appendChild(message);
+            document.body.appendChild(overlay);
+            document.body.classList.add("easter-egg-active");
+
+            function onEscape(event) {
+              if (event.key === "Escape") {
+                window.clearInterval(timer);
+                closeEasterEgg(overlay);
+                document.removeEventListener("keydown", onEscape);
+              }
+            }
+
+            var timer = window.setInterval(function () {
+              index += 1;
+              message.textContent = text.slice(0, index);
+              if (index >= text.length) {
+                window.clearInterval(timer);
+              }
+            }, 55);
+
+            overlay.addEventListener("click", function () {
+              window.clearInterval(timer);
+              closeEasterEgg(overlay);
+              document.removeEventListener("keydown", onEscape);
+            });
+
+            document.addEventListener("keydown", onEscape);
+          }
+
+          demo.addEventListener("click", showEasterEgg);
+          demo.addEventListener("keydown", function (event) {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              showEasterEgg();
+            }
+          });
+
+          gsap.ticker.add(drawSignal);
+        }
+
+        function setupFigureWaveAnimations() {
+          var dynamicWaves = Array.prototype.slice.call(document.querySelectorAll(".figure-wave-overlay .dynamic-wave, .model-key-svg .dynamic-wave"));
+          var traceFlows = Array.prototype.slice.call(document.querySelectorAll(".figure-wave-overlay .trace-flow"));
+
+          if (!dynamicWaves.length && !traceFlows.length) {
+            return;
+          }
+
+          function readNumber(element, name, fallback) {
+            var value = parseFloat(element.getAttribute(name));
+            return Number.isFinite(value) ? value : fallback;
+          }
+
+          function drawFigureWaves(time) {
+            dynamicWaves.forEach(function (wave) {
+              var xStart = readNumber(wave, "data-x1", 0);
+              var xEnd = readNumber(wave, "data-x2", 100);
+              var yMid = readNumber(wave, "data-y", 50);
+              var amp = readNumber(wave, "data-amp", 10);
+              var cycles = readNumber(wave, "data-cycles", 2);
+              var speed = readNumber(wave, "data-speed", 4);
+              var phase = -time * speed;
+              var envelopeFn = null;
+
+              if (wave.getAttribute("data-envelope") === "am") {
+                envelopeFn = function (u) {
+                  return 0.32 + 0.68 * (0.5 + 0.5 * Math.sin(Math.PI * 2 * 2.1 * u - time * 2.2));
+                };
+              }
+
+              wave.setAttribute("d", wavePath(xStart, xEnd, yMid, amp, cycles, phase, envelopeFn));
+            });
+          }
+
+          drawFigureWaves(0);
+
+          if (reduceMotion) {
+            return;
+          }
+
+          if (traceFlows.length) {
+            gsap.to(traceFlows, {
+              strokeDashoffset: -144,
+              duration: 1.9,
+              repeat: -1,
+              ease: "none",
+              stagger: 0.08
+            });
+          }
+
+          gsap.ticker.add(drawFigureWaves);
+        }
+
+        function setupFaqAnimations() {
+          document.querySelectorAll(".faq-list details").forEach(function (details) {
+            var summary = details.querySelector("summary");
+            var content = Array.prototype.slice.call(details.children).filter(function (child) {
+              return child !== summary;
+            });
+
+            if (!summary || !content.length) {
+              return;
+            }
+
+            summary.addEventListener("click", function (event) {
+              event.preventDefault();
+
+              if (details._faqTween) {
+                details._faqTween.kill();
+              }
+
+              var isOpen = details.hasAttribute("open");
+              if (isOpen) {
+                var openHeight = details.offsetHeight;
+                var closedHeight = summary.offsetHeight;
+
+                details._faqTween = gsap.timeline({
+                  onUpdate: function () {
+                    updateActiveNav();
+                    updateNavState();
+                  },
+                  onComplete: function () {
+                    details.removeAttribute("open");
+                    gsap.set(details, { clearProps: "height,overflow" });
+                    gsap.set(content, { clearProps: "autoAlpha,y" });
+                    details._faqTween = null;
+                    if (ScrollTrigger) {
+                      ScrollTrigger.refresh();
+                    }
+                    window.requestAnimationFrame(updateActiveNav);
+                  }
+                });
+
+                details._faqTween
+                  .set(details, { height: openHeight, overflow: "hidden" })
+                  .to(content, { autoAlpha: 0, y: -4, duration: 0.14, ease: "power1.out" }, 0)
+                  .to(details, { height: closedHeight, duration: 0.28, ease: "power2.inOut" }, 0);
+              } else {
+                details.setAttribute("open", "");
+
+                var startHeight = summary.offsetHeight;
+                var targetHeight = details.offsetHeight;
+
+                details._faqTween = gsap.timeline({
+                  onUpdate: function () {
+                    updateActiveNav();
+                    updateNavState();
+                  },
+                  onComplete: function () {
+                    gsap.set(details, { clearProps: "height,overflow" });
+                    gsap.set(content, { clearProps: "autoAlpha,y" });
+                    details._faqTween = null;
+                    if (ScrollTrigger) {
+                      ScrollTrigger.refresh();
+                    }
+                    window.requestAnimationFrame(updateActiveNav);
+                  }
+                });
+
+                details._faqTween
+                  .set(details, { height: startHeight, overflow: "hidden" })
+                  .set(content, { autoAlpha: 0, y: -4 })
+                  .to(details, { height: targetHeight, duration: 0.3, ease: "power2.out" }, 0)
+                  .to(content, { autoAlpha: 1, y: 0, duration: 0.22, ease: "power2.out" }, 0.08);
+              }
+            });
+          });
+        }
+
+        if (reduceMotion) {
+          if (ScrollTrigger) {
+            ScrollTrigger.refresh();
+          }
+          setupNavSignalDemo();
+          setupFigureWaveAnimations();
+          return;
+        }
+
+        setupNavSignalDemo();
+        setupFigureWaveAnimations();
+        setupFaqAnimations();
+
+        var intro = gsap.timeline({ defaults: { ease: "power2.out" } });
+        intro
+          .from(".site-nav", { autoAlpha: 0, y: -10, duration: 0.45 })
+          .from(".page-header h1", { autoAlpha: 0, y: 18, duration: 0.7 }, "-=0.2")
+          .from(".hero-author-list li", { autoAlpha: 0, y: 10, stagger: 0.045, duration: 0.38 }, "-=0.25")
+          .from(".hero-affils", { autoAlpha: 0, y: 10, duration: 0.4 }, "-=0.15")
+          .from([".page-header #summary", ".hero-summary"], { autoAlpha: 0, y: 12, stagger: 0.08, duration: 0.5 }, "-=0.1");
+
+        if (!ScrollTrigger) {
+          return;
+        }
+
+        gsap.set(".section", { autoAlpha: 0.96, y: 14 });
+        ScrollTrigger.batch(".section", {
+          start: "top 86%",
+          once: true,
+          onEnter: function (batch) {
+            gsap.to(batch, {
+              autoAlpha: 1,
+              y: 0,
+              stagger: 0.06,
+              duration: 0.55,
+              overwrite: "auto",
+              clearProps: "visibility"
+            });
+          }
+        });
+
+        gsap.set(".panel, .media-card, .case-card, .figure-block, .devices-figure", { autoAlpha: 0, y: 18 });
+        ScrollTrigger.batch(".panel, .media-card, .case-card, .figure-block, .devices-figure", {
+          start: "top 88%",
+          once: true,
+          interval: 0.08,
+          batchMax: 5,
+          onEnter: function (batch) {
+            gsap.to(batch, {
+              autoAlpha: 1,
+              y: 0,
+              stagger: 0.05,
+              duration: 0.52,
+              overwrite: "auto",
+              clearProps: "visibility"
+            });
+          }
+        });
+
+        document.querySelectorAll(".figure-block img").forEach(function (image) {
+          gsap.fromTo(image, { scale: 0.992 }, {
+            scale: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: image,
+              start: "top 92%",
+              end: "bottom 35%",
+              scrub: 0.6
+            }
+          });
+        });
+
+        document.querySelectorAll(".media-card, .case-card, .panel").forEach(function (card) {
+          card.addEventListener("mouseenter", function () {
+            gsap.to(card, { y: -3, duration: 0.18, overwrite: "auto" });
+          });
+          card.addEventListener("mouseleave", function () {
+            gsap.to(card, { y: 0, duration: 0.22, overwrite: "auto" });
+          });
+        });
+
+        ScrollTrigger.create({
+          trigger: document.documentElement,
+          start: "top top",
+          end: "bottom bottom",
+          onUpdate: updateActiveNav,
+          onRefresh: updateActiveNav
+        });
+
+        window.addEventListener("load", function () {
+          ScrollTrigger.refresh();
+        });
+      });
+    </script>
+  </body>
+</html>
