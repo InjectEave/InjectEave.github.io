@@ -120,7 +120,7 @@
     <link rel="stylesheet" href="./styles.css?v=bilingual-revision" />
     <style>
       html[lang="zh-CN"] body {
-        font-family: "Times New Roman", "宋体", SimSun, serif;
+        font-family: "Times New Roman", "楷体", KaiTi, serif;
       }
       .gsap-enhanced .site-nav {
         transition: box-shadow 180ms ease, border-color 180ms ease;
@@ -619,7 +619,7 @@
           <li><a href="#contact">联系方式</a></li>
           <li><a class="lang-switch" href="./index.html" lang="en" aria-label="Switch to the English page">English</a></li>
         </ul>
-        <div class="nav-signal-demo" role="button" tabindex="0" aria-label="触发彩蛋" data-easter-egg-text="老大哥正在看着你。">
+        <div class="nav-signal-demo" role="button" tabindex="0" aria-label="触发彩蛋" data-easter-egg-text="隔墙有耳。">
           <svg viewBox="0 0 300 64" role="img">
             <line class="signal-baseline" x1="8" y1="32" x2="292" y2="32" />
             <path class="inject-wave" d="" />
@@ -2595,7 +2595,7 @@
               closeEasterEgg(existing);
             }
 
-            var text = demo.getAttribute("data-easter-egg-text") || "老大哥正在看着你。";
+            var text = demo.getAttribute("data-easter-egg-text") || "隔墙有耳。";
             var overlay = document.createElement("div");
             var message = document.createElement("div");
             var index = 0;
