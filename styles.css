@@ -949,18 +949,45 @@ video {
   border-bottom-color: #0a4ea2;
 }
 
-.site-nav-links a.lang-switch {
+.site-nav-links a.lang-switch,
+.nav-lang-button {
   border: 1px solid #c5d6ea;
   border-radius: 999px;
   padding: 2px 10px;
   color: #0a4ea2;
   font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 .site-nav-links a.lang-switch:hover,
-.site-nav-links a.lang-switch:focus-visible {
+.site-nav-links a.lang-switch:focus-visible,
+.nav-lang-button:hover,
+.nav-lang-button:focus-visible {
   background: #f5f9ff;
   border-color: #0a4ea2;
+}
+
+.theme-toggle {
+  flex: 0 0 auto;
+  border: 1px solid #c5d6ea;
+  border-radius: 999px;
+  padding: 4px 11px;
+  background: #fff;
+  color: #0a4ea2;
+  font: inherit;
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  border-color: #0a4ea2;
+  background: #f5f9ff;
+  outline: 2px solid transparent;
 }
 
 .nav-signal-demo {
@@ -1009,6 +1036,35 @@ body.easter-egg-active > :not(.easter-egg-overlay) {
   background: currentColor;
   vertical-align: -0.08em;
   animation: caret-blink 0.8s steps(1) infinite;
+}
+
+.easter-egg-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(160px, 260px);
+  align-items: center;
+  gap: 26px;
+  max-width: min(980px, 92vw);
+  padding: 22px;
+  border: 1px solid rgba(173, 31, 31, 0.2);
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 24px 70px rgba(20, 37, 63, 0.16);
+  backdrop-filter: blur(4px);
+  text-align: left;
+}
+
+.easter-egg-card .easter-egg-message {
+  max-width: none;
+  font-size: clamp(1.35rem, 4.4vw, 3.2rem);
+  line-height: 1.15;
+  text-transform: none;
+}
+
+.easter-egg-card img {
+  width: 100%;
+  max-height: 360px;
+  object-fit: cover;
+  border: 1px solid rgba(17, 17, 17, 0.18);
+  filter: grayscale(100%);
 }
 
 @keyframes caret-blink {
@@ -1862,6 +1918,255 @@ a.contact-name:focus-visible {
   text-align: justify;
 }
 
+html.shielded-mode {
+  color-scheme: dark;
+}
+
+html.shielded-mode body {
+  background:
+    linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.88)),
+    repeating-linear-gradient(0deg, rgba(148, 163, 184, 0.045) 0, rgba(148, 163, 184, 0.045) 1px, transparent 1px, transparent 22px),
+    repeating-linear-gradient(90deg, rgba(56, 189, 248, 0.035) 0, rgba(56, 189, 248, 0.035) 1px, transparent 1px, transparent 34px),
+    #0f172a;
+  color: #e5e7eb;
+}
+
+html.shielded-mode .site-nav {
+  border-bottom-color: #334155;
+  background: rgba(15, 23, 42, 0.94);
+}
+
+html.shielded-mode.gsap-enhanced .site-nav.is-scrolled,
+html.shielded-mode .gsap-enhanced .site-nav.is-scrolled {
+  border-bottom-color: #475569 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28) !important;
+}
+
+html.shielded-mode .page-header::after,
+html.shielded-mode .section + .section,
+html.shielded-mode .contact-person {
+  border-color: #334155;
+}
+
+html.shielded-mode .site-nav-brand,
+html.shielded-mode .site-nav-links a,
+html.shielded-mode a {
+  color: #93c5fd;
+}
+
+html.shielded-mode .brand-eave,
+html.shielded-mode .title-red,
+html.shielded-mode .password-answer,
+html.shielded-mode .case3-explain .risk-word {
+  color: #fca5a5;
+}
+
+html.shielded-mode .title-blue,
+html.shielded-mode #part1 h2,
+html.shielded-mode .demo-link-list.part1 a,
+html.shielded-mode .faq-list summary {
+  color: #93c5fd;
+}
+
+html.shielded-mode #part2 h2,
+html.shielded-mode .demo-link-list.part2 a {
+  color: #86efac;
+}
+
+html.shielded-mode #part3 h2,
+html.shielded-mode .demo-link-list.part3 a,
+html.shielded-mode #part6 h2 {
+  color: #facc15;
+}
+
+html.shielded-mode #part4 h2,
+html.shielded-mode .demo-link-list.part4 a {
+  color: #fca5a5;
+}
+
+html.shielded-mode #part5 h2,
+html.shielded-mode .demo-link-list.part5 a {
+  color: #c4b5fd;
+}
+
+html.shielded-mode .site-nav-links a:hover,
+html.shielded-mode .site-nav-links a:focus-visible,
+html.shielded-mode .site-nav-links a.is-active {
+  color: #bfdbfe;
+  border-bottom-color: #60a5fa;
+}
+
+html.shielded-mode .site-nav-links a.lang-switch,
+html.shielded-mode .nav-lang-button,
+html.shielded-mode .theme-toggle,
+html.shielded-mode .password-check-button,
+html.shielded-mode .overview-card {
+  border-color: #475569;
+  background: #111827;
+  color: #bfdbfe;
+}
+
+html.shielded-mode .site-nav-links a.lang-switch:hover,
+html.shielded-mode .site-nav-links a.lang-switch:focus-visible,
+html.shielded-mode .nav-lang-button:hover,
+html.shielded-mode .nav-lang-button:focus-visible,
+html.shielded-mode .theme-toggle:hover,
+html.shielded-mode .theme-toggle:focus-visible,
+html.shielded-mode .password-check-button:hover,
+html.shielded-mode .password-check-button:focus,
+html.shielded-mode .overview-card:hover,
+html.shielded-mode .overview-card:focus-visible,
+html.shielded-mode .overview-card.is-copied {
+  border-color: #60a5fa;
+  background: #172033;
+  color: #dbeafe;
+}
+
+html.shielded-mode .panel,
+html.shielded-mode .media-card,
+html.shielded-mode .case-card,
+html.shielded-mode .faq-list details,
+html.shielded-mode .demo-nav-heading,
+html.shielded-mode .figure-block,
+html.shielded-mode .devices-figure,
+html.shielded-mode .case3-explain,
+html.shielded-mode .scope-note,
+html.shielded-mode .method-note,
+html.shielded-mode .metric,
+html.shielded-mode .pipeline-steps li,
+html.shielded-mode .callout,
+html.shielded-mode .caveat,
+html.shielded-mode .wave-key-panel,
+html.shielded-mode .model-key-panel,
+html.shielded-mode .result-card,
+html.shielded-mode .contact-content,
+html.shielded-mode .demo-link-group {
+  border-color: #334155;
+  background: rgba(17, 24, 39, 0.92);
+  color: #e5e7eb;
+}
+
+html.shielded-mode .demo-link-list a {
+  border-color: #263244;
+  background: rgba(15, 23, 42, 0.78);
+}
+
+html.shielded-mode .demo-link-list a:hover,
+html.shielded-mode .demo-link-list a:focus-visible {
+  border-color: #60a5fa;
+  background: rgba(30, 41, 59, 0.96);
+}
+
+html.shielded-mode .demo-link-group h4,
+html.shielded-mode .demo-nav-heading h3,
+html.shielded-mode .overview-card-title,
+html.shielded-mode .contact-name,
+html.shielded-mode a.contact-name:hover,
+html.shielded-mode a.contact-name:focus-visible,
+html.shielded-mode .contact-copy,
+html.shielded-mode .data-table thead th {
+  color: #f8fafc;
+}
+
+html.shielded-mode .demo-nav-heading p,
+html.shielded-mode .section-lead,
+html.shielded-mode .paper-note,
+html.shielded-mode .overview-resource-note,
+html.shielded-mode .password-prompt,
+html.shielded-mode .figure-block figcaption,
+html.shielded-mode .figure-legend,
+html.shielded-mode .table-caption,
+html.shielded-mode .data-table .table-caption,
+html.shielded-mode .audio-sub-label,
+html.shielded-mode .contact-list strong,
+html.shielded-mode .contact-list em,
+html.shielded-mode .muted,
+html.shielded-mode .results-table .muted,
+html.shielded-mode .metric-label,
+html.shielded-mode .model-key-row span,
+html.shielded-mode .demo-link-list a span,
+html.shielded-mode .demo-link-icon {
+  color: #cbd5e1;
+}
+
+html.shielded-mode .wave-key-row strong,
+html.shielded-mode .model-key-row strong,
+html.shielded-mode .step-tag {
+  color: #93c5fd;
+}
+
+html.shielded-mode .metric-num {
+  color: #fca5a5;
+}
+
+html.shielded-mode .contact-copy:hover,
+html.shielded-mode .contact-copy:focus-visible {
+  color: #93c5fd;
+}
+
+html.shielded-mode .audio-table,
+html.shielded-mode .data-table,
+html.shielded-mode .results-table {
+  color: #e5e7eb;
+}
+
+html.shielded-mode .audio-table th,
+html.shielded-mode .audio-table td,
+html.shielded-mode .data-table th,
+html.shielded-mode .data-table td,
+html.shielded-mode .results-table th,
+html.shielded-mode .results-table td {
+  border-color: #475569;
+}
+
+html.shielded-mode .audio-table th,
+html.shielded-mode .results-table th,
+html.shielded-mode .data-table thead th,
+html.shielded-mode .data-table tbody tr.grp > td {
+  background: #1e293b;
+}
+
+html.shielded-mode .case1-figure,
+html.shielded-mode .case1-table-wrap,
+html.shielded-mode .case2-figure,
+html.shielded-mode .case2-table-wrap,
+html.shielded-mode .stealth-figure,
+html.shielded-mode .stealth-table-wrap,
+html.shielded-mode .case3-figure,
+html.shielded-mode .case3-secondary-wrap,
+html.shielded-mode .table-wrap {
+  border-color: #475569;
+  background: rgba(15, 23, 42, 0.72);
+}
+
+html.shielded-mode .figure-block img,
+html.shielded-mode .devices-figure img {
+  background: #e5e7eb;
+}
+
+html.shielded-mode video,
+html.shielded-mode audio {
+  border-color: #475569;
+  background: #020617;
+  color-scheme: dark;
+}
+
+html.shielded-mode .easter-egg-overlay {
+  background: rgba(15, 23, 42, 0.58);
+  color: #f8fafc;
+}
+
+html.shielded-mode .easter-egg-card {
+  border-color: rgba(96, 165, 250, 0.28);
+  background: rgba(15, 23, 42, 0.82);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+}
+
+html.shielded-mode .skip-link {
+  background: #93c5fd;
+  color: #020617;
+}
+
 @media (max-width: 940px) {
   .site-nav-inner {
     width: 94vw;
@@ -2113,6 +2418,19 @@ a.contact-name:focus-visible {
     grid-template-columns: 1fr;
   }
 
+  .easter-egg-card {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .easter-egg-card img {
+    max-width: 190px;
+    max-height: 240px;
+    margin: 0 auto;
+  }
+
   /* Justification hurts readability on narrow screens; fall back to left. */
   .hero-summary,
   .key-concept-box p,
@@ -2155,4 +2473,3 @@ a.contact-name:focus-visible {
     min-width: 560px;
   }
 }
-

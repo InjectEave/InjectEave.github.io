@@ -117,6 +117,23 @@
       }
     </script>
 
+    <script>
+      (function () {
+        var storageKey = "injecteave-theme-mode";
+        var storedMode = null;
+
+        try {
+          storedMode = window.localStorage.getItem(storageKey);
+        } catch (error) {
+          storedMode = null;
+        }
+
+        var preferShielded = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (storedMode === "shielded" || (!storedMode && preferShielded)) {
+          document.documentElement.classList.add("shielded-mode");
+        }
+      }());
+    </script>
     <link rel="stylesheet" href="./styles.css?v=bilingual-revision" />
     <style>
       html[lang="zh-CN"] body {
@@ -617,8 +634,9 @@
           <li><a href="#implementation">实现</a></li>
           <li><a href="#faq">常见问题</a></li>
           <li><a href="#contact">联系方式</a></li>
-          <li><a class="lang-switch" href="./index.html" lang="en" aria-label="Switch to the English page">English</a></li>
         </ul>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换到屏蔽模式">屏蔽模式</button>
+        <a class="lang-switch nav-lang-button" href="./index.html" lang="en" aria-label="Switch to the English page">English</a>
         <div class="nav-signal-demo" role="button" tabindex="0" aria-label="触发彩蛋" data-easter-egg-text="隔墙有耳。">
           <svg viewBox="0 0 300 64" role="img">
             <line class="signal-baseline" x1="8" y1="32" x2="292" y2="32" />
@@ -2218,6 +2236,38 @@
     <script type="text/plain" id="bibtex-source">% TODO: add final BibTeX for InjectEave, USENIX Security '26.</script>
 
     <script>
+      (function () {
+        var title = "InjectEave Lab Console";
+        var spectrum = [
+          "Noise floor:    ▁▁▂▁▁▁▁▂▁",
+          "Carrier:        ▁▁▁▁▁█▁▁▁",
+          "Sidebands:      ▁▁▃▁▁█▁▃▁",
+          "",
+          "Injection-Modulation-Emission",
+          "Research use only. Do not perform unauthorized experiments."
+        ].join("\n");
+
+        function printConsoleEasterEgg() {
+          if (!window.console || typeof window.console.log !== "function") {
+            return;
+          }
+
+          try {
+            window.console.log("%c" + title + "%c\n" + spectrum, "color: #0a4ea2; font-weight: 700;", "color: #333;");
+          } catch (error) {
+            window.console.log(title + "\n" + spectrum);
+          }
+        }
+
+        if (document.readyState === "complete") {
+          printConsoleEasterEgg();
+        } else {
+          window.addEventListener("load", printConsoleEasterEgg, { once: true });
+        }
+      }());
+    </script>
+
+    <script>
       window.addEventListener("DOMContentLoaded", function () {
         document.body.classList.add("gsap-enhanced");
 
@@ -2225,6 +2275,175 @@
         var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         var passwordButton = document.querySelector(".password-check-button");
         var passwordAnswer = document.querySelector("#overview-password");
+
+        function setupThemeToggle() {
+          var toggle = document.querySelector("[data-theme-toggle]");
+          var storageKey = "injecteave-theme-mode";
+          var mediaQuery = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+
+          function getStoredMode() {
+            try {
+              return window.localStorage.getItem(storageKey);
+            } catch (error) {
+              return null;
+            }
+          }
+
+          function storeMode(mode) {
+            try {
+              window.localStorage.setItem(storageKey, mode);
+            } catch (error) {
+              return;
+            }
+          }
+
+          function preferredMode() {
+            return mediaQuery && mediaQuery.matches ? "shielded" : "lab";
+          }
+
+          function applyMode(mode, shouldStore) {
+            var shielded = mode === "shielded";
+            document.documentElement.classList.toggle("shielded-mode", shielded);
+
+            if (toggle) {
+              toggle.textContent = shielded ? "实验室模式" : "屏蔽模式";
+              toggle.setAttribute("aria-label", shielded ? "切换到实验室模式" : "切换到屏蔽模式");
+              toggle.setAttribute("aria-pressed", shielded ? "true" : "false");
+            }
+
+            if (shouldStore) {
+              storeMode(mode);
+            }
+          }
+
+          applyMode(getStoredMode() || preferredMode(), false);
+
+          if (toggle) {
+            toggle.addEventListener("click", function () {
+              var nextMode = document.documentElement.classList.contains("shielded-mode") ? "lab" : "shielded";
+              applyMode(nextMode, true);
+            });
+          }
+
+          if (mediaQuery && typeof mediaQuery.addEventListener === "function") {
+            mediaQuery.addEventListener("change", function () {
+              if (!getStoredMode()) {
+                applyMode(preferredMode(), false);
+              }
+            });
+          }
+        }
+
+        setupThemeToggle();
+
+        function setupLogoEasterEgg() {
+          var brand = document.querySelector(".site-nav-brand");
+          var clickCount = 0;
+          var firstClickAt = 0;
+          var resetTimer = null;
+          var hertzText = "你可能不知道，第一个发现无线电波的人是海因里希·赫兹。";
+          var hertzImage = "https://upload.wikimedia.org/wikipedia/commons/c/cc/Heinrich-hertz.jpg";
+
+          function resetClicks() {
+            clickCount = 0;
+            firstClickAt = 0;
+            if (resetTimer) {
+              window.clearTimeout(resetTimer);
+              resetTimer = null;
+            }
+          }
+
+          function closeLogoEasterEgg(overlay) {
+            document.body.classList.remove("easter-egg-active");
+            if (overlay && overlay.parentNode) {
+              overlay.parentNode.removeChild(overlay);
+            }
+          }
+
+          function showHertzEasterEgg() {
+            var existing = document.querySelector(".easter-egg-overlay");
+            if (existing) {
+              closeLogoEasterEgg(existing);
+            }
+
+            var overlay = document.createElement("div");
+            var card = document.createElement("div");
+            var message = document.createElement("div");
+            var image = document.createElement("img");
+            var index = 0;
+
+            overlay.className = "easter-egg-overlay";
+            overlay.setAttribute("role", "dialog");
+            overlay.setAttribute("aria-modal", "true");
+            overlay.setAttribute("aria-label", hertzText);
+            card.className = "easter-egg-card";
+            message.className = "easter-egg-message";
+            image.src = hertzImage;
+            image.alt = "海因里希·赫兹肖像";
+            image.loading = "lazy";
+            image.decoding = "async";
+            card.appendChild(message);
+            card.appendChild(image);
+            overlay.appendChild(card);
+            document.body.appendChild(overlay);
+            document.body.classList.add("easter-egg-active");
+
+            function onEscape(event) {
+              if (event.key === "Escape") {
+                window.clearInterval(timer);
+                closeLogoEasterEgg(overlay);
+                document.removeEventListener("keydown", onEscape);
+              }
+            }
+
+            var timer = window.setInterval(function () {
+              index += 1;
+              message.textContent = hertzText.slice(0, index);
+              if (index >= hertzText.length) {
+                window.clearInterval(timer);
+              }
+            }, 55);
+
+            overlay.addEventListener("click", function () {
+              window.clearInterval(timer);
+              closeLogoEasterEgg(overlay);
+              document.removeEventListener("keydown", onEscape);
+            });
+
+            document.addEventListener("keydown", onEscape);
+          }
+
+          function recordLogoClick() {
+            var now = window.Date.now();
+
+            if (!firstClickAt || now - firstClickAt > 2000) {
+              resetClicks();
+              firstClickAt = now;
+              resetTimer = window.setTimeout(resetClicks, 2000);
+            }
+
+            clickCount += 1;
+
+            if (clickCount >= 3) {
+              showHertzEasterEgg();
+              resetClicks();
+            }
+          }
+
+          if (!brand) {
+            return;
+          }
+
+          brand.addEventListener("click", recordLogoClick);
+          brand.addEventListener("keydown", function (event) {
+            if (event.key === " ") {
+              event.preventDefault();
+              brand.click();
+            }
+          });
+        }
+
+        setupLogoEasterEgg();
 
         if (passwordButton && passwordAnswer) {
           passwordButton.addEventListener("click", function () {
