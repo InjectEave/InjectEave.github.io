@@ -1640,6 +1640,7 @@ h2 {
 .data-table th:last-child {
   white-space: nowrap;
 }
+
 .affected-intro {
   max-width: 62rem;
   margin: 0 auto 18px;
