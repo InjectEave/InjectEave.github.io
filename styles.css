@@ -2168,6 +2168,26 @@ html.shielded-mode .skip-link {
   color: #020617;
 }
 
+html.shielded-mode .hero-author-list li {
+  color: #e5e7eb;
+}
+
+html.shielded-mode .author-name {
+  color: #e5e7eb;
+}
+
+html.shielded-mode a.author-name {
+  color: #e5e7eb;
+}
+
+html.shielded-mode a.author-name:hover {
+  color: #93c5fd;
+}
+
+html.shielded-mode .affil-mark {
+  color: #94a3b8;
+}
+
 @media (max-width: 940px) {
   .site-nav-inner {
     width: 94vw;
