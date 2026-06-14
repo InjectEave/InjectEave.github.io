@@ -664,7 +664,7 @@
 
     <header class="page-header" id="top">
       <h1>
-        <span class="title-blue">主动注入</span>，<span class="title-red">激发泄漏</span>：<br />
+        <span class="title-inject-wrap"><span class="title-arrow-in title-arrow-left" aria-hidden="true"></span><span class="title-blue title-inject-word">主动注入</span><span class="title-arrow-in title-arrow-right" aria-hidden="true"></span></span><span class="title-and-bounce">，</span><span class="title-leak-wrap"><span class="title-arrow-out title-arrow-left" aria-hidden="true"></span><span class="title-red title-leak-word">激发泄漏</span><span class="title-arrow-out title-arrow-right" aria-hidden="true"></span></span>：<br />
         <span class="title-subtitle"
           >利用电磁注入与硬件非线性主动诱导侧信道泄漏</span
         >
@@ -2324,6 +2324,14 @@
 
         setupThemeToggle();
 
+        function replayTitleAnimation() {
+          var h1 = document.querySelector(".page-header h1");
+          if (!h1) return;
+          h1.classList.remove("title-animate");
+          void h1.offsetWidth;
+          h1.classList.add("title-animate");
+        }
+
         function setupLogoEasterEgg() {
           var brand = document.querySelector(".site-nav-brand");
           var clickCount = 0;
@@ -2403,6 +2411,7 @@
 
           function recordLogoClick() {
             var now = window.Date.now();
+            replayTitleAnimation();
 
             if (!firstClickAt || now - firstClickAt > 2000) {
               resetClicks();
@@ -2432,6 +2441,13 @@
         }
 
         setupLogoEasterEgg();
+
+        var titleH1 = document.querySelector(".page-header h1");
+        if (titleH1) {
+          window.setTimeout(function () {
+            titleH1.classList.add("title-animate");
+          }, 100);
+        }
 
         if (passwordButton && passwordAnswer) {
           passwordButton.addEventListener("click", function () {
@@ -2997,7 +3013,7 @@
         var intro = gsap.timeline({ defaults: { ease: "power2.out" } });
         intro
           .from(".site-nav", { autoAlpha: 0, y: -10, duration: 0.45 })
-          .from(".page-header h1", { autoAlpha: 0, y: 18, duration: 0.7 }, "-=0.2")
+          .from(".page-header h1", { y: 18, duration: 0.7 }, "-=0.2")
           .from(".hero-author-list li", { autoAlpha: 0, y: 10, stagger: 0.045, duration: 0.38 }, "-=0.25")
           .from(".hero-affils", { autoAlpha: 0, y: 10, duration: 0.4 }, "-=0.15")
           .from([".page-header #summary", ".hero-summary"], { autoAlpha: 0, y: 12, stagger: 0.08, duration: 0.5 }, "-=0.1");
