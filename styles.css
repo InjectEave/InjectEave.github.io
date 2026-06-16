@@ -2636,10 +2636,6 @@ html.shielded-mode .affil-mark {
 @keyframes inject-converge {
   0% {
     font-size: 3em;
-    opacity: 0.3;
-  }
-  16.67% {
-    font-size: 3em;
     opacity: 1;
   }
   33.33% {
@@ -2742,15 +2738,15 @@ html.shielded-mode .affil-mark {
 @keyframes ray-converge {
   0% {
     opacity: 0.8;
-    transform: translate(-50%, -50%) scale(0.5);
+    transform: translate(-50%, -50%) scale(1.5);
   }
-  83.33% {
+  33.33% {
     opacity: 0.8;
     transform: translate(-50%, -50%) scale(1.5);
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(1.5);
+    transform: translate(-50%, -50%) scale(0.5);
   }
 }
 
