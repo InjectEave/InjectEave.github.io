@@ -1090,41 +1090,42 @@ body.easter-egg-active > :not(.easter-egg-overlay) {
   line-height: 1.45;
 }
 
-.overview-resource-note {
-  max-width: 60rem;
-  margin: 24px auto 0;
-  color: #333;
-  font-size: 1rem;
-  line-height: 1.5;
-  text-align: center;
-}
-
 .overview-cards {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  max-width: 60rem;
-  margin: 14px auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 52rem;
+  margin: 18px auto 10px;
 }
 
 .overview-card {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 42px;
-  padding: 8px 14px;
-  border: 1px solid #9fd5ed;
-  border-radius: 8px;
-  background: #dff4fd;
+  min-height: 38px;
+  min-width: 9.25rem;
+  padding: 8px 18px;
+  border: 1px solid #b8c8dd;
+  border-radius: 999px;
+  background: #fff;
   color: #0a4ea2;
+  font-family: Arial, Helvetica, sans-serif;
   text-align: center;
   text-decoration: none;
-  transition: background 140ms ease, border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
+  box-shadow: 0 1px 2px rgba(10, 78, 162, 0.06);
+  transition: background 140ms ease, border-color 140ms ease, box-shadow 140ms ease, color 140ms ease, transform 140ms ease;
+}
+
+.overview-card-conference {
+  border-color: #ad1f1f;
+  background: #ad1f1f;
+  color: #fff;
 }
 
 .overview-card-button {
-  width: 100%;
   font: inherit;
+  font-family: Arial, Helvetica, sans-serif;
   cursor: pointer;
   appearance: none;
 }
@@ -1132,11 +1133,18 @@ body.easter-egg-active > :not(.easter-egg-overlay) {
 .overview-card:hover,
 .overview-card:focus-visible,
 .overview-card.is-copied {
-  background: #c9edfb;
-  border-color: #55add7;
-  box-shadow: 0 6px 16px rgba(10, 78, 162, 0.14);
+  background: #f4f9ff;
+  border-color: #0a4ea2;
+  box-shadow: 0 8px 18px rgba(10, 78, 162, 0.12);
   outline: none;
   transform: translateY(-1px);
+}
+
+.overview-card-conference:hover,
+.overview-card-conference:focus-visible {
+  background: #8d1919;
+  border-color: #8d1919;
+  box-shadow: 0 8px 18px rgba(173, 31, 31, 0.18);
 }
 
 .overview-card:active {
@@ -1144,10 +1152,24 @@ body.easter-egg-active > :not(.easter-egg-overlay) {
 }
 
 .overview-card-title {
-  font-weight: 700;
-  font-size: 1rem;
-  letter-spacing: 0.02em;
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0;
+  line-height: 1.2;
+  white-space: nowrap;
   color: inherit;
+}
+
+.visitor-badge {
+  margin: 18px 0 0;
+  text-align: right;
+}
+
+.visitor-badge img {
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 100%;
+  height: auto;
 }
 
 .overview-video {
@@ -2007,6 +2029,12 @@ html.shielded-mode .overview-card {
   color: #bfdbfe;
 }
 
+html.shielded-mode .overview-card-conference {
+  border-color: #f87171;
+  background: #b91c1c;
+  color: #f8fafc;
+}
+
 html.shielded-mode .site-nav-links a.lang-switch:hover,
 html.shielded-mode .site-nav-links a.lang-switch:focus-visible,
 html.shielded-mode .nav-lang-button:hover,
@@ -2021,6 +2049,13 @@ html.shielded-mode .overview-card.is-copied {
   border-color: #60a5fa;
   background: #172033;
   color: #dbeafe;
+}
+
+html.shielded-mode .overview-card-conference:hover,
+html.shielded-mode .overview-card-conference:focus-visible {
+  border-color: #fca5a5;
+  background: #dc2626;
+  color: #f8fafc;
 }
 
 html.shielded-mode .panel,
@@ -2072,7 +2107,6 @@ html.shielded-mode .data-table thead th {
 html.shielded-mode .demo-nav-heading p,
 html.shielded-mode .section-lead,
 html.shielded-mode .paper-note,
-html.shielded-mode .overview-resource-note,
 html.shielded-mode .password-prompt,
 html.shielded-mode .figure-block figcaption,
 html.shielded-mode .figure-legend,
@@ -2208,12 +2242,15 @@ html.shielded-mode .affil-mark {
   }
 
   .overview-cards {
-    grid-template-columns: 1fr;
+    align-items: stretch;
+    justify-content: stretch;
   }
 
-  .overview-resource-note {
-    text-align: left;
+  .overview-card {
+    width: 100%;
+    min-width: 0;
   }
+
 }
 
 @media (max-width: 560px) {

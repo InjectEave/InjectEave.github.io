@@ -693,6 +693,21 @@
         </div>
       </div>
 
+      <div class="overview-cards">
+        <a class="overview-card overview-card-conference" href="https://www.usenix.org/conference/usenixsecurity26" target="_blank" rel="noopener" aria-label="Open USENIX Security 2026 conference page">
+          <span class="overview-card-title">USENIX Security 2026</span>
+        </a>
+        <!-- NOTE: InjectEave paper.pdf exists locally but is listed in .gitignore; ensure the final paper PDF is published with the site. -->
+        <a class="overview-card overview-card-primary" href="./InjectEave%20paper.pdf" target="_blank" rel="noopener" aria-label="Download the InjectEave paper PDF">
+          <span class="overview-card-title">Read the Paper</span>
+        </a>
+        <a class="overview-card" href="https://doi.org/10.5281/zenodo.20432240" target="_blank" rel="noopener" aria-label="Open InjectEave code on Zenodo">
+          <span class="overview-card-title">Code</span>
+        </a>
+        <button class="overview-card overview-card-button" type="button" data-copy-bibtex data-copy-success="Copied BibTeX" data-copy-error="Copy failed" aria-label="Copy BibTeX to clipboard">
+          <span class="overview-card-title" data-copy-label aria-live="polite">BibTeX Citation</span>
+        </button>
+      </div>
       <h2 id="summary">Overview</h2>
       <p class="hero-summary">
         <span class="title-blue">Inject</span><span class="title-red">Eave</span> unveils a cybersecurity attack where
@@ -722,24 +737,6 @@
           </button>
           <span class="password-answer" id="overview-password" hidden>Password: 4815162342</span>
         </p>
-      </div>
-      <p class="overview-resource-note">
-        The <span class="title-blue">Inject</span><span class="title-red">Eave</span>
-        research paper has been accepted to
-        <a href="https://www.usenix.org/conference/usenixsecurity26" target="_blank" rel="noopener">USENIX Security '26</a>.
-        The PDF, code, and reference information can be found below.
-      </p>
-      <div class="overview-cards">
-        <!-- NOTE: InjectEave paper.pdf exists locally but is listed in .gitignore; ensure the final paper PDF is published with the site. -->
-        <a class="overview-card" href="./InjectEave%20paper.pdf" target="_blank" rel="noopener" aria-label="Download the InjectEave paper PDF">
-          <span class="overview-card-title">Read the Paper</span>
-        </a>
-        <a class="overview-card" href="https://doi.org/10.5281/zenodo.20432240" target="_blank" rel="noopener" aria-label="Open InjectEave code on Zenodo">
-          <span class="overview-card-title">Code</span>
-        </a>
-        <button class="overview-card overview-card-button" type="button" data-copy-bibtex data-copy-success="Copied BibTeX" data-copy-error="Copy failed" aria-label="Copy BibTeX to clipboard">
-          <span class="overview-card-title" data-copy-label aria-live="polite">BibTeX Citation</span>
-        </button>
       </div>
     </header>
 
@@ -2326,9 +2323,19 @@
         </div>
       </section>
 
+      <div class="visitor-badge">
+        <img src="https://visitor-badge.laobi.icu/badge?page_id=injecteave.github.io&amp;left_text=Visitors" alt="Visitors badge" loading="lazy" />
+      </div>
+
     </main>
 
-    <script type="text/plain" id="bibtex-source">% TODO: add final BibTeX for InjectEave, USENIX Security '26.</script>
+    <script type="text/plain" id="bibtex-source">@inproceedings{yan2026injected,
+  title={Injected and Leaked: Actively Inducing Side-Channel Leakage Using Electromagnetic Injection and Hardware Nonlinearity},
+  author={Yan, Haoran and Shao, Ziyu and Zhang, Shuhao and Jiang, Qinhong and Long, Yan},
+  booktitle={35th USENIX Security Symposium (USENIX Security 26)},
+  pages={},
+  year={2026}
+}</script>
 
     <script>
       (function () {
