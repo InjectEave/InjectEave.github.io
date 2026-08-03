@@ -2261,9 +2261,10 @@
               <span class="title-blue">Inject</span><span class="title-red">Eave</span>
               may pose the most serious threats to everyday audio peripherals
               and always-on smart-home devices from <strong>up to tens of meters
-              away</strong>. As hardware nonlinearity is inevitable in computer
-              systems, any device built with nonlinear components is potentially
-              exposed to this attack.
+              away</strong>. As hardware nonlinearity is
+              <span class="inevitable-easter-egg" role="button" tabindex="0" aria-label="Reveal I am inevitable">inevitable</span>
+              in computer systems, any device built with nonlinear components is
+              potentially exposed to this attack.
             </p>
           </details>
           <details>
@@ -2555,6 +2556,108 @@
         }
 
         setupLogoEasterEgg();
+
+        function setupInevitableEasterEgg() {
+          var trigger = document.querySelector(".inevitable-easter-egg");
+          if (!trigger) {
+            return;
+          }
+
+          var messageText = "I am inevitable.";
+          var imageSrc = "./assets/images/thanos-inevitable.webp";
+          var currentEscapeHandler = null;
+
+          function closeOverlay(overlay) {
+            document.body.classList.remove("easter-egg-active");
+            if (currentEscapeHandler) {
+              document.removeEventListener("keydown", currentEscapeHandler);
+              currentEscapeHandler = null;
+            }
+            if (overlay && overlay.parentNode) {
+              overlay.parentNode.removeChild(overlay);
+            }
+          }
+
+          function showOverlay() {
+            var existing = document.querySelector(".easter-egg-overlay");
+            if (existing) {
+              closeOverlay(existing);
+            }
+
+            var overlay = document.createElement("div");
+            var card = document.createElement("div");
+            var message = document.createElement("div");
+            var image = document.createElement("img");
+            var index = 0;
+
+            overlay.className = "easter-egg-overlay";
+            overlay.tabIndex = -1;
+            overlay.setAttribute("role", "dialog");
+            overlay.setAttribute("aria-modal", "true");
+            overlay.setAttribute("aria-label", messageText);
+            card.className = "easter-egg-card";
+            message.className = "easter-egg-message";
+            image.className = "easter-egg-color";
+            image.src = imageSrc;
+            image.alt = "Thanos snapping his fingers and saying I am inevitable";
+            image.loading = "lazy";
+            image.decoding = "async";
+            card.appendChild(message);
+            card.appendChild(image);
+            overlay.appendChild(card);
+            document.body.appendChild(overlay);
+            document.body.classList.add("easter-egg-active");
+
+            function onEscape(event) {
+              if (event.key === "Escape") {
+                window.clearInterval(timer);
+                closeOverlay(overlay);
+                trigger.focus();
+              }
+            }
+
+            var timer = null;
+            if (reduceMotion) {
+              message.textContent = messageText;
+            } else {
+              timer = window.setInterval(function () {
+                index += 1;
+                message.textContent = messageText.slice(0, index);
+                if (index >= messageText.length) {
+                  window.clearInterval(timer);
+                }
+              }, 60);
+            }
+
+            currentEscapeHandler = onEscape;
+            document.addEventListener("keydown", onEscape);
+            overlay.focus();
+
+            overlay.addEventListener("click", function () {
+              window.clearInterval(timer);
+              closeOverlay(overlay);
+              trigger.focus();
+            });
+          }
+
+          trigger.addEventListener("click", function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            showOverlay();
+          });
+
+          trigger.addEventListener("keydown", function (event) {
+            if (event.repeat) {
+              return;
+            }
+            if (event.key === " " || event.key === "Enter") {
+              event.preventDefault();
+              showOverlay();
+            }
+          });
+        }
+
+        setupInevitableEasterEgg();
 
         var titleH1 = document.querySelector(".page-header h1");
         if (titleH1) {

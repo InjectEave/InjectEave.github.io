@@ -999,6 +999,22 @@ video {
   outline-offset: 4px;
 }
 
+.inevitable-easter-egg {
+  cursor: pointer;
+  border-bottom: 1px dashed #6a3fa0;
+  transition: color 120ms ease, background-color 120ms ease;
+}
+
+.inevitable-easter-egg:hover {
+  color: #6a3fa0;
+  background-color: rgba(106, 63, 160, 0.1);
+}
+
+.inevitable-easter-egg:focus-visible {
+  outline: 2px solid #6a3fa0;
+  outline-offset: 2px;
+}
+
 body.easter-egg-active > :not(.easter-egg-overlay) {
   filter: blur(6px);
   transition: filter 160ms ease;
@@ -1065,6 +1081,10 @@ body.easter-egg-active > :not(.easter-egg-overlay) {
   object-fit: cover;
   border: 1px solid rgba(17, 17, 17, 0.18);
   filter: grayscale(100%);
+}
+
+.easter-egg-card img.easter-egg-color {
+  filter: none;
 }
 
 @keyframes caret-blink {
@@ -2829,5 +2849,8 @@ html.shielded-mode .affil-mark {
   .title-animate .title-leak-wrap::after {
     animation: none !important;
     display: none;
+  }
+  .easter-egg-message::after {
+    animation: none;
   }
 }
