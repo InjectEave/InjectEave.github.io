@@ -1,0 +1,29 @@
+Injecteave HTML 演示使用说明
+
+1. 双击 index.html 即可在 Edge、Chrome 或 Firefox 中打开。
+2. 使用左右方向键、Page Up / Page Down 或页面右下角按钮翻页。
+3. 按 F 或点击右下角全屏按钮进入全屏。
+4. 第 2 页的视频使用浏览器兼容的 H.264 + AAC 副本；原始 PCM 音轨视频保存在素材目录中。
+5. 第 5、6 页使用网站同款动态图；动画由本地 PNG 与 SVG/CSS 叠加完成，不依赖网络。
+6. 演示为本地静态文件，不依赖网络；点击第 1 页二维码区域打开项目网站时才需要联网。
+7. 第 2–14 页原PPT底部蓝色页脚栏已在 HTML 中隐藏；第 2 页视频说明为英文。
+8. 第 10 页为新增的智能家居展示页，包含 Smart Lamp 与 Smart Fan 两段浏览器兼容视频。
+9. 最后一页原 Team 区域已替换为 Future Work 英文文字占位，后续可继续加入对应图片。
+
+文件结构
+
+- index.html：演示入口
+- css/deck.css：页面排版和视觉样式
+- js/deck.js：翻页、全屏、触屏和自适应逻辑
+- assets/vector-slides：从原演示 PDF 逐页转换的矢量 SVG，负责保持原版排版并避免文字、线条放大模糊
+- assets/original-slides：上一版栅格渲染图，仅作为对照备份，当前 HTML 不再引用
+- assets/website：从项目网站整理出的第 5、6 页动态图底图
+- assets/02_project_links：第 1 页二维码
+- assets/07_video：第 2、10 页浏览器视频、封面图及原始 PCM 音轨视频备份
+- active-asset-manifest.csv：当前 HTML 实际使用素材的路径、页码、大小和 SHA-256
+
+原始文件
+
+- 原 PowerPoint：../Injecteave presentation.pptx
+- 原素材备份：../../PPT所需要的素材_原始备份_20260817
+- 整理后的素材：../../PPT所需要的素材

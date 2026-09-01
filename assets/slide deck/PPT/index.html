@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a4ea2">
+  <title>Injected and Leaked — HTML Presentation</title>
+  <link rel="stylesheet" href="css/deck.css">
+</head>
+<body>
+  <div class="stage" id="stage" aria-live="polite">
+    <main class="deck" id="deck">
+      <section class="slide is-active" data-title="Injected and Leaked" aria-hidden="false">
+        <img class="ppt-background" src="assets/vector-slides/slide-01.svg" alt="Injected and Leaked title slide">
+        <div class="usenix-badge" aria-label="35th USENIX Security Symposium, 2026">
+          <img src="assets/01_brand/usenix-security-26-wordmark.png" alt="35th USENIX Security Symposium">
+        </div>
+        <a class="title-qr" href="https://injecteave.github.io/" aria-label="Open the InjectEave project website">
+          <img src="assets/02_project_links/injecteave_qr.png" alt="InjectEave project QR code">
+        </a>
+      </section>
+
+      <section class="slide" data-title="Case 1: 30 m Long Range Audio Eavesdropping" aria-hidden="true">
+        <img class="ppt-background" src="assets/vector-slides/slide-02.svg" alt="Case 1: 30 m Long Range Audio Eavesdropping">
+        <span class="title-bar" aria-hidden="true"></span>
+        <div class="video-clean-area" aria-hidden="true"></div>
+        <figure class="video-content">
+          <video controls preload="metadata" playsinline>
+            <source src="assets/07_video/case_01_30m_demo_web.mp4" type="video/mp4">
+            Your browser does not support the embedded video.
+          </video>
+          <figcaption>30 m Long-Range Eavesdropping Demonstration</figcaption>
+        </figure>
+      </section>
+
+      <section class="slide" data-title="Passive EM Side-Channel Leakage" aria-hidden="true">
+        <img class="ppt-background" src="assets/vector-slides/slide-03.svg" alt="Original PowerPoint slide 3">
+        <span class="title-bar" aria-hidden="true"></span>
+      </section>
+      <section class="slide" data-title="Passive and Active EM Side-Channel Eavesdropping" aria-hidden="true">
+        <img class="ppt-background" src="assets/vector-slides/slide-04.svg" alt="Original PowerPoint slide 4">
+        <span class="title-bar" aria-hidden="true"></span>
+      </section>
+
+      <section class="slide" data-title="Key Idea: Active EM Side-Channel Eavesdropping" aria-hidden="true">
+        <img class="ppt-background" src="assets/vector-slides/slide-05.svg" alt="Original PowerPoint slide 5">
+        <span class="title-bar" aria-hidden="true"></span>
+        <div class="animated-figure" aria-label="Animated comparison of passive leakage and InjectEave">
+          <img src="assets/website/em-comparison.png" alt="Passive and active electromagnetic side-channel comparison">
+          <svg class="figure-wave-overlay" viewBox="0 0 1509 306" aria-hidden="true">
+            <rect class="fig1-wave-cover" x="576" y="178" width="100" height="82"></rect>
+            <rect class="fig1-wave-cover" x="823" y="164" width="108" height="124"></rect>
+            <g class="wave-burst burst-1"><circle class="wave-dot" cx="593" cy="222" r="7"></circle><path class="wave-arc arc-1" d="M612 211 C620 218 620 228 612 235"></path><path class="wave-arc arc-2" d="M631 205 C644 217 644 232 631 245"></path><path class="wave-arc arc-3" d="M650 199 C668 216 668 236 650 253"></path></g>
+            <g class="wave-burst burst-2"><path class="wave-arc arc-1" d="M891 177 C879 185 879 205 891 213"></path><path class="wave-arc arc-2" d="M870 174 C854 185 854 209 870 220"></path><path class="wave-arc arc-3" d="M849 171 C829 185 829 212 849 225"></path><circle class="wave-dot" cx="914" cy="193" r="7"></circle></g>
+            <g class="wave-burst burst-3"><circle class="wave-dot" cx="838" cy="249" r="7"></circle><path class="wave-arc arc-1" d="M861 235 C872 244 872 256 861 265"></path><path class="wave-arc arc-2" d="M881 230 C896 243 896 259 881 272"></path><path class="wave-arc arc-3" d="M902 226 C921 243 921 263 902 279"></path></g>
+            <path class="figure-panel-border" d="M630 150 L630 272"></path><path class="figure-panel-border" d="M878.5 150 L878.5 288"></path>
+          </svg>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Key Idea: Active EM Side-Channel Eavesdropping" aria-hidden="true">
+        <img class="ppt-background" src="assets/vector-slides/slide-06.svg" alt="Original PowerPoint slide 6">
+        <span class="title-bar" aria-hidden="true"></span>
+        <div class="animated-figure" aria-label="Animated comparison of passive leakage and InjectEave">
+          <img src="assets/website/em-comparison.png" alt="Passive and active electromagnetic side-channel comparison">
+          <svg class="figure-wave-overlay" viewBox="0 0 1509 306" aria-hidden="true">
+            <rect class="fig1-wave-cover" x="576" y="178" width="100" height="82"></rect>
+            <rect class="fig1-wave-cover" x="823" y="164" width="108" height="124"></rect>
+            <g class="wave-burst burst-1"><circle class="wave-dot" cx="593" cy="222" r="7"></circle><path class="wave-arc arc-1" d="M612 211 C620 218 620 228 612 235"></path><path class="wave-arc arc-2" d="M631 205 C644 217 644 232 631 245"></path><path class="wave-arc arc-3" d="M650 199 C668 216 668 236 650 253"></path></g>
+            <g class="wave-burst burst-2"><path class="wave-arc arc-1" d="M891 177 C879 185 879 205 891 213"></path><path class="wave-arc arc-2" d="M870 174 C854 185 854 209 870 220"></path><path class="wave-arc arc-3" d="M849 171 C829 185 829 212 849 225"></path><circle class="wave-dot" cx="914" cy="193" r="7"></circle></g>
+            <g class="wave-burst burst-3"><circle class="wave-dot" cx="838" cy="249" r="7"></circle><path class="wave-arc arc-1" d="M861 235 C872 244 872 256 861 265"></path><path class="wave-arc arc-2" d="M881 230 C896 243 896 259 881 272"></path><path class="wave-arc arc-3" d="M902 226 C921 243 921 263 902 279"></path></g>
+            <path class="figure-panel-border" d="M630 150 L630 272"></path><path class="figure-panel-border" d="M878.5 150 L878.5 288"></path>
+          </svg>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Commercial Off-The-Shelf Devices" aria-hidden="true"><img class="ppt-background" src="assets/vector-slides/slide-07.svg" alt="Original PowerPoint slide 7"><span class="title-bar" aria-hidden="true"></span></section>
+      <section class="slide" data-title="Case 2: Through-Wall Audio Eavesdropping" aria-hidden="true"><img class="ppt-background" src="assets/vector-slides/slide-08.svg" alt="Original PowerPoint slide 8"><span class="title-bar" aria-hidden="true"></span></section>
+      <section class="slide" data-title="Case 3: Landline Phone Closed-Loop Manipulation" data-hidden="true" aria-hidden="true"><img class="ppt-background" src="assets/vector-slides/slide-09.svg" alt="Original PowerPoint slide 9"><span class="title-bar" aria-hidden="true"></span></section>
+
+      <section class="slide smart-home-slide" data-title="Case 4: Smart-Home Device Eavesdropping" aria-hidden="true">
+        <header class="custom-slide-header">
+          <h2>Case 4: Smart-Home Device Eavesdropping</h2>
+        </header>
+        <span class="title-bar" aria-hidden="true"></span>
+        <div class="smart-home-videos">
+          <figure>
+            <video controls preload="metadata" playsinline poster="assets/07_video/demo_lamp_poster.jpg">
+              <source src="assets/07_video/demo_lamp_web.mp4" type="video/mp4">
+              Your browser does not support the embedded video.
+            </video>
+            <figcaption>(a) Smart lamp: brightness state</figcaption>
+          </figure>
+          <figure>
+            <video controls preload="metadata" playsinline poster="assets/07_video/demo_fan_poster.jpg">
+              <source src="assets/07_video/demo_fan_web.mp4" type="video/mp4">
+              Your browser does not support the embedded video.
+            </video>
+            <figcaption>(b) Smart fan: operating state</figcaption>
+          </figure>
+        </div>
+        <p class="smart-home-takeaway">Beyond audio, InjectEave reveals the operating states of smart-home devices.</p>
+      </section>
+
+      <section class="slide" data-title="Range Analysis" aria-hidden="true"><img class="ppt-background" src="assets/vector-slides/slide-10.svg" alt="Original PowerPoint slide 10"><span class="title-bar" aria-hidden="true"></span></section>
+      <section class="slide range-analysis-corrected" data-title="Range Analysis" aria-hidden="true">
+        <img class="ppt-background" src="assets/vector-slides/slide-11.svg" alt="Original PowerPoint slide 11">
+        <span class="title-bar" aria-hidden="true"></span>
+        <div class="range-correction" aria-label="Corrected RF hardware improvement directions">
+          <p class="range-noise-text">Lower phase noise and receiver noise</p>
+          <p class="range-injection-text">Higher power and antenna gain</p>
+        </div>
+      </section>
+      <section class="slide" data-title="Hardware Nonlinearity is Everywhere" aria-hidden="true"><img class="ppt-background" src="assets/vector-slides/slide-12.svg" alt="Original PowerPoint slide 12"><span class="title-bar" aria-hidden="true"></span></section>
+      <section class="slide" data-title="Summary and Team" aria-hidden="true">
+        <img class="ppt-background" src="assets/vector-slides/slide-13.svg" alt="Original PowerPoint summary and team slide">
+      </section>
+    </main>
+
+    <div class="deck-ui" aria-label="Presentation controls">
+      <div class="progress-track" aria-hidden="true"><span id="progress"></span></div>
+      <button id="prev" type="button" aria-label="Previous slide">←</button>
+      <p class="page-readout"><span id="current">1</span><span class="page-divider">/</span><span id="total">13</span></p>
+      <button id="next" type="button" aria-label="Next slide">→</button>
+      <button id="fullscreen" class="fullscreen-button" type="button" aria-label="Toggle fullscreen">⛶</button>
+    </div>
+  </div>
+  <script src="js/deck.js"></script>
+</body>
+</html>
