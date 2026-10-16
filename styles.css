@@ -2854,3 +2854,126 @@ html.shielded-mode .affil-mark {
     animation: none;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Media coverage strip: outlet wordmarks, each linking to the original article.
+   The section itself carries the standard .section class, so its <h2> heading is
+   formatted exactly like every other section heading, and it takes the usual
+   divider from the .section + .section rule.
+   Two rows of five (the page's own language first); a fixed light tile per item so
+   the marks stay legible in both themes, hover scale as on the reference page.
+   Four outlets publish a white mark on a solid brand background and take that colour
+   via --brand-bg; RTL-SDR publishes no logo image at all, so it shows its name.
+   -------------------------------------------------------------------------- */
+
+.media-strip {
+  max-width: 76rem;
+  margin: 0 auto;
+}
+
+.media-strip-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.media-strip-row + .media-strip-row {
+  margin-top: 14px;
+}
+
+.media-strip-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 190px;
+  height: 74px;
+  padding: 11px 14px;
+  border: 1px solid #dbe3ee;
+  border-radius: 8px;
+  background: #fff;
+  text-decoration: none;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.media-strip-item:hover,
+.media-strip-item:focus-visible {
+  border-color: #0a4ea2;
+  box-shadow: 0 2px 12px rgba(10, 78, 162, 0.18);
+  transform: scale(1.05);
+  outline: none;
+}
+
+.media-strip-mark {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* A few outlets publish a white mark on a solid brand background. Those tiles take the
+   brand colour (--brand-bg is set per item in the markup) so the mark reads as intended. */
+.media-strip-item.is-brand {
+  border-color: var(--brand-bg);
+  background: var(--brand-bg);
+}
+
+.media-strip-item.is-brand:hover,
+.media-strip-item.is-brand:focus-visible {
+  border-color: var(--brand-bg);
+  box-shadow: 0 3px 16px rgba(15, 23, 42, 0.34);
+}
+
+.media-strip-name {
+  color: #111;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.16;
+  text-align: center;
+}
+
+/* the tile stays light in shielded mode so the marks remain legible */
+html.shielded-mode .media-strip-item {
+  border-color: #475569;
+  background: #f1f5f9;
+}
+
+html.shielded-mode .media-strip-item:hover,
+html.shielded-mode .media-strip-item:focus-visible {
+  border-color: #60a5fa;
+  box-shadow: 0 2px 14px rgba(96, 165, 250, 0.3);
+}
+
+/* brand tiles keep their own colour in both themes */
+html.shielded-mode .media-strip-item.is-brand {
+  border-color: var(--brand-bg);
+  background: var(--brand-bg);
+}
+
+html.shielded-mode .media-strip-item.is-brand:hover,
+html.shielded-mode .media-strip-item.is-brand:focus-visible {
+  border-color: var(--brand-bg);
+  box-shadow: 0 3px 18px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 560px) {
+  .media-strip {
+    margin-top: 20px;
+  }
+
+  .media-strip-row {
+    gap: 12px;
+  }
+
+  .media-strip-item {
+    width: 152px;
+    height: 70px;
+    padding: 9px 10px;
+  }
+
+  .media-strip-name {
+    font-size: 0.74rem;
+  }
+}
